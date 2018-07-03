@@ -22,25 +22,46 @@
 
 import pyosu
 
-def test(function, name):
+def test(function):
     """ Tests a function and sends a report if it fails """
 
     try :
         function()
-        print(f"{name} : Success")
+        print(f"{function.__name__} : Success")
 
     except Exception as e:
-        print(f"{name} : Failed !\n"
+        print(f"{function.__name__} : Failed !\n"
               f"{e}")
+
+def test_GameMode():
+    str(pyosu.GameMode(pyosu.GameMode.Osu))
+    str(pyosu.GameMode(pyosu.GameMode.Taiko))
+    str(pyosu.GameMode(pyosu.GameMode.Catch))
+    str(pyosu.GameMode(pyosu.GameMode.Mania))
+
+def test_GameModifier():
+
+    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore)
+    modifier += modifier
+    str(modifier)
+
+    if not (modifier == pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore):
+        raise ValueError("modifier should be equals to 'pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore'")
+    
+    if not (modifier == modifier):
+        raise ValueError("modifier should be equal to itself")
+
+    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut)
+
+    if not modifier.has(pyosu.GameModifier.SpunOut):
+        raise ValueError("Modifier should have pyosu.GameModifier.SpunOut")
 
 def main():
 
-    test(lambda: (
-            str(pyosu.GameMode(pyosu.GameMode.Osu)),
-            str(pyosu.GameMode(pyosu.GameMode.Taiko)),
-            str(pyosu.GameMode(pyosu.GameMode.Catch)),
-            str(pyosu.GameMode(pyosu.GameMode.Mania))
-        ), "GameMode")
+    print('\n')
+
+    test(test_GameMode)
+    test(test_GameModifier)
 
     print("Tests done !")
 
