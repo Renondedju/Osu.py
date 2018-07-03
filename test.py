@@ -43,7 +43,6 @@ def test_GameModifier():
 
     modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore)
     modifier += modifier
-    str(modifier)
 
     if not (modifier == pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore):
         raise ValueError("modifier should be equals to 'pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore'")

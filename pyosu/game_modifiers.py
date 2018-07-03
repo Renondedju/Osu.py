@@ -95,7 +95,15 @@ class GameModifier():
     def __repr__(self):
         """ Returns the string representation of the game modifier """
 
-        return str(self)
+        string = "Mods :"
+        for key, value in self.__dict__.items():
+            try:
+                if (self.has(int(value))):
+                    string += " " + key
+            except:
+                pass
+
+        return string
 
     def has(self, modifier):
         """ Checks if the current modifiers has one
