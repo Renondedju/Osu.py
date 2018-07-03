@@ -6,7 +6,7 @@ This library is developed for [Uso! bot](https://github.com/Renondedju/Uso_Bot_V
 
 ## Requierments
 
-- Python 3.5+ *(python 3.7 is partially unsupported due to the changes to asyncio)*
+- Python 3.6+ *(python 3.7 is partially unsupported due to the changes to asyncio)*
 - An internet connexion *(since we are doing requests)*
 
 ## Thanks
