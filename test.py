@@ -20,7 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pyosu
+from pyosu import *
+import asyncio
+import traceback
 
 def test(function):
     """ Tests a function and sends a report if it fails """
@@ -30,37 +32,30 @@ def test(function):
         print(f"{function.__name__} : Success")
 
     except Exception as e:
-        print(f"{function.__name__} : Failed !\n"
-              f"{e}")
+        print(f"{function.__name__} : Failed !")
+        traceback.print_tb(e.__traceback__)
 
-def test_GameMode():
-    str(pyosu.GameMode(pyosu.GameMode.Osu))
-    str(pyosu.GameMode(pyosu.GameMode.Taiko))
-    str(pyosu.GameMode(pyosu.GameMode.Catch))
-    str(pyosu.GameMode(pyosu.GameMode.Mania))
+def test_route():
 
-def test_GameModifier():
+    route = Route('get_beatmaps', '123', b=123456)
 
-    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore)
-    modifier += modifier
+    loop = asyncio.get_event_loop()
 
-    if not (modifier == pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore):
-        raise ValueError("modifier should be equals to 'pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore'")
-    
-    if not (modifier == modifier):
-        raise ValueError("modifier should be equal to itself")
+    try:
+        loop.run_until_complete(route.fetch())
+    except WrongApiKey:
+        pass
 
-    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut)
+    route.path = 'wrong path'
 
-    if not modifier.has(pyosu.GameModifier.SpunOut):
-        raise ValueError("Modifier should have pyosu.GameModifier.SpunOut")
+    try:
+        loop.run_until_complete(route.fetch())
+    except RouteNotFound:
+        pass
 
 def main():
 
-    print('\n')
-
-    test(test_GameMode)
-    test(test_GameModifier)
+    test(test_route)
 
     print("Tests done !")
 
