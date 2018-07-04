@@ -22,10 +22,12 @@
 
 #Trello card : https:#trello.com/c/iWdaEubw/4-beatmap-class
 
-from .game_modes     import *
-from .game_modifiers import *
+from .http                   import *
+from .language               import *
+from .game_modes             import *
+from .beatmap_genre          import *
+from .beatmap_approved_state import *
 
-from .http import *
 
 class Beatmap():
     """ Beatmap class """
@@ -33,36 +35,31 @@ class Beatmap():
     def __init__(self):
 
         #Api data
-        self.approved         = "" # 4 = loved, 3 = qualified, 2 = approved, 1 = ranked, 0 = pending, -1 = WIP, -2 = graveyard
+        self.approved         = BeatmapApprovedState.Pending
         self.approved_date    = "" # date ranked, UTC+8 for now
         self.last_update      = "" # last update date, timezone same as above. May be after approved_date if map was unranked and reranked.
         self.artist           = ""
-        self.beatmap_id       = "" # beatmap_id is per difficulty
-        self.beatmapset_id    = "" # beatmapset_id groups difficulties into a set
-        self.bpm              = ""
+        self.beatmap_id       = 0  # beatmap_id is per difficulty
+        self.beatmapset_id    = 0  # beatmapset_id groups difficulties into a set
+        self.bpm              = 0
         self.creator          = ""
-        self.difficultyrating = "" # The amount of stars the map would have ingame and on the website
-        self.diff_size        = "" # Circle size value (CS)
-        self.diff_overall     = "" # Overall difficulty (OD)
-        self.diff_approach    = "" # Approach Rate (AR)
-        self.diff_drain       = "" # Healthdrain (HP)
-        self.hit_length       = "" # seconds from first note to last note not including breaks
+        self.difficultyrating = 0.0 # The amount of stars the map would have ingame and on the website
+        self.diff_size        = 0  # Circle size value (CS)
+        self.diff_overall     = 0  # Overall difficulty (OD)
+        self.diff_approach    = 0  # Approach Rate (AR)
+        self.diff_drain       = 0  # Healthdrain (HP)
+        self.hit_length       = 0  # seconds from first note to last note not including breaks
         self.source           = ""
-        self.genre_id         = "" # 0 = any, 1 = unspecified, 2 = video game, 3 = anime, 4 = rock, 5 = pop, 6 = other, 7 = novelty, 9 = hip hop, 10 = electronic (note that there's no 8)
-        self.language_id      = "" # 0 = any, 1 = other, 2 = english, 3 = japanese, 4 = chinese, 5 = instrumental, 6 = korean, 7 = french, 8 = german, 9 = swedish, 10 = spanish, 11 = italian
+        self.genre_id         = BeatmapGenre.Any
+        self.language_id      = Language.Any
         self.title            = "" # song name
-        self.total_length     = "" # seconds from first note to last note including breaks
+        self.total_length     = 0  # seconds from first note to last note including breaks
         self.version          = "" # difficulty name
         self.file_md5         = "" # md5 hash of the beatmap
-        self.mode             = "" # game mode,
+        self.mode             = GameMode.Osu # game mode,
         self.tags             = "" # Beatmap tags separated by spaces.
-        self.favourite_count  = "" # Number of times the beatmap was favourited. (americans: notice the ou!)
-        self.playcount        = "" # Number of times the beatmap was played
-        self.passcount        = "" # Number of times the beatmap was passed, completed (the user didn't fail or retry)
-        self.max_combo        = "" # The maximum combo a user can reach playing this beatmap.
+        self.favourite_count  = 0  # Number of times the beatmap was favourited. (americans: notice the ou!)
+        self.playcount        = 0  # Number of times the beatmap was played
+        self.passcount        = 0  # Number of times the beatmap was passed, completed (the user didn't fail or retry)
+        self.max_combo        = 0  # The maximum combo a user can reach playing this beatmap.
 
-        #Additionals parameters
-        self._playstyle = 0
-        self._pp        = {GameModifier(GameModifier.none) : {100 : 0.0}}
-
-    
