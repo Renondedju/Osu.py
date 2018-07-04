@@ -20,5 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from .http           import *
+from .beatmap        import *
+from .exceptions     import *
 from .game_modes     import *
 from .game_modifiers import *
