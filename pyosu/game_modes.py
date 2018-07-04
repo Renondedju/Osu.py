@@ -37,30 +37,3 @@ class GameMode():
     Taiko = 1
     Catch = 2
     Mania = 3
-
-    def __init__(self, mode : int):
-        """ Inits the game mode """
-
-        if mode not in [0, 1, 2, 3]:
-            mode = 0
-
-        self.mode = mode
-
-    def __str__(self):
-        """ Readable representation of the mode """
-
-        if (self.mode is GameMode.Osu):
-            return "Game mode : Osu"
-        if (self.mode is GameMode.Taiko):
-            return "Game mode : Taiko"
-        if (self.mode is GameMode.Catch):
-            return "Game mode : Catch the beat"
-        if (self.mode is GameMode.Mania):
-            return "Game mode : Mania"
-        
-        return "Game mode : Unknown"
-
-    def __repr__(self):
-        """ unambiguous representation of the mode """
-
-        return self.__str__()
