@@ -27,4 +27,5 @@ from .exceptions             import *
 from .game_modes             import *
 from .beatmap_genre          import *
 from .game_modifiers         import *
+from .beatmap_collection     import *
 from .beatmap_approved_state import *

@@ -84,10 +84,20 @@ async def test_beatmap(loop = None):
             await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, user = 'Renondedju', session=session)
             await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, mode = GameMode.Mania, include_converted = True, session=session)
 
+async def test_beatmap_collection(loop = None):
+
+    beatmaps = BeatmapCollection()
+
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        
+        await beatmaps.fetch(settings.get('api_key'), beatmapset_id = 327680)
+
 async def main(loop):
 
     await test(test_route)
     await test(test_beatmap)
+    await test(test_beatmap_collection)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")
