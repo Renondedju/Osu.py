@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https:#trello.com/c/iWdaEubw/4-beatmap-class
+#Trello card : https://trello.com/c/iWdaEubw/4-beatmap-class
 
 from .http                   import *
 from .language               import *
@@ -65,6 +65,18 @@ class Beatmap():
 
         self.is_empty         = True
 
+    def apply_data(self, data : dict):
+        """ Applies datas from a dict to the attributes of the beatmap """
+
+        self.is_empty = len(data) is 0
+
+        for key, value in data.items():
+            attribute = getattr(self, key)
+            if attribute is not None and value is not None:
+                setattr(self, key, (type(attribute))(value))
+        
+        return
+
     async def fetch(self, key, session = None, beatmapset_id = None, beatmap_id = None,
             user = None, type_str = None, mode = None, include_converted = None,
             hash_str = None):
@@ -73,7 +85,9 @@ class Beatmap():
             If any of the parameters used returns more than one beatmap,
             the first one only will be used
 
-            Accepeted parameters :
+            Parameters :
+
+                'session' - aiohttp session
 
                 'beatmapset_id' - specify a beatmapset_id to return metadata from.
 
@@ -117,13 +131,8 @@ class Beatmap():
 
         if len(data) is not 0:
             data = data[0]
-            self.is_empty = False
         else:
-            self.is_empty = True
             return
 
         # Assigning the fetched values to the variables
-        for key, value in data.items():
-            setattr(self, key, (type(getattr(self, key)))(value))
-
-loop = asyncio.get_event_loop()
+        self.apply_data(data)
