@@ -20,20 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+class BeatmapGenre():
+    """ Beatmap music genre """
 
-class GameMode():
-    """
-        Game mode class. Used to Represent the different game modes.
+    #Note that there is no 8
 
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
-
-    """
-
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+    Any         = 0
+    Unspecified = 1
+    Video_game  = 2
+    Anime       = 3
+    Rock        = 4
+    Pop         = 5
+    Other       = 6
+    Novelty     = 7
+    Hip_hop     = 9
+    Electronic  = 10

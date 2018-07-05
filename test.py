@@ -20,49 +20,105 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pyosu
 
-def test(function):
+import json
+import asyncio
+import aiohttp
+import inspect
+import traceback
+
+from pyosu import *
+
+pass_count = 0
+test_count = 0
+
+async def test(function, loop = None):
     """ Tests a function and sends a report if it fails """
 
+    global pass_count, test_count
+
     try :
-        function()
-        print(f"{function.__name__} : Success")
+        if inspect.iscoroutinefunction(function):
+            print(f"starting couroutine test : {function.__name__}", end = '...')
+            await function(loop)
+        else:
+            print(f"starting test : {function.__name__}", end = '...')
+            function()
+
+        print(" Success.")
+        pass_count += 1
 
     except Exception as e:
-        print(f"{function.__name__} : Failed !\n"
-              f"{e}")
+        print(" Failed.")
+        traceback.print_tb(e.__traceback__)
+        print(e)
 
-def test_GameMode():
-    str(pyosu.GameMode(pyosu.GameMode.Osu))
-    str(pyosu.GameMode(pyosu.GameMode.Taiko))
-    str(pyosu.GameMode(pyosu.GameMode.Catch))
-    str(pyosu.GameMode(pyosu.GameMode.Mania))
+    test_count += 1
 
-def test_GameModifier():
+async def test_user(loop = None):
 
-    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore)
-    modifier += modifier
-
-    if not (modifier == pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore):
-        raise ValueError("modifier should be equals to 'pyosu.GameModifier.SpunOut | pyosu.GameModifier.Nightcore'")
+    user = User()
     
-    if not (modifier == modifier):
-        raise ValueError("modifier should be equal to itself")
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        
+        await user.fetch(settings.get('api_key'), user = 'Renondedju')
+        await user.fetch(settings.get('api_key'), user = 'Renondedju', mode = GameMode.Mania)
+        
+        if user.is_empty:
+            raise ValueError("User is empty and shouldn't be !")
 
-    modifier = pyosu.GameModifier(pyosu.GameModifier.SpunOut)
+async def test_route(loop = None):
 
-    if not modifier.has(pyosu.GameModifier.SpunOut):
-        raise ValueError("Modifier should have pyosu.GameModifier.SpunOut")
+    route = Route('get_beatmaps', '123', b=123456)
 
-def main():
+    try:
+        await route.fetch()
+    except WrongApiKey:
+        pass
 
-    print('\n')
+    route.path = 'wrong path'
 
-    test(test_GameMode)
-    test(test_GameModifier)
+    try:
+        await route.fetch()
+    except RouteNotFound:
+        pass
 
-    print("Tests done !")
+async def test_beatmap(loop = None):
+
+    beatmap = Beatmap()
+
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        async with aiohttp.ClientSession(loop=loop) as session:
+
+            await beatmap.fetch(settings.get('api_key'), beatmapset_id = 65536, session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, user = 'Renondedju', session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, mode = GameMode.Mania, include_converted = True, session=session)
+
+async def test_beatmap_collection(loop = None):
+
+    beatmaps = BeatmapCollection()
+
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        
+        await beatmaps.fetch(settings.get('api_key'), beatmapset_id = 327680)
+
+async def main(loop):
+
+    await test(test_user)
+    await test(test_route)
+    await test(test_beatmap)
+    await test(test_beatmap_collection)
+
+    print('\n' + '-'*100)
+    print(f"Tests done : {pass_count}/{test_count}")
+
+    return
 
 if __name__ == '__main__':
-    main()
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(loop))

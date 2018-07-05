@@ -20,20 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+class Language():
+    """ Language id's """
 
-class GameMode():
-    """
-        Game mode class. Used to Represent the different game modes.
-
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
-
-    """
-
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+    Any          = 0
+    Other        = 1
+    English      = 2
+    Japanese     = 3
+    Chinese      = 4
+    Instrumental = 5 #Idk you could speak 'Instrumental' :thinking:
+    Korean       = 6
+    French       = 7
+    German       = 8
+    Swedish      = 9
+    Spanish      = 10
+    Italian      = 11

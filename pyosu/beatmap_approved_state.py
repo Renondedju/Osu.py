@@ -20,20 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+class BeatmapApprovedState():
+    """ Beatmaps approved state id's """
 
-class GameMode():
-    """
-        Game mode class. Used to Represent the different game modes.
-
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
-
-    """
-
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+    Graveyard = -2
+    WIP       = -1
+    Pending   = 0
+    Ranked    = 1
+    Approved  = 2
+    Qualified = 3
+    Loved     = 4

@@ -26,7 +26,7 @@ class GameModifier():
     """
         Game modifier class. Used to represent game modifiers
 
-        Game modifiers can be stacked
+        Game modifiers can be stacked using the | (pipe) operator
     """
 
     #Static variables
@@ -65,54 +65,3 @@ class GameModifier():
     KeyMod            = Key1 | Key2 | Key3 | Key4 | Key5 | Key6 | Key7 | Key8 | Key9 | KeyCoop
     FreeModAllowed    = NoFail | Easy | Hidden | HardRock | SuddenDeath | Flashlight | FadeIn | Relax | Relax2 | SpunOut | KeyMod
     ScoreIncreaseMods = Hidden | HardRock | DoubleTime | Flashlight | FadeIn
-
-    def __init__(self, modifiers : int):
-        """ Inits a game modifier """
-
-        self.modifiers = modifiers
-
-    def __add__(self, other):
-        """ Adds two game modifiers """
-
-        return self.modifiers | other.modifiers
-
-    def __eq__(self, other):
-        """ Checks if 2 GameModifier are equals """
-
-        if type(other) == int:
-            return self.modifiers == other
-        
-        if type(other) == GameModifier:
-            return self.modifiers == other.modifiers
-
-        return False
-
-    def __str__(self):
-        """ Returns the string version of the game modifier """
-
-        return str(self.modifiers)
-    
-    def __repr__(self):
-        """ Returns the string representation of the game modifier """
-
-        string = "Mods :"
-        for key, value in self.__dict__.items():
-            try:
-                if (self.has(int(value))):
-                    string += " " + key
-            except:
-                pass
-
-        return string
-
-    def has(self, modifier):
-        """ Checks if the current modifiers has one
-        or multiples mod(s) """
-
-        if type(modifier) == int:
-            return (self.modifiers & modifier) == modifier
-
-        if type(modifier) == GameModifier:
-            return (self.modifiers & modifier.modifiers) == modifier.modifiers
-
-        return False

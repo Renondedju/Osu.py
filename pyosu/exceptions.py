@@ -20,20 +20,43 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+# Trello card : https://trello.com/c/FgSCdGTM/8-exceptions
 
-class GameMode():
+class WrongApiKey(Exception):
+    """ Wrong api key exception """
+
+    def __init__(self, message):
+
+        super().__init__(message)
+        self.code = 401
+
+class RouteNotFound(Exception):
+    """ The route that was targetted was not found """
+
+    def __init__(self, message, code):
+
+        super().__init__(message)
+        self.code = code
+
+class InvalidArgument(Exception):
+    """ Invalid argument passed 
+    This event is raised by the Route class if a parameter
+    send isn't in the list of accepted parameters :
+
+    [a, h, k, m, b, u, s, mp, limit, type, mods, event_days, since]
     """
-        Game mode class. Used to Represent the different game modes.
 
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
+    def __init__(self, param):
 
-    """
+        super().__init__(f'Invalid parameter used : \'{param}\'')
+        self.code = 400
 
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+class HTTPError(Exception):
+    """ Unhandeled http error """
+
+    def __init__(self, code, message):
+
+        super().__init__(message)
+
+        self.message = message
+        self.code = code

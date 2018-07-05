@@ -20,20 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+#Trello card : https://trello.com/c/IXr5hLdu/11-user
 
-class GameMode():
-    """
-        Game mode class. Used to Represent the different game modes.
+class UserEvent():
+    """ Contains events for a user """
 
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
-
-    """
-
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+    def __init__(self):
+        
+        self.display_html	= ""
+        self.beatmap_id	    = 0
+        self.beatmapset_id	= 0
+        self.date		    = ""
+        self.epicfactor	    = 1 # How "epic" this event is (between 1 and 32)

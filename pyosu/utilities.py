@@ -20,20 +20,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/R5WkTqlO/5-game-modes-class
+class Utilities():
+    """ Utilities class """
 
-class GameMode():
-    """
-        Game mode class. Used to Represent the different game modes.
+    @staticmethod
+    def apply_data(obj, data : dict, ignore : list = []):
+        """ Applies datas from a dict to an object.
+            Returns True if the dict passed is empty
 
-        Osu (std) = 0
-        Taiko     = 1
-        CtB       = 2
-        osu!mania = 3
+            'ignore' is a list of optional key to ignore, must be str keys
+        """
 
-    """
+        for key, value in data.items():
 
-    Osu   = 0
-    Taiko = 1
-    Catch = 2
-    Mania = 3
+            if key in ignore:
+                continue
+
+            attribute = getattr(obj, key)
+            if attribute is not None and value is not None:
+                setattr(obj, key, (type(attribute))(value))
+        
+        return len(data) is 0
