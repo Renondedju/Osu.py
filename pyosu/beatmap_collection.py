@@ -22,8 +22,9 @@
 
 #Trello card : https://trello.com/c/Deol8NYI/10-beatmap-collection
 
-from .http    import *
-from .beatmap import *
+from .http      import *
+from .beatmap   import *
+from .utilities import *
 
 class BeatmapCollection():
     """ Beatmap collection class """
@@ -106,7 +107,7 @@ class BeatmapCollection():
 
         for data in datas:
             beatmap = Beatmap()
-            beatmap.apply_data(data)
+            beatmap.is_empty = Utilities.apply_data(beatmap, data)
 
             self.beatmaps.append(beatmap)
 

@@ -24,10 +24,10 @@
 
 from .http                   import *
 from .language               import *
+from .utilities              import *
 from .game_modes             import *
 from .beatmap_genre          import *
 from .beatmap_approved_state import *
-
 
 class Beatmap():
     """ Beatmap class """
@@ -64,18 +64,6 @@ class Beatmap():
         self.max_combo        = 0   # The maximum combo a user can reach playing this beatmap.
 
         self.is_empty         = True
-
-    def apply_data(self, data : dict):
-        """ Applies datas from a dict to the attributes of the beatmap """
-
-        self.is_empty = len(data) is 0
-
-        for key, value in data.items():
-            attribute = getattr(self, key)
-            if attribute is not None and value is not None:
-                setattr(self, key, (type(attribute))(value))
-        
-        return
 
     async def fetch(self, key, session = None, beatmapset_id = None, beatmap_id = None,
             user = None, type_str = None, mode = None, include_converted = None,
@@ -135,4 +123,4 @@ class Beatmap():
             return
 
         # Assigning the fetched values to the variables
-        self.apply_data(data)
+        self.is_empty = Utilities.apply_data(self, data)
