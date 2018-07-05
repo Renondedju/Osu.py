@@ -45,15 +45,28 @@ async def test(function, loop = None):
             print(f"starting test : {function.__name__}", end = '...')
             function()
 
-        print("\t Success.")
+        print(" Success.")
         pass_count += 1
 
     except Exception as e:
-        print("\t Failed.")
+        print(" Failed.")
         traceback.print_tb(e.__traceback__)
         print(e)
 
     test_count += 1
+
+async def test_user(loop = None):
+
+    user = User()
+    
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        
+        await user.fetch(settings.get('api_key'), user = 'Renondedju')
+        await user.fetch(settings.get('api_key'), user = 'Renondedju', mode = GameMode.Mania)
+        
+        if user.is_empty:
+            raise ValueError("User is empty and shouldn't be !")
 
 async def test_route(loop = None):
 
@@ -95,6 +108,7 @@ async def test_beatmap_collection(loop = None):
 
 async def main(loop):
 
+    await test(test_user)
     await test(test_route)
     await test(test_beatmap)
     await test(test_beatmap_collection)
