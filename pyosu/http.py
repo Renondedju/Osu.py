@@ -44,13 +44,16 @@ class Route:
         """ Returns the current route """
         params = ''
         for key, value in self.parameters.items():
-            params += f'&{key}={value}'
+            params += f'&{str(key)}={str(value)}'
 
         return f"{Route.BASE}{self.path}?k={self.api_key}{params}"
         
     def param(self, key, value):
         """ Adds or updates a prameter """
 
+        if (value is None):
+            return
+            
         self.parameters[key] = value
         return
 
@@ -128,7 +131,12 @@ class Route:
                     raise HTTPError(response.status, await self.get_json(response, 'error'))
 
                 if response.status == 200:
-                    return await self.get_json(response)
+                    data = await self.get_json(response)
+                    
+                    if (type(data) == dict) and ('error' in data):
+                        raise HTTPError(400, data.get('error'))
+
+                    return data
 
     async def fetch(self):
         """ Fetches some data using the actual route """
