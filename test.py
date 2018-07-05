@@ -20,44 +20,81 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu import *
+
+import json
 import asyncio
+import aiohttp
+import inspect
 import traceback
 
-def test(function):
+from pyosu import *
+
+pass_count = 0
+test_count = 0
+
+async def test(function, loop = None):
     """ Tests a function and sends a report if it fails """
 
+    global pass_count, test_count
+
     try :
-        function()
-        print(f"{function.__name__} : Success")
+        if inspect.iscoroutinefunction(function):
+            print(f"starting couroutine test : {function.__name__}", end = '...')
+            await function(loop)
+        else:
+            print(f"starting test : {function.__name__}", end = '...')
+            function()
+
+        print("\t Success.")
+        pass_count += 1
 
     except Exception as e:
-        print(f"{function.__name__} : Failed !")
+        print("\t Failed.")
         traceback.print_tb(e.__traceback__)
+        print(e)
 
-def test_route():
+    test_count += 1
+
+async def test_route(loop = None):
 
     route = Route('get_beatmaps', '123', b=123456)
 
-    loop = asyncio.get_event_loop()
-
     try:
-        loop.run_until_complete(route.fetch())
+        await route.fetch()
     except WrongApiKey:
         pass
 
     route.path = 'wrong path'
 
     try:
-        loop.run_until_complete(route.fetch())
+        await route.fetch()
     except RouteNotFound:
         pass
 
-def main():
+async def test_beatmap(loop = None):
 
-    test(test_route)
+    beatmap = Beatmap()
 
-    print("Tests done !")
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        async with aiohttp.ClientSession(loop=loop) as session:
+
+            await beatmap.fetch(settings.get('api_key'), beatmapset_id = 65536, session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, user = 'Renondedju', session=session)
+            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, mode = GameMode.Mania, include_converted = True, session=session)
+
+async def main(loop):
+
+    await test(test_route)
+    await test(test_beatmap)
+
+    print('\n' + '-'*100)
+    print(f"Tests done : {pass_count}/{test_count}")
+
+    return
 
 if __name__ == '__main__':
-    main()
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main(loop))
