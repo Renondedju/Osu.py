@@ -75,6 +75,8 @@ class Beatmap():
 
             Parameters :
 
+                'key' - api key (required).
+
                 'session' - aiohttp session
 
                 'beatmapset_id' - specify a beatmapset_id to return metadata from.
@@ -111,7 +113,7 @@ class Beatmap():
         route.param('h'   , hash_str)
         route.param('type', type_str)
 
-        data = {}
+        data = []
         if session is None:
             data = await route.fetch()
         else:
@@ -120,6 +122,7 @@ class Beatmap():
         if len(data) is not 0:
             data = data[0]
         else:
+            self.is_empty = True
             return
 
         # Assigning the fetched values to the variables
