@@ -55,6 +55,17 @@ async def test(function, loop = None):
 
     test_count += 1
 
+async def test_score(loop = None):
+
+    score = Score()
+
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        async with aiohttp.ClientSession(loop=loop) as session:
+
+            await score.fetch(settings.get('api_key'), 390057, user ='Renondedju', session = session)
+            await score.get_user_data(settings.get('api_key'), session = session)
+
 async def test_user(loop = None):
 
     user = User()
@@ -108,10 +119,11 @@ async def test_beatmap_collection(loop = None):
 
 async def main(loop):
 
-    await test(test_user)
     await test(test_route)
+    await test(test_user)
     await test(test_beatmap)
     await test(test_beatmap_collection)
+    await test(test_score)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")

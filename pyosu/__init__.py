@@ -22,6 +22,7 @@
 
 from .http                   import *
 from .user                   import *
+from .score                  import *
 from .beatmap                import *
 from .language               import *
 from .user_event             import *
@@ -30,4 +31,5 @@ from .game_modes             import *
 from .beatmap_genre          import *
 from .game_modifiers         import *
 from .beatmap_collection     import *
+from .replay_availability    import *
 from .beatmap_approved_state import *
