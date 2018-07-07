@@ -117,6 +117,15 @@ async def test_beatmap_collection(loop = None):
         
         await beatmaps.fetch(settings.get('api_key'), beatmapset_id = 327680)
 
+async def test_score_collection(loop = None):
+
+    scores = ScoreCollection()
+
+    with open('test-config.json') as config_file:
+        settings = json.load(config_file)
+        
+        await scores.fetch(settings.get('api_key'), 390057, user='Renondedju')
+
 async def main(loop):
 
     await test(test_route)
@@ -124,6 +133,7 @@ async def main(loop):
     await test(test_beatmap)
     await test(test_beatmap_collection)
     await test(test_score)
+    await test(test_score_collection)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")
