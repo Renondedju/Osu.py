@@ -27,9 +27,10 @@ from .utilities import *
 class ScoreCollection():
     """ Score collection class """
 
-    def __init__(self):
+    def __init__(self, api):
 
         self._scores = []
+        self.api     = api
 
     @property
     def count(self):
@@ -55,48 +56,5 @@ class ScoreCollection():
 
         if score is not None:
             self._scores.pop(score, None)
-
-        return
-
-    async def fetch(self, key, beatmap_id, user = None, mode = None, mods = None, session = None, type_str = None, limit = None):
-        """
-            Do note that requesting a score collection is way faster than 
-            requesting score by score (and requiers only only one api request)
-
-            Parameters :
-
-                key        - api key (required).
-                beatmap_id - specify a beatmap_id to return score information from (required).
-                user       - specify a user_id or a username to return score information for.
-                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
-                             Optional, default value is 0.
-                mods       - specify a mod or mod combination (See the bitwise enum)
-                type_str   - specify if user is a user_id or a username.
-                             Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
-                             (may be problematic for usernames made up of digits only).
-                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
-                session    - aiohttp session
-        """
-
-        route = Route('get_scores', key, b=beatmap_id)
-
-        route.param('u', user)
-        route.param('m', mode)
-        route.param('mods', mods)
-        route.param('type', type_str)
-        route.param('limit', limit)
-
-        datas = []
-        if session is None:
-            datas = await route.fetch()
-        else:
-            datas = await route.fetch_with_session(session)
-
-        for data in datas:
-            score = Score()
-            score.is_empty = Utilities.apply_data(score, data)
-
-            self._scores.append(score)
 
         return

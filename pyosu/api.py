@@ -24,16 +24,10 @@ from .http                   import *
 from .user                   import *
 from .score                  import *
 from .beatmap                import *
-from .language               import *
 from .user_event             import *
 from .exceptions             import *
-from .game_modes             import *
-from .beatmap_genre          import *
-from .game_modifiers         import *
 from .score_collection       import *
 from .beatmap_collection     import *
-from .replay_availability    import *
-from .beatmap_approved_state import *
 
 import asyncio
 import aiohttp
@@ -85,7 +79,7 @@ class Api():
         route.add_param('h'   , hash_str)
         route.add_param('type', type_str)
 
-        beatmap = Beatmap()
+        beatmap = Beatmap(self)
         request = Request(route)
 
         if self._session is None:
@@ -98,13 +92,12 @@ class Api():
             data = data[0]
         else:
             beatmap.is_empty = True
-            return
+            return beatmap
 
         # Assigning the fetched values to the variables
         beatmap.is_empty = Utilities.apply_data(beatmap, data)
 
         return beatmap
-
 
     async def get_beatmaps(self, limit = None, since = None, type_str = None,
         beatmapset_id = None, include_converted = None, user = None, mode = None):
@@ -143,7 +136,7 @@ class Api():
         route.add_param('u'    , user)
         route.add_param('m'    , mode)
 
-        beatmaps = BeatmapCollection()
+        beatmaps = BeatmapCollection(self)
         request  = Request(route)
 
         if self._session is None:
@@ -152,9 +145,148 @@ class Api():
             await request.fetch_with_session(self._session)
 
         for data in request.data:
-            beatmap = Beatmap()
+            beatmap = Beatmap(self)
             beatmap.is_empty = Utilities.apply_data(beatmap, data)
 
             beatmaps.add_beatmap(beatmap)
 
         return beatmaps
+
+    async def get_user(self, user = None, mode = None, type_str = None, event_days = None):
+        """
+            Fetches a user data
+
+            Parameters :
+
+                user       - specify a user_id or a username to return metadata from (required).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.    
+                type_str   - specify if u is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                event_days - Max number of days between now and last event date. 
+                             Range of 1-31. Optional, default value is 1.
+        """
+
+        route = Route('get_user', self._api_key)
+
+        route.add_param('u', user)
+        route.add_param('m', mode)
+        route.add_param('type', type_str)
+        route.add_param('event_days', event_days)
+
+        user    = User   (self)
+        request = Request(route)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        data = request.data
+        if len(data) is not 0:
+            data = data[0]
+        else:
+            user.is_empty = True
+            return user
+
+        #Adding events
+        for event in data['events']:
+            user_event = UserEvent()
+            Utilities.apply_data(user_event, event)
+            user.events.append(user_event)
+
+        # Assigning the fetched values to the variables
+        user.is_empty = Utilities.apply_data(user, data, ['events'])
+
+        return user
+
+    async def get_score(self, beatmap_id, user = None, mode = None, type_str = None):
+        """
+            If any of the parameters used returns more than one score,
+            the first one only will be used. If you want multiple scores use
+            Api.get_scores() instead
+
+            Parameters :
+
+                beatmap_id - specify a beatmap_id to return metadata from. (required)
+                user       - specify a user_id or a username to return metadata from.
+                type_str   - specify if 'user' is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, maps of all modes are returned by default.
+        """
+
+        route = Route('get_scores', self._api_key, b=beatmap_id, limit=1)
+
+        route.add_param('u', user)
+        route.add_param('m', mode)
+        route.add_param('type', type_str)
+
+        score   = Score  (self)
+        request = Request(route)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        data = request.data
+        if len(data) is not 0:
+            data = data[0]
+        else:
+            score.is_empty = True
+            return score
+
+        # Assigning the fetched values to the variables
+        score.is_empty = Utilities.apply_data(score, data)
+        if mode != None:
+            score.mode = mode
+
+        return score
+
+    async def get_scores(self, beatmap_id, user = None, mode = None, mods = None, type_str = None, limit = None):
+        """
+            Do note that requesting a score collection is way faster than 
+            requesting score by score (and requiers only only one api request)
+
+            Parameters :
+
+                beatmap_id - specify a beatmap_id to return score information from (required).
+                user       - specify a user_id or a username to return score information for.
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.
+                mods       - specify a mod or mod combination (See the bitwise enum)
+                type_str   - specify if user is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
+        """
+
+        route = Route('get_scores', self._api_key, b=beatmap_id)
+
+        route.add_param('u', user)
+        route.add_param('m', mode)
+        route.add_param('mods', mods)
+        route.add_param('type', type_str)
+        route.add_param('limit', limit)
+
+        request = Request(route)
+        scores  = ScoreCollection(self)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        for data in request.data:
+            score = Score(self)
+            score.is_empty = Utilities.apply_data(score, data)
+
+            scores.add_score(score)
+
+        return scores
