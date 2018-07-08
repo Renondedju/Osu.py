@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/iWdaEubw/4-beatmap-class
-
 from .http                   import *
 from .language               import *
 from .utilities              import *
@@ -64,66 +62,3 @@ class Beatmap():
         self.max_combo        = 0   # The maximum combo a user can reach playing this beatmap.
 
         self.is_empty         = True
-
-    async def fetch(self, key, session = None, beatmapset_id = None, beatmap_id = None,
-            user = None, type_str = None, mode = None, include_converted = None,
-            hash_str = None):
-
-        """
-            If any of the parameters used returns more than one beatmap,
-            the first one only will be used
-
-            Parameters :
-
-                'key' - api key (required).
-
-                'session' - aiohttp session
-
-                'beatmapset_id' - specify a beatmapset_id to return metadata from.
-
-                'beatmap_id' - specify a beatmap_id to return metadata from.
-
-                'user' - specify a user_id or a username to return metadata from.
-
-                'type_str' - specify if 'user' is a user_id or a username. Use string for usernames or id 
-                    for user_ids. Optional, default behaviour is automatic recognition
-                    (may be problematic for usernames made up of digits only).
-
-                'mode' - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
-                    Optional, maps of all modes are returned by default.
-
-                'include_converted' - specify whether converted beatmaps are included (0 = not included, 1 = included).
-                    Only has an effect if 'm' is chosen and not 0.
-                    Converted maps show their converted difficulty rating. Optional, default is 0.
-
-                'hash_str' - the beatmap hash. It can be used, for instance,
-                    if you're trying to get what beatmap has a replay played in,
-                    as .osr replays only provide beatmap hashes
-                    (example of hash: a5b99395a42bd55bc5eb1d2411cbdf8b).
-                    Optional, by default all beatmaps are returned independently from the hash.
-        """
-
-        route = Route('get_beatmaps', key, limit=1)
-
-        route.param('s'   , beatmapset_id)
-        route.param('b'   , beatmap_id)
-        route.param('u'   , user)
-        route.param('m'   , mode)
-        route.param('a'   , include_converted)
-        route.param('h'   , hash_str)
-        route.param('type', type_str)
-
-        data = []
-        if session is None:
-            data = await route.fetch()
-        else:
-            data = await route.fetch_with_session(session)
-
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            self.is_empty = True
-            return
-
-        # Assigning the fetched values to the variables
-        self.is_empty = Utilities.apply_data(self, data)
