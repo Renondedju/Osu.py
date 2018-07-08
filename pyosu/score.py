@@ -28,7 +28,7 @@ from .replay_availability import *
 
 class Score():
 
-    def __init__(self):
+    def __init__(self, api):
 
         self.score_id         = 0
         self.score            = 0.0
@@ -51,53 +51,9 @@ class Score():
 
         self.is_empty = True
         self._user    = None
+        self.api      = api
 
-    async def fetch(self, key, beatmap_id, session = None, user = None, mode = GameMode.Osu, type_str = None):
-        """
-            If any of the parameters used returns more than one score,
-            the first one only will be used
-
-            Parameters :
-
-                'key' - api key (required).
-
-                'beatmap_id' - specify a beatmap_id to return metadata from. (required)
-
-                'session' - aiohttp session
-
-                'user' - specify a user_id or a username to return metadata from.
-
-                'type_str' - specify if 'user' is a user_id or a username. Use string for usernames or id 
-                    for user_ids. Optional, default behaviour is automatic recognition
-                    (may be problematic for usernames made up of digits only).
-
-                'mode' - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
-                    Optional, maps of all modes are returned by default.
-        """
-
-        route = Route('get_scores', key, b=beatmap_id, limit=1)
-
-        route.param('u', user)
-        route.param('m', mode)
-        route.param('type', type_str)
-
-        data = []
-        if session is None:
-            data = await route.fetch()
-        else:
-            data = await route.fetch_with_session(session)
-
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            self.is_empty = True
-            return
-
-        # Assigning the fetched values to the variables
-        self.is_empty = Utilities.apply_data(self, data)
-        self.mode     = mode
-
-    async def get_user_data(self, key, session = None, mode = None):
+    async def get_user_data(self, mode = None):
         """ Returns the data of the author of the score 
 
         If the user has already been fetched once, the data will be reused and no
@@ -105,14 +61,12 @@ class Score():
         """
 
         if self.is_empty or self.username == "":
-            return User()
+            return User(self.api)
 
         if mode is None:
             mode = self.mode
 
         if self._user is None:
-            user = User()
-            await user.fetch(key, session=session, user=self.username, mode=mode)
-            self._user = user
+            self._user = self.api.get_user(user=self.username, mode=self.mode)
 
         return self._user
