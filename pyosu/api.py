@@ -20,9 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http      import *
-from .beatmap   import *
-from .utilities import *
+from .http                   import *
+from .user                   import *
+from .score                  import *
+from .beatmap                import *
+from .language               import *
+from .user_event             import *
+from .exceptions             import *
+from .game_modes             import *
+from .beatmap_genre          import *
+from .game_modifiers         import *
+from .score_collection       import *
+from .beatmap_collection     import *
+from .replay_availability    import *
+from .beatmap_approved_state import *
 
 import asyncio
 import aiohttp
@@ -43,21 +54,21 @@ class Api():
 
             Parameters :
 
-                'beatmapset_id'     - specify a beatmapset_id to return metadata from.
-                'beatmap_id'        - specify a beatmap_id to return metadata from.
-                'user'              - specify a user_id or a username to return metadata from.
-                'type_str'          - specify if 'user' is a user_id or a username.
+                beatmapset_id     - specify a beatmapset_id to return metadata from.
+                beatmap_id        - specify a beatmap_id to return metadata from.
+                user              - specify a user_id or a username to return metadata from.
+                type_str          - specify if 'user' is a user_id or a username.
                                       Use string for usernames or id for user_ids.
                                       Optional, default behaviour is automatic recognition
                                       (may be problematic for usernames made up of digits only).
-                'mode'              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                mode              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                                       Optional, maps of all modes are returned by default.
-                'include_converted' - specify whether converted beatmaps are included
+                include_converted - specify whether converted beatmaps are included
                                       (0 = not included, 1 = included).
                                       Only has an effect if 'mode' is chosen and not 0.
                                       Converted maps show their converted difficulty rating.
                                       Optional, default is 0.
-                'hash_str'          - the beatmap hash. It can be used, for instance,
+                hash_str          - the beatmap hash. It can be used, for instance,
                                       if you're trying to get what beatmap has a replay played in,
                                       as .osr replays only provide beatmap hashes
                                       (example of hash: a5b99395a42bd55bc5eb1d2411cbdf8b).
@@ -93,3 +104,57 @@ class Api():
         beatmap.is_empty = Utilities.apply_data(beatmap, data)
 
         return beatmap
+
+
+    async def get_beatmaps(self, limit = None, since = None, type_str = None,
+        beatmapset_id = None, include_converted = None, user = None, mode = None):
+        """
+            Do note that requesting a beatmap collection is way faster than 
+            requesting beatmap by beatmap (and requiers only only one api request)
+
+            Parameters :
+
+                session           - aiohttp session
+                limit             - amount of results. Optional, default and maximum are 500.
+                since             - return all beatmaps ranked or loved since this date.
+                                    Must be a MySQL date.
+                beatmapset_id     - specify a beatmapset_id to return metadata from.
+                user              - specify a user_id or a username to return metadata from.
+                type_str          - specify if 'user' is a user_id or a username.
+                                    Use string for usernames or id for user_ids.
+                                    Optional, default behaviour is automatic recognition
+                                    (may be problematic for usernames made up of digits only).
+                mode              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                                    Optional, maps of all modes are returned by default.
+                include_converted - specify whether converted beatmaps are included
+                                    (0 = not included, 1 = included).
+                                    Only has an effect if 'mode' is chosen and not 0.
+                                    Converted maps show their converted difficulty rating.
+                                    Optional, default is 0.
+        """
+
+        route = Route('get_beatmaps', self._api_key)
+
+        route.add_param('limit', limit)
+        route.add_param('since', since)
+        route.add_param('type' , type_str)
+        route.add_param('s'    , beatmapset_id)
+        route.add_param('a'    , include_converted)
+        route.add_param('u'    , user)
+        route.add_param('m'    , mode)
+
+        beatmaps = BeatmapCollection()
+        request  = Request(route)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        for data in request.data:
+            beatmap = Beatmap()
+            beatmap.is_empty = Utilities.apply_data(beatmap, data)
+
+            beatmaps.add_beatmap(beatmap)
+
+        return beatmaps
