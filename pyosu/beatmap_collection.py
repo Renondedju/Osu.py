@@ -20,18 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/Deol8NYI/10-beatmap-collection
-
-from .http      import *
-from .beatmap   import *
-from .utilities import *
+from .beatmap import *
 
 class BeatmapCollection():
     """ Beatmap collection class """
 
-    def __init__(self):
+    def __init__(self, api):
 
         self._beatmaps = []
+        self.api       = api
 
     @property
     def count(self):

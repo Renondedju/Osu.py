@@ -20,9 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http                   import *
 from .language               import *
-from .utilities              import *
 from .game_modes             import *
 from .beatmap_genre          import *
 from .beatmap_approved_state import *
@@ -30,7 +28,7 @@ from .beatmap_approved_state import *
 class Beatmap():
     """ Beatmap class """
 
-    def __init__(self):
+    def __init__(self, api):
 
         #Api data
         self.approved         = BeatmapApprovedState.Pending
@@ -62,3 +60,4 @@ class Beatmap():
         self.max_combo        = 0   # The maximum combo a user can reach playing this beatmap.
 
         self.is_empty         = True
+        self.api              = api

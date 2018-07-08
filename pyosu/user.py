@@ -20,18 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/IXr5hLdu/11-user
-
-import asyncio
-
-from .http       import *
-from .utilities  import *
 from .user_event import *
 
 class User():
     """ Contains users data """
 
-    def __init__(self):
+    def __init__(self, api):
         
         self.user_id         = 0
         self.username        = ""
@@ -55,52 +49,5 @@ class User():
         self.pp_country_rank = 0    # The user's rank in the country.
         self.events          = []   # Contains events for this user
 
-        self.is_empty = True
-
-    async def fetch(self, key, session = None, user = None, mode = None,
-        type_str = None, event_days = None):
-        """
-            Fetches a user data
-
-            Parameters :
-
-                'user'       - specify a user_id or a username to return metadata from (required).
-
-                'mode'       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
-                               Optional, default value is 0.
-                               
-                'type_str'   - specify if u is a user_id or a username.
-                               Use string for usernames or id for user_ids.
-                               Optional, default behaviour is automatic recognition
-                               (may be problematic for usernames made up of digits only).
-
-                'event_days' - Max number of days between now and last event date. 
-                               Range of 1-31. Optional, default value is 1.
-        """
-
-        route = Route('get_user', key)
-
-        route.param('u', user)
-        route.param('m', mode)
-        route.param('type', type_str)
-        route.param('event_days', event_days)
-
-        data = []
-        if session is None:
-            data = await route.fetch()
-        else:
-            data = await route.fetch_with_session(session)
-
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            return
-
-        #Adding events
-        for event in data['events']:
-            user_event = UserEvent()
-            Utilities.apply_data(user_event, event)
-            self.events.append(user_event)
-
-        # Assigning the fetched values to the variables
-        self.is_empty = Utilities.apply_data(self, data, ['events'])
+        self.is_empty        = True
+        self.api             = api
