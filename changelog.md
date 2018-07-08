@@ -6,11 +6,14 @@
 
 > Player scores are here !
 
-- Added Score class 
+- Added Score model 
 - Added Replay Availability Enum
-- Added Score collection class
+- Added Score collection model
 - Created a chengelog :)
 - Added the *\_\_version\_\_*, *\_\_copyright\_\_*, *\_\_license\_\_*, *\_\_author\_\_* and *\_\_title\_\_* properties of the library
+- New api system : everything can be get from one and unique class.
+Everything returned is now a valid instance and client apps don't have to manage sessions themselves.
+Just create an Api instance, and it manages everything
 
 -------
 
