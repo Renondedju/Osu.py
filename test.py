@@ -31,7 +31,7 @@ from pyosu import *
 
 pass_count = 0
 test_count = 0
-api = Api(json.load(open('test-config.json'))['api_key'])
+api = OsuApi(json.load(open('test-config.json'))['api_key'])
 
 async def test(function):
     """ Tests a function and sends a report if it fails """
@@ -81,6 +81,17 @@ async def test_score_collection():
     if scores.is_empty:
         raise ValueError('Empty scores !')
 
+async def test_user_best():
+    best = await api.get_user_best('Renondedju', mode = GameMode.Osu)
+    if (best.is_empty):
+        raise ValueError('Empty best !')
+    
+    if (await best.get_beatmap()).is_empty:
+        raise ValueError('Empty best.get_beatmap() !')
+
+    if (await best.get_user()).is_empty:
+        raise ValueError('Empty best.get_user() !')
+
 async def main():
 
     await test(test_user)
@@ -88,6 +99,7 @@ async def main():
     await test(test_beatmap_collection)
     await test(test_score)
     await test(test_score_collection)
+    await test(test_user_best)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")

@@ -24,15 +24,17 @@ from .http                   import *
 from .user                   import *
 from .score                  import *
 from .beatmap                import *
+from .user_best              import *
 from .user_event             import *
 from .exceptions             import *
+from .user_recent            import *
 from .score_collection       import *
 from .beatmap_collection     import *
 
 import asyncio
 import aiohttp
 
-class Api():
+class OsuApi():
 
     def __init__(self, api_key : str):
 
@@ -44,7 +46,7 @@ class Api():
         """
             If any of the parameters used returns more than one beatmap,
             the first one only will be returned, if you want multiple beatmaps,
-            use Api.get_beatmaps() instead
+            use OsuApi.get_beatmaps() instead
 
             Parameters :
 
@@ -205,7 +207,7 @@ class Api():
         """
             If any of the parameters used returns more than one score,
             the first one only will be used. If you want multiple scores use
-            Api.get_scores() instead
+            OsuApi.get_scores() instead
 
             Parameters :
 
@@ -289,3 +291,44 @@ class Api():
             scores.add_score(score)
 
         return scores
+
+    async def get_user_best(self, user, mode = None, type_str = None):
+        """
+            Returns the top play of a user. If you want more than one user best
+            use OsuApi.get_user_bests() instead.
+
+            Parameters : 
+            
+                user     - specify a user_id or a username to return best scores from (required).
+                mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                           Optional, default value is 0.
+                type_str - specify if user is a user_id or a username.
+                           Use 'string' for usernames or 'id' for user_ids.
+                           Optional, default behavior is automatic recognition 
+                           may be problematic for usernames made up of digits only).
+        """
+
+        route = Route('get_user_best', self._api_key, u=user, limit=1)
+
+        route.add_param('m', mode)
+        route.add_param('type', type_str)
+        
+        request = Request(route)
+        best    = UserBest(self)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        data = request.data
+        if len(data) is not 0:
+            data = data[0]
+        else:
+            best.is_empty = True
+            return best
+
+        # Assigning the fetched values to the variables
+        best.is_empty = Utilities.apply_data(best, data)
+
+        return best
