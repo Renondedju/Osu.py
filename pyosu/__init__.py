@@ -20,8 +20,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+Osu API Wrapper
+~~~~~~~~~~~~~~~~~~~
+A basic wrapper for the Osu API.
+
+:copyright: (c) 2018 Renondedju
+:license: MIT, see LICENSE for more details.
+"""
+
+__title__     = 'osu.py'
+__author__    = 'Renondedju'
+__license__   = 'MIT'
+__copyright__ = 'Copyright 2018 Renondedju'
+__version__   = '0.1.0'
+
+from .api                    import *
 from .http                   import *
 from .user                   import *
+from .score                  import *
 from .beatmap                import *
 from .language               import *
 from .user_event             import *
@@ -29,5 +46,7 @@ from .exceptions             import *
 from .game_modes             import *
 from .beatmap_genre          import *
 from .game_modifiers         import *
+from .score_collection       import *
 from .beatmap_collection     import *
+from .replay_availability    import *
 from .beatmap_approved_state import *

@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Trello card : https://trello.com/c/rXyJNvUD/9-http-module
-
 import asyncio
 import aiohttp
 import json
@@ -34,7 +32,6 @@ class Route:
 
     def __init__(self, path : str, api_key : str, **parameters):
 
-        self.retry_count = 5 # Number of retrys to do before throwing any errors
         self.path        = path
         self.api_key     = api_key
         self.parameters  = parameters
@@ -42,46 +39,30 @@ class Route:
     @property
     def route(self):
         """ Returns the current route """
+
+        self.check_params()
+        self.check_path()
+
         params = ''
         for key, value in self.parameters.items():
             params += f'&{str(key)}={str(value)}'
 
         return f"{Route.BASE}{self.path}?k={self.api_key}{params}"
         
-    def param(self, key, value):
+    def add_param(self, key, value):
         """ Adds or updates a prameter """
 
         if (value is None):
             return
             
         self.parameters[key] = value
+
         return
 
     def remove_param(self, key):
         """ Removes a parameter from the route """
 
         return self.parameters.pop(key, None) != None
-
-    async def get_json(self, response, *args):
-        """ Returns the json version of an api response """
-        text = await response.text()
-
-        if (text == None or text == ''):
-            return {}
-
-        data = json.loads(text)
-
-        if len(args) == 0:
-            return data
-
-        for key in args:
-
-            try:
-                data = data[args]
-            except KeyError:
-                return ''
-
-        return data
 
     def check_params(self):
         """ Raise the InvalidArgument Exception if one of the parameters that is
@@ -112,20 +93,49 @@ class Route:
         
         return
 
+class Request():
+
+    def __init__(self, route : Route, retry : int = 5):
+
+        self.retry_count = retry # Number of retrys to do before throwing any errors
+        self.route = route
+        self._data = []
+
+    @property
+    def data(self):
+        return self._data
+
+    async def get_json(self, response, *args):
+        """ Returns the json version of an api response """
+        text = await response.text()
+
+        if (text == None or text == ''):
+            return {}
+
+        data = json.loads(text)
+
+        if len(args) == 0:
+            return data
+
+        for key in args:
+            try:
+                data = data[key]
+            except KeyError:
+                return ''
+
+        return data
+
     async def fetch_with_session(self, session):
         """ Fetches some data with a session using the actual route """
 
-        self.check_params()
-        self.check_path()
-
         for i in range(self.retry_count):
-            async with session.get(self.route) as response:
+            async with session.get(self.route.route) as response:
                     
                 if response.status == 401: #Unauthorized
                     raise WrongApiKey(await self.get_json(response, 'error'))
 
                 if response.status in [302, 404]: #Redirection or route not found
-                    raise RouteNotFound(f'{self.route} was not found.', response.status)
+                    raise RouteNotFound(f'{self.route.route} was not found.', response.status)
 
                 if response.status != 200 and i == self.retry_count: #Unknown error
                     raise HTTPError(response.status, await self.get_json(response, 'error'))
@@ -136,6 +146,7 @@ class Route:
                     if (type(data) == dict) and ('error' in data):
                         raise HTTPError(400, data.get('error'))
 
+                    self._data = data
                     return data
 
     async def fetch(self):

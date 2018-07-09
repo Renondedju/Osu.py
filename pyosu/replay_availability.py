@@ -20,43 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .beatmap import *
+class ReplayAvailability():
+    """ Enum of the availability states of a replay """
 
-class BeatmapCollection():
-    """ Beatmap collection class """
-
-    def __init__(self, api):
-
-        self._beatmaps = []
-        self.api       = api
-
-    @property
-    def count(self):
-        """ Returns the number of beatmaps of the collection """
-        return len(self._beatmaps)
-
-    @property
-    def is_empty(self):
-        """ Checks if the beatmap collection si empty or not """
-        return len(self._beatmaps) == 0
-
-    @property
-    def beatmaps(self):
-        """ Returns the beatmaps of the collection """
-        return self._beatmaps
-
-    def add_beatmap(self, beatmap : Beatmap):
-        """ Adds a beatmap to the collection """
-
-        if beatmap is not None:
-            self._beatmaps.append(beatmap)
-
-        return
-
-    def remove_beatmap(self, beatmap : Beatmap):
-        """ Removes a beatmap from the collection """
-
-        if beatmap is not None:
-            self._beatmaps.pop(beatmap, None)
-
-        return
+    Unavailable = 0
+    Available   = 1

@@ -20,43 +20,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .beatmap import *
+from .http      import *
+from .score     import *
+from .utilities import *
 
-class BeatmapCollection():
-    """ Beatmap collection class """
+class ScoreCollection():
+    """ Score collection class """
 
     def __init__(self, api):
 
-        self._beatmaps = []
-        self.api       = api
+        self._scores = []
+        self.api     = api
 
     @property
     def count(self):
-        """ Returns the number of beatmaps of the collection """
-        return len(self._beatmaps)
+        """ Returns the number of scores of the collection """
+        return len(self._scores)
 
+    @property
+    def scores(self):
+        """ Returns the scores of the collection """
+        return self._scores
+    
     @property
     def is_empty(self):
-        """ Checks if the beatmap collection si empty or not """
-        return len(self._beatmaps) == 0
+        """ Checks if the score collection si empty or not """
+        return len(self._scores) == 0
+    
+    def add_score(self, score : Score):
+        """ Adds a score to the collection """
 
-    @property
-    def beatmaps(self):
-        """ Returns the beatmaps of the collection """
-        return self._beatmaps
-
-    def add_beatmap(self, beatmap : Beatmap):
-        """ Adds a beatmap to the collection """
-
-        if beatmap is not None:
-            self._beatmaps.append(beatmap)
+        if score is not None:
+            self._scores.append(score)
 
         return
 
-    def remove_beatmap(self, beatmap : Beatmap):
-        """ Removes a beatmap from the collection """
+    def remove_beatmap(self, score : Score):
+        """ Removes a score from the collection """
 
-        if beatmap is not None:
-            self._beatmaps.pop(beatmap, None)
+        if score is not None:
+            self._scores.pop(score, None)
 
         return
