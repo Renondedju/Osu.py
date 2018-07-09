@@ -18,7 +18,7 @@ import pyosu #Make sure your import path is the right one
 print(pyosu.__version__)
 ```
 
-Link to the [chagelogs](CHANGELOG.md)
+Link to the [chagelogs](changelog.md)
 
 ## Thanks
 
