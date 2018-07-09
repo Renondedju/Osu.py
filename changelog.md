@@ -2,6 +2,15 @@
 
 > Osu<span></span>.py library changelogs
 
+## Version 0.2.0
+
+> User bests and recent are now avaliable !
+
+- Renamed Api class to OsuApi to avoid confusions
+- Added OsuApi.get_user_best()
+- Added User Best model
+- Added User Recent model
+
 ## Version 0.1.0
 
 > Player scores are here !
