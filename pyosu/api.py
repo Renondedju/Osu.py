@@ -30,6 +30,7 @@ from .exceptions             import *
 from .user_recent            import *
 from .score_collection       import *
 from .beatmap_collection     import *
+from .user_best_collection   import *
 
 import asyncio
 import aiohttp
@@ -332,3 +333,40 @@ class OsuApi():
         best.is_empty = Utilities.apply_data(best, data)
 
         return best
+
+    async def get_user_bests(self, user, mode = None, type_str = None, limit = None):
+        """
+
+            Parameters :
+
+                user       - sspecify a user_id or a username to return best scores from (required).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.
+                type_str   - specify if user is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
+        """
+
+        route = Route('get_user_best', self._api_key, u=user)
+
+        route.add_param('m', mode)
+        route.add_param('type', type_str)
+        route.add_param('limit', limit)
+
+        request = Request(route)
+        bests   = UserBestCollection(self)
+
+        if self._session is None:
+            await request.fetch()
+        else:
+            await request.fetch_with_session(self._session)
+
+        for data in request.data:
+            best = UserBest(self)
+            best.is_empty = Utilities.apply_data(best, data)
+
+            bests.add_user_best(best)
+
+        return bests

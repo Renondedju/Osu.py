@@ -20,9 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http      import *
-from .score     import *
-from .utilities import *
+from .score import Score
 
 class ScoreCollection():
     """ Score collection class """
@@ -55,7 +53,7 @@ class ScoreCollection():
 
         return
 
-    def remove_beatmap(self, score : Score):
+    def remove_score(self, score : Score):
         """ Removes a score from the collection """
 
         if score is not None:
