@@ -61,3 +61,8 @@ class Beatmap():
 
         self.is_empty         = True
         self.api              = api
+
+    async def get_beatmapset(self):
+        """ Returns a beatmap collection with every beatmap of the beatmapset """
+
+        return await self.api.get_beatmaps(beatmapset_id=self.beatmapset_id)

@@ -101,7 +101,7 @@ class Request():
         self.route = route
         self._data = []
 
-    @property()
+    @property
     def data(self):
         return self._data
 
@@ -129,13 +129,13 @@ class Request():
         """ Fetches some data with a session using the actual route """
 
         for i in range(self.retry_count):
-            async with session.get(self.route) as response:
+            async with session.get(self.route.route) as response:
                     
                 if response.status == 401: #Unauthorized
                     raise WrongApiKey(await self.get_json(response, 'error'))
 
                 if response.status in [302, 404]: #Redirection or route not found
-                    raise RouteNotFound(f'{self.route} was not found.', response.status)
+                    raise RouteNotFound(f'{self.route.route} was not found.', response.status)
 
                 if response.status != 200 and i == self.retry_count: #Unknown error
                     raise HTTPError(response.status, await self.get_json(response, 'error'))

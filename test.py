@@ -31,8 +31,9 @@ from pyosu import *
 
 pass_count = 0
 test_count = 0
+api = Api(json.load(open('test-config.json'))['api_key'])
 
-async def test(function, loop = None):
+async def test(function):
     """ Tests a function and sends a report if it fails """
 
     global pass_count, test_count
@@ -40,7 +41,7 @@ async def test(function, loop = None):
     try :
         if inspect.iscoroutinefunction(function):
             print(f"starting couroutine test : {function.__name__}", end = '...')
-            await function(loop)
+            await function()
         else:
             print(f"starting test : {function.__name__}", end = '...')
             function()
@@ -55,80 +56,33 @@ async def test(function, loop = None):
 
     test_count += 1
 
-async def test_score(loop = None):
+async def test_score():
+    score = await api.get_score(1461701)
+    if score.is_empty:
+        raise ValueError('Empty score !')
 
-    score = Score()
+async def test_user():
+    user = await api.get_user(user = 'Renondedju', mode = GameMode.Mania)
+    if user.is_empty:
+        raise ValueError('Empty user !')
 
-    with open('test-config.json') as config_file:
-        settings = json.load(config_file)
-        async with aiohttp.ClientSession(loop=loop) as session:
+async def test_beatmap():
+    beatmap = await api.get_beatmap(beatmap_id=1461701)
+    if beatmap.is_empty:
+        raise ValueError('Empty beatmap !')
 
-            await score.fetch(settings.get('api_key'), 390057, user ='Renondedju', session = session)
-            await score.get_user_data(settings.get('api_key'), session = session)
+async def test_beatmap_collection():
+    beatmapset = await api.get_beatmaps(beatmapset_id=690687)
+    if beatmapset.is_empty:
+        raise ValueError('Empty beatmapset !')
 
-async def test_user(loop = None):
+async def test_score_collection():
+    scores = await api.get_scores(1461701)
+    if scores.is_empty:
+        raise ValueError('Empty scores !')
 
-    user = User()
-    
-    with open('test-config.json') as config_file:
-        settings = json.load(config_file)
-        
-        await user.fetch(settings.get('api_key'), user = 'Renondedju')
-        await user.fetch(settings.get('api_key'), user = 'Renondedju', mode = GameMode.Mania)
-        
-        if user.is_empty:
-            raise ValueError("User is empty and shouldn't be !")
+async def main():
 
-async def test_route(loop = None):
-
-    route = Route('get_beatmaps', '123', b=123456)
-
-    try:
-        await route.fetch()
-    except WrongApiKey:
-        pass
-
-    route.path = 'wrong path'
-
-    try:
-        await route.fetch()
-    except RouteNotFound:
-        pass
-
-async def test_beatmap(loop = None):
-
-    beatmap = Beatmap()
-
-    with open('test-config.json') as config_file:
-        settings = json.load(config_file)
-        async with aiohttp.ClientSession(loop=loop) as session:
-
-            await beatmap.fetch(settings.get('api_key'), beatmapset_id = 65536, session=session)
-            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, session=session)
-            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, user = 'Renondedju', session=session)
-            await beatmap.fetch(settings.get('api_key'), beatmap_id = 65536, mode = GameMode.Mania, include_converted = True, session=session)
-
-async def test_beatmap_collection(loop = None):
-
-    beatmaps = BeatmapCollection()
-
-    with open('test-config.json') as config_file:
-        settings = json.load(config_file)
-        
-        await beatmaps.fetch(settings.get('api_key'), beatmapset_id = 327680)
-
-async def test_score_collection(loop = None):
-
-    scores = ScoreCollection()
-
-    with open('test-config.json') as config_file:
-        settings = json.load(config_file)
-        
-        await scores.fetch(settings.get('api_key'), 390057, user='Renondedju')
-
-async def main(loop):
-
-    await test(test_route)
     await test(test_user)
     await test(test_beatmap)
     await test(test_beatmap_collection)
@@ -143,4 +97,4 @@ async def main(loop):
 if __name__ == '__main__':
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(loop))
+    loop.run_until_complete(main())

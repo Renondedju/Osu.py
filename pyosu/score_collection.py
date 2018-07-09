@@ -41,7 +41,11 @@ class ScoreCollection():
     def scores(self):
         """ Returns the scores of the collection """
         return self._scores
-
+    
+    @property
+    def is_empty(self):
+        """ Checks if the score collection si empty or not """
+        return len(self._scores) == 0
     
     def add_score(self, score : Score):
         """ Adds a score to the collection """

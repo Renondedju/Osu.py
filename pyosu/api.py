@@ -107,7 +107,6 @@ class Api():
 
             Parameters :
 
-                session           - aiohttp session
                 limit             - amount of results. Optional, default and maximum are 500.
                 since             - return all beatmaps ranked or loved since this date.
                                     Must be a MySQL date.

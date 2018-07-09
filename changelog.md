@@ -14,6 +14,8 @@
 - New api system : everything can be get from one and unique class.
 Everything returned is now a valid instance and client apps don't have to manage sessions themselves.
 Just create an Api instance, and it manages everything
+- Every model has now a pointer on the api instance
+- Added the method get_beatmapset() on the beatmap model
 
 -------
 
