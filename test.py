@@ -92,6 +92,12 @@ async def test_user_best():
     if (await best.get_user()).is_empty:
         raise ValueError('Empty best.get_user() !')
 
+async def test_user_bests():
+    bests = await api.get_user_bests('Renondedju')
+
+    if bests.is_empty:
+        raise ValueError('User bests is empty, there should be 10 scores')
+
 async def main():
 
     await test(test_user)
@@ -100,6 +106,7 @@ async def main():
     await test(test_score)
     await test(test_score_collection)
     await test(test_user_best)
+    await test(test_user_bests)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")
