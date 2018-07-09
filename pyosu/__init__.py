@@ -41,9 +41,11 @@ from .user                   import *
 from .score                  import *
 from .beatmap                import *
 from .language               import *
+from .user_best              import *
 from .user_event             import *
 from .exceptions             import *
 from .game_modes             import *
+from .user_recent            import *
 from .beatmap_genre          import *
 from .game_modifiers         import *
 from .score_collection       import *
