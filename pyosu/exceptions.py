@@ -60,3 +60,12 @@ class HTTPError(Exception):
 
         self.message = message
         self.code = code
+
+class UnreferencedApi(Exception):
+    """ Api instance isn't known """
+
+    def __init__(self, message):
+
+        super().__init__(message)
+        
+        self.message = message
