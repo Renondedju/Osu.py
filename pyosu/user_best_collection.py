@@ -20,43 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .user_best import UserBest
+from .user_best       import UserBest
+from .base_collection import BaseCollection
 
-class UserBestCollection():
+class UserBestCollection(BaseCollection):
     """ User bests collection class """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
 
-        self._user_bests = []
-        self.api         = api
+        super().__init__(api, UserBest)
 
-    @property
-    def count(self):
-        """ Returns the number of user bests of the collection """
-        return len(self._user_bests)
-
-    @property
-    def user_bests(self):
+    def get_user_bests(self):
         """ Returns the user bests of the collection """
-        return self._user_bests
+        
+        return self.get_content()
 
-    @property
-    def is_empty(self):
-        """ Checks if the user bests collection si empty or not """
-        return len(self._user_bests) == 0
-    
-    def add_user_best(self, best : UserBest):
+    def add_user_best(self, beatmap : UserBest):
         """ Adds a user best to the collection """
 
-        if best is not None:
-            self._user_bests.append(best)
-
-        return
-
-    def remove_score(self, best : UserBest):
+        return self.add_content(beatmap)
+ 
+    def remove_user_best(self, beatmap : UserBest):
         """ Removes a user best from the collection """
 
-        if best is not None:
-            self._user_bests.pop(best, None)
-
-        return
+        return self.remove_content(beatmap)

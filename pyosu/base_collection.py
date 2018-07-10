@@ -29,10 +29,11 @@ class BaseCollection(metaclass=abc.ABCMeta):
         unless you create a child class of it
     """
 
-    def __init__(self, api : 'OsuApi'):
+    def __init__(self, api : 'OsuApi', collection_type):
 
         self._container = []
         self.__api     = api
+        self.__type    = collection_type
 
     @property
     def api(self):
@@ -60,23 +61,29 @@ class BaseCollection(metaclass=abc.ABCMeta):
         """ Checks if the container of the collection is empty """
         return len(self._container) == 0
 
-    @property
     def get_content(self):
         """ Returns the content of the collection """
         return self._container
 
     def add_content(self, content):
-        """ Adds content to the collection.
+        """ Adds content to the collection. """
 
-            Please be careful with this method since it allows to add any type
-            of content, this might break the container later on.
-        """
+        if type(content) is not self.__type:
+            raise ValueError(
+                f'The content type should be of type '
+                f'\'{self.__type.__name__}\', not \'{type(content).__name__}\'')
 
-        self._container.append(content)
+        if content is not None:
+            self._container.append(content)
+
         return
 
     def remove_content(self, content):
         """ Removes content from the collection """
 
-        self._container.pop(content, None)
-        return
+        if type(content) is not self.__type:
+            raise ValueError(
+                f'The content type should be of type '
+                f'\'{self.__type.__name__}\', not \'{type(content).__name__}\'')
+
+        return self._container.pop(content, None)
