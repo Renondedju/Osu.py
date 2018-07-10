@@ -20,10 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-class UserRecent():
+from .base_model import BaseModel
+
+class UserRecent(BaseModel):
     """ User recent model """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
+
+        super().__init__(api)
 
         self.beatmap_id   = 0
         self.score        = 0.0
@@ -39,6 +43,3 @@ class UserRecent():
         self.user_id      = 0
         self.date         = ""
         self.rank         = ""
-        
-        self.is_empty     = True
-        self.api          = api

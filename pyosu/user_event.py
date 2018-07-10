@@ -20,13 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/IXr5hLdu/11-user
+from .base_model import BaseModel
 
-class UserEvent():
+class UserEvent(BaseModel):
     """ Contains events for a user """
 
-    def __init__(self):
+    def __init__(self, api : 'OsuApi'):
         
+        super().__init__(api)
+
         self.display_html	= ""
         self.beatmap_id	    = 0
         self.beatmapset_id	= 0

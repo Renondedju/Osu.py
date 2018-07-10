@@ -20,12 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .user_event import *
+from .base_model import BaseModel
 
-class User():
+class User(BaseModel):
     """ Contains users data """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
+
+        super().__init__(api)
         
         self.user_id         = 0
         self.username        = ""
@@ -48,6 +50,3 @@ class User():
                                     # See this for more information: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2/)
         self.pp_country_rank = 0    # The user's rank in the country.
         self.events          = []   # Contains events for this user
-
-        self.is_empty        = True
-        self.api             = api

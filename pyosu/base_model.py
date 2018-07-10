@@ -22,13 +22,12 @@
 
 import abc
 
-from .api        import OsuApi
 from .exceptions import UnreferencedApi
 
 class BaseModel(metaclass=abc.ABCMeta):
     """ This class is just a base model and cannot be instanciated. """
-
-    def __init__(self, api : OsuApi):
+    
+    def __init__(self, api : 'OsuApi'):
 
         self.__api     = api
         self.is_empty = True
@@ -43,7 +42,7 @@ class BaseModel(metaclass=abc.ABCMeta):
         return self.__api
 
     @api.setter
-    def api(self, value : OsuApi):
+    def api(self, value : 'OsuApi'):
         """ api setter """
 
         self.__api = value

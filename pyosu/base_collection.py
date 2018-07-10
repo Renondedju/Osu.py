@@ -22,7 +22,6 @@
 
 import abc
 
-from .api        import OsuApi
 from .exceptions import UnreferencedApi
 
 class BaseCollection(metaclass=abc.ABCMeta):
@@ -30,7 +29,7 @@ class BaseCollection(metaclass=abc.ABCMeta):
         unless you create a child class of it
     """
 
-    def __init__(self, api : OsuApi):
+    def __init__(self, api : 'OsuApi'):
 
         self._container = []
         self.__api     = api
@@ -45,7 +44,7 @@ class BaseCollection(metaclass=abc.ABCMeta):
         return self.__api
 
     @api.setter
-    def api(self, value : OsuApi):
+    def api(self, value : 'OsuApi'):
         """ api setter """
 
         self.__api = value

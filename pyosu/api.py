@@ -20,17 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http                   import *
-from .user                   import *
-from .score                  import *
-from .beatmap                import *
-from .user_best              import *
-from .user_event             import *
-from .exceptions             import *
-from .user_recent            import *
-from .score_collection       import *
-from .beatmap_collection     import *
-from .user_best_collection   import *
+from .http                   import Route, Request
+from .user                   import User
+from .score                  import Score
+from .beatmap                import Beatmap
+from .utilities              import Utilities
+from .user_best              import UserBest
+from .user_event             import UserEvent
+from .user_recent            import UserRecent
+from .score_collection       import ScoreCollection
+from .beatmap_collection     import BeatmapCollection
+from .user_best_collection   import UserBestCollection
 
 import asyncio
 import aiohttp
@@ -308,7 +308,6 @@ class OsuApi():
                            Optional, default behavior is automatic recognition 
                            may be problematic for usernames made up of digits only).
         """
-
         route = Route('get_user_best', self._api_key, u=user, limit=1)
 
         route.add_param('m', mode)

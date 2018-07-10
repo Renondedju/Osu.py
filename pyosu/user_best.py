@@ -20,10 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-class UserBest():
+from .base_model import BaseModel
+
+class UserBest(BaseModel):
     """ User best model """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
+
+        super().__init__(api)
 
         self.beatmap_id   = 0
         self.score        = 0.0
@@ -40,9 +44,6 @@ class UserBest():
         self.date         = ""
         self.rank         = ""
         self.pp           = 0.0          # Float value , 4 decimals
-
-        self.is_empty     = True
-        self.api          = api
 
         self._beatmap     = None
         self._user        = None

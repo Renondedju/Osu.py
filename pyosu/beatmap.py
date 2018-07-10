@@ -20,15 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .language               import *
-from .game_modes             import *
-from .beatmap_genre          import *
-from .beatmap_approved_state import *
+from .language               import Language
+from .game_modes             import GameMode
+from .base_model             import BaseModel
+from .beatmap_genre          import BeatmapGenre
+from .beatmap_approved_state import BeatmapApprovedState
 
-class Beatmap():
+class Beatmap(BaseModel):
     """ Beatmap class """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
+
+        super().__init__(api)
 
         #Api data
         self.approved         = BeatmapApprovedState.Pending
@@ -58,9 +61,6 @@ class Beatmap():
         self.playcount        = 0   # Number of times the beatmap was played
         self.passcount        = 0   # Number of times the beatmap was passed, completed (the user didn't fail or retry)
         self.max_combo        = 0   # The maximum combo a user can reach playing this beatmap.
-
-        self.is_empty         = True
-        self.api              = api
 
     async def get_beatmapset(self):
         """ Returns a beatmap collection with every beatmap of the beatmapset """

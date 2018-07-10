@@ -6,6 +6,7 @@
 
 > User bests and recent are now avaliable !
 
+- Created The BaseModel and BaseCollection classes for easier extensions
 - Renamed Api class to OsuApi to avoid confusions
 - Added OsuApi.get_user_best()
 - Added User Best model
