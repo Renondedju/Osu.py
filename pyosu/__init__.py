@@ -35,22 +35,21 @@ __license__   = 'MIT'
 __copyright__ = 'Copyright 2018 Renondedju'
 __version__   = '0.2.0'
 
-from .api                    import *
-from .http                   import *
-from .user                   import *
-from .score                  import *
-from .beatmap                import *
-from .language               import *
-from .user_best              import *
-from .base_model             import *
-from .user_event             import *
+from .api                    import OsuApi
+from .user                   import User
+from .score                  import Score
+from .beatmap                import Beatmap
+from .language               import Language
+from .user_best              import UserBest
+from .user_event             import UserEvent
 from .exceptions             import *
-from .game_modes             import *
-from .user_recent            import *
-from .beatmap_genre          import *
-from .game_modifiers         import *
-from .base_collection        import *
-from .score_collection       import *
-from .beatmap_collection     import *
-from .replay_availability    import *
-from .beatmap_approved_state import *
+from .game_modes             import GameMode
+from .user_recent            import UserRecent
+from .beatmap_genre          import BeatmapGenre
+from .game_modifiers         import GameModifier
+from .score_collection       import ScoreCollection
+from .beatmap_collection     import BeatmapCollection
+from .replay_availability    import ReplayAvailability
+from .user_best_collection   import UserBestCollection
+from .user_recent_collection import UserRecentCollection
+from .beatmap_approved_state import BeatmapApprovedState
