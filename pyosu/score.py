@@ -20,38 +20,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http                import *
-from .user                import *
-from .utilities           import *
-from .game_modes          import *
-from .replay_availability import *
+from .base_model          import BaseModel
+from .replay_availability import ReplayAvailability
 
-class Score():
+class Score(BaseModel):
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi', **data):
 
-        self.score_id         = 0
-        self.score            = 0.0
-        self.username         = ""
-        self.count300         = 0
-        self.count100         = 0
-        self.count50          = 0
-        self.countmiss        = 0
-        self.maxcombo         = 0
-        self.countkatu        = 0
-        self.countgeki        = 0
-        self.perfect          = False # True = maximum combo of map reached, False otherwise
-        self.enabled_mods     = 0     # Bitwise flag representation of mods used. see reference (GameModifier class)
-        self.user_id          = 0
-        self.date             = ""
-        self.rank             = ""
-        self.pp               = 0.0   # Float value , 4 decimals
-        self.replay_available = ReplayAvailability.Unavailable
-        self.mode             = 0
+        super().__init__(api, **data)
 
-        self.is_empty = True
-        self._user    = None
-        self.api      = api
+        self.score_id         = data.get('score_id'         , 0)
+        self.score            = data.get('score'            , 0.0)
+        self.username         = data.get('username'         , "")
+        self.count300         = data.get('count300'         , 0)
+        self.count100         = data.get('count100'         , 0)
+        self.count50          = data.get('count50'          , 0)
+        self.countmiss        = data.get('countmiss'        , 0)
+        self.maxcombo         = data.get('maxcombo'         , 0)
+        self.countkatu        = data.get('countkatu'        , 0)
+        self.countgeki        = data.get('countgeki'        , 0)
+        self.perfect          = data.get('perfect'          , False) # True = maximum combo of map reached, False otherwise
+        self.enabled_mods     = data.get('enabled_mods'     , 0)     # Bitwise flag representation of mods used. see reference (GameModifier class)
+        self.user_id          = data.get('user_id'          , 0)
+        self.date             = data.get('date'             , "")
+        self.rank             = data.get('rank'             , "")
+        self.pp               = data.get('pp'               , 0.0)   # Float value , 4 decimals
+        self.replay_available = data.get('replay_available' , ReplayAvailability.Unavailable)
+        self.mode             = data.get('mode'             , 0)
+
+        self._user = None
 
     async def get_user_data(self, mode = None):
         """ Returns the data of the author of the score 
@@ -59,9 +56,6 @@ class Score():
         If the user has already been fetched once, the data will be reused and no
         request will be sent to the osu api.
         """
-
-        if self.is_empty or self.username == "":
-            return User(self.api)
 
         if mode is None:
             mode = self.mode

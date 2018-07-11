@@ -24,7 +24,6 @@ from .http                   import Route, Request
 from .user                   import User
 from .score                  import Score
 from .beatmap                import Beatmap
-from .utilities              import Utilities
 from .user_best              import UserBest
 from .user_event             import UserEvent
 from .user_recent            import UserRecent
@@ -82,25 +81,17 @@ class OsuApi():
         route.add_param('h'   , hash_str)
         route.add_param('type', type_str)
 
-        beatmap = Beatmap(self)
         request = Request(route)
 
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
+        await request.fetch(self._session)
 
         data = request.data
         if len(data) is not 0:
             data = data[0]
         else:
-            beatmap.is_empty = True
-            return beatmap
+            data = {}
 
-        # Assigning the fetched values to the variables
-        beatmap.is_empty = Utilities.apply_data(beatmap, data)
-
-        return beatmap
+        return Beatmap(self, **data)
 
     async def get_beatmaps(self, limit = None, since = None, type_str = None,
         beatmapset_id = None, include_converted = None, user = None, mode = None):
@@ -138,19 +129,12 @@ class OsuApi():
         route.add_param('u'    , user)
         route.add_param('m'    , mode)
 
+        request = Request(route)
+        await request.fetch(self._session)
+
         beatmaps = BeatmapCollection(self)
-        request  = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
         for data in request.data:
-            beatmap = Beatmap(self)
-            beatmap.is_empty = Utilities.apply_data(beatmap, data)
-
-            beatmaps.add_beatmap(beatmap)
+            beatmaps.add_beatmap(Beatmap(self, **data))
 
         return beatmaps
 
@@ -178,29 +162,22 @@ class OsuApi():
         route.add_param('type', type_str)
         route.add_param('event_days', event_days)
 
-        user    = User   (self)
         request = Request(route)
 
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
+        await request.fetch(self._session)
 
         data = request.data
         if len(data) is not 0:
             data = data[0]
         else:
-            user.is_empty = True
-            return user
+            data = {}
+
+        user = User(self, **data)
 
         #Adding events
         for event in data['events']:
-            user_event = UserEvent()
-            Utilities.apply_data(user_event, event)
+            user_event = UserEvent(**event)
             user.events.append(user_event)
-
-        # Assigning the fetched values to the variables
-        user.is_empty = Utilities.apply_data(user, data, ['events'])
 
         return user
 
@@ -228,23 +205,16 @@ class OsuApi():
         route.add_param('m', mode)
         route.add_param('type', type_str)
 
-        score   = Score  (self)
         request = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
+        await request.fetch(self._session)
 
         data = request.data
         if len(data) is not 0:
             data = data[0]
         else:
-            score.is_empty = True
-            return score
+            data = {}
 
-        # Assigning the fetched values to the variables
-        score.is_empty = Utilities.apply_data(score, data)
+        score = Score(self, **data)
         if mode != None:
             score.mode = mode
 
@@ -278,18 +248,11 @@ class OsuApi():
         route.add_param('limit', limit)
 
         request = Request(route)
-        scores  = ScoreCollection(self)
+        await request.fetch(self._session)
 
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
+        scores = ScoreCollection(self)
         for data in request.data:
-            score = Score(self)
-            score.is_empty = Utilities.apply_data(score, data)
-
-            scores.add_score(score)
+            scores.add_score(Score(self, **data))
 
         return scores
 
@@ -314,24 +277,15 @@ class OsuApi():
         route.add_param('type', type_str)
         
         request = Request(route)
-        best    = UserBest(self)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
+        await request.fetch(self._session)
 
         data = request.data
         if len(data) is not 0:
             data = data[0]
         else:
-            best.is_empty = True
-            return best
+            data = {}
 
-        # Assigning the fetched values to the variables
-        best.is_empty = Utilities.apply_data(best, data)
-
-        return best
+        return UserBest(self, **data)
 
     async def get_user_bests(self, user, mode = None, type_str = None, limit = None):
         """
@@ -355,17 +309,10 @@ class OsuApi():
         route.add_param('limit', limit)
 
         request = Request(route)
-        bests   = UserBestCollection(self)
+        await request.fetch(self._session)
 
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
+        bests = UserBestCollection(self)
         for data in request.data:
-            best = UserBest(self)
-            best.is_empty = Utilities.apply_data(best, data)
-
-            bests.add_user_best(best)
+            bests.add_user_best(UserBest(self, **data))
 
         return bests

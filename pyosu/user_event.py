@@ -25,12 +25,12 @@ from .base_model import BaseModel
 class UserEvent(BaseModel):
     """ Contains events for a user """
 
-    def __init__(self, api : 'OsuApi'):
+    def __init__(self, api : 'OsuApi', **data):
         
-        super().__init__(api)
+        super().__init__(api, **data)
 
-        self.display_html	= ""
-        self.beatmap_id	    = 0
-        self.beatmapset_id	= 0
-        self.date		    = ""
-        self.epicfactor	    = 1 # How "epic" this event is (between 1 and 32)
+        self.display_html	= data.get('display_html' , "")
+        self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
+        self.beatmapset_id	= data.get('beatmapset_id', 0 )
+        self.date		    = data.get('date'		  , "")
+        self.epicfactor	    = data.get('epicfactor'	  , 1 ) # How "epic" this event is (between 1 and 32)

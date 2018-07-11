@@ -25,25 +25,25 @@ from .base_model import BaseModel
 class UserBest(BaseModel):
     """ User best model """
 
-    def __init__(self, api : 'OsuApi'):
+    def __init__(self, api : 'OsuApi', **data):
 
-        super().__init__(api)
+        super().__init__(api, **data)
 
-        self.beatmap_id   = 0
-        self.score        = 0.0
-        self.maxcombo     = 0
-        self.count300     = 0
-        self.count100     = 0
-        self.count50      = 0
-        self.countmiss    = 0
-        self.countkatu    = 0
-        self.countgeki    = 0
-        self.perfect      = False        # True = maximum combo of map reached, False otherwise
-        self.enabled_mods = 0            # bitwise flag representation of mods used. see reference (GameModifiers)
-        self.user_id      = 0
-        self.date         = ""
-        self.rank         = ""
-        self.pp           = 0.0          # Float value , 4 decimals
+        self.beatmap_id   = data.get('beatmap_id'  , 0)
+        self.score        = data.get('score'       , 0.0)
+        self.maxcombo     = data.get('maxcombo'    , 0)
+        self.count300     = data.get('count300'    , 0)
+        self.count100     = data.get('count100'    , 0)
+        self.count50      = data.get('count50'     , 0)
+        self.countmiss    = data.get('countmiss'   , 0)
+        self.countkatu    = data.get('countkatu'   , 0)
+        self.countgeki    = data.get('countgeki'   , 0)
+        self.perfect      = data.get('perfect'     , False)        # True = maximum combo of map reached, False otherwise
+        self.enabled_mods = data.get('enabled_mods', 0)            # bitwise flag representation of mods used. see reference (GameModifiers)
+        self.user_id      = data.get('user_id'     , 0)
+        self.date         = data.get('date'        , "")
+        self.rank         = data.get('rank'        , "")
+        self.pp           = data.get('pp'          , 0.0)          # Float value , 4 decimals
 
         self._beatmap     = None
         self._user        = None

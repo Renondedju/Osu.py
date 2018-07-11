@@ -149,8 +149,11 @@ class Request():
                     self._data = data
                     return data
 
-    async def fetch(self):
+    async def fetch(self, session = None):
         """ Fetches some data using the actual route """
+        
+        if session is not None:
+            return await self.fetch_with_session(session)
 
         async with aiohttp.ClientSession() as session:
             return await self.fetch_with_session(session)

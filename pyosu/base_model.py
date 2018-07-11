@@ -27,10 +27,10 @@ from .exceptions import UnreferencedApi
 class BaseModel(metaclass=abc.ABCMeta):
     """ This class is just a base model and cannot be instanciated. """
     
-    def __init__(self, api : 'OsuApi'):
+    def __init__(self, api : 'OsuApi', **data):
 
-        self.__api     = api
-        self.is_empty = True
+        self.__api    = api
+        self.is_empty = len(data) is 0
 
     @property
     def api(self):
