@@ -24,7 +24,7 @@ import asyncio
 import aiohttp
 import json
 
-from .exceptions import *
+from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError
 
 class Route:
 

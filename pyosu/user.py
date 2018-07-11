@@ -25,7 +25,7 @@ from .base_model import BaseModel
 class User(BaseModel):
     """ Contains users data """
 
-    def __init__(self, api : 'OsuApi', events : list, **data):
+    def __init__(self, api : 'OsuApi', user_events : list, **data):
 
         super().__init__(api, **data)
         
@@ -49,4 +49,4 @@ class User(BaseModel):
         self.country         = data.get('country'       , "")   # Uses the ISO3166-1 alpha-2 country code naming.
                                                                 # See this for more information: http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2/)
         self.pp_country_rank = data.get('pp_country_rank', 0)   # The user's rank in the country.
-        self.events          = events                           # Contains events for this user
+        self.events          = user_events                      # Contains events for this user

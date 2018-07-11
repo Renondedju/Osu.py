@@ -41,6 +41,26 @@ class OsuApi():
         self._api_key = api_key
         self._session = None
 
+    async def __get_data(self, url : str, unique = True, **args):
+
+        route = Route(url, self._api_key)
+
+        for key, value in args.items():
+            route.add_param(key, value)
+
+        request = Request(route)
+        await request.fetch(self._session)
+
+        data = request.data
+
+        if unique:
+            if len(data) is not 0:
+                data = data[0]
+            else:
+                data = {}
+
+        return data
+
     async def get_beatmap(self, beatmapset_id = None, beatmap_id = None, user = None,
         type_str = None, mode = None, include_converted = None, hash_str = None):
         """
@@ -71,25 +91,9 @@ class OsuApi():
                                       Optional, by default all beatmaps are returned independently from the hash.
         """
 
-        route = Route('get_beatmaps', self._api_key, limit=1)
-
-        route.add_param('s'   , beatmapset_id)
-        route.add_param('b'   , beatmap_id)
-        route.add_param('u'   , user)
-        route.add_param('m'   , mode)
-        route.add_param('a'   , include_converted)
-        route.add_param('h'   , hash_str)
-        route.add_param('type', type_str)
-
-        request = Request(route)
-
-        await request.fetch(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            data = {}
+        data = await self.__get_data('get_beatmaps', limit = 1, s = beatmapset_id,
+            b = beatmap_id, u = user, m = mode, a = include_converted, h = hash_str,
+            type = type_str)
 
         return Beatmap(self, **data)
 
@@ -119,21 +123,11 @@ class OsuApi():
                                     Optional, default is 0.
         """
 
-        route = Route('get_beatmaps', self._api_key)
-
-        route.add_param('limit', limit)
-        route.add_param('since', since)
-        route.add_param('type' , type_str)
-        route.add_param('s'    , beatmapset_id)
-        route.add_param('a'    , include_converted)
-        route.add_param('u'    , user)
-        route.add_param('m'    , mode)
-
-        request = Request(route)
-        await request.fetch(self._session)
+        datas = await self.__get_data('get_beatmaps', False, limit = limit, since = since,
+            type = type_str, s = beatmapset_id, a = include_converted, u = user, m = mode)
 
         beatmaps = BeatmapCollection(self)
-        for data in request.data:
+        for data in datas:
             beatmaps.add_beatmap(Beatmap(self, **data))
 
         return beatmaps
@@ -155,31 +149,14 @@ class OsuApi():
                              Range of 1-31. Optional, default value is 1.
         """
 
-        route = Route('get_user', self._api_key)
+        data = await self.__get_data('get_user', u = user, m = mode, type = type_str,
+            event_days = event_days)
 
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-        route.add_param('event_days', event_days)
+        user_events = []
+        for event in data.get('events', []):
+            user_events.append(UserEvent(**event))
 
-        request = Request(route)
-
-        await request.fetch(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            data = {}
-
-        user = User(self, **data)
-
-        #Adding events
-        for event in data['events']:
-            user_event = UserEvent(**event)
-            user.events.append(user_event)
-
-        return user
+        return User(self, user_events, **data)
 
     async def get_score(self, beatmap_id, user = None, mode = None, type_str = None):
         """
@@ -199,20 +176,8 @@ class OsuApi():
                              Optional, maps of all modes are returned by default.
         """
 
-        route = Route('get_scores', self._api_key, b=beatmap_id, limit=1)
-
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-
-        request = Request(route)
-        await request.fetch(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            data = {}
+        data = await self.__get_data('get_scores', b = beatmap_id, limit = 1, u = user,
+            m = mode, type = type_str)
 
         score = Score(self, **data)
         if mode != None:
@@ -239,19 +204,11 @@ class OsuApi():
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
 
-        route = Route('get_scores', self._api_key, b=beatmap_id)
-
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('mods', mods)
-        route.add_param('type', type_str)
-        route.add_param('limit', limit)
-
-        request = Request(route)
-        await request.fetch(self._session)
+        datas = await self.__get_data('get_scores', False, b = beatmap_id, u = user,
+            m = mode, mods = mods, type = type_str, limit = limit)
 
         scores = ScoreCollection(self)
-        for data in request.data:
+        for data in datas:
             scores.add_score(Score(self, **data))
 
         return scores
@@ -271,19 +228,8 @@ class OsuApi():
                            Optional, default behavior is automatic recognition 
                            may be problematic for usernames made up of digits only).
         """
-        route = Route('get_user_best', self._api_key, u=user, limit=1)
-
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-        
-        request = Request(route)
-        await request.fetch(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            data = {}
+        data = await self.__get_data('get_user_best', u = user, limit = 1, m = mode,
+            type = type_str)
 
         return UserBest(self, **data)
 
@@ -302,17 +248,11 @@ class OsuApi():
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
 
-        route = Route('get_user_best', self._api_key, u=user)
-
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-        route.add_param('limit', limit)
-
-        request = Request(route)
-        await request.fetch(self._session)
+        datas = await self.__get_data('get_user_best', False, u = user, m = mode,
+            type = type_str, limit = limit)
 
         bests = UserBestCollection(self)
-        for data in request.data:
+        for data in datas:
             bests.add_user_best(UserBest(self, **data))
 
         return bests
