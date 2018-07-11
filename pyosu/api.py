@@ -20,31 +20,53 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http                   import *
-from .user                   import *
-from .score                  import *
-from .beatmap                import *
-from .user_event             import *
-from .exceptions             import *
-from .score_collection       import *
-from .beatmap_collection     import *
+from .http                   import Route, Request
+from .user                   import User
+from .score                  import Score
+from .beatmap                import Beatmap
+from .user_best              import UserBest
+from .user_event             import UserEvent
+from .user_recent            import UserRecent
+from .score_collection       import ScoreCollection
+from .beatmap_collection     import BeatmapCollection
+from .user_best_collection   import UserBestCollection
+from .user_recent_collection import UserRecentCollection
 
 import asyncio
-import aiohttp
 
-class Api():
+class OsuApi():
 
     def __init__(self, api_key : str):
 
         self._api_key = api_key
         self._session = None
 
+    async def __get_data(self, url : str, unique = True, **args):
+
+        route = Route(url, self._api_key)
+
+        for key, value in args.items():
+            route.add_param(key, value)
+
+        request = Request(route)
+        await request.fetch(self._session)
+
+        data = request.data
+
+        if unique:
+            if len(data) is not 0:
+                data = data[0]
+            else:
+                data = {}
+
+        return data
+
     async def get_beatmap(self, beatmapset_id = None, beatmap_id = None, user = None,
         type_str = None, mode = None, include_converted = None, hash_str = None):
         """
             If any of the parameters used returns more than one beatmap,
             the first one only will be returned, if you want multiple beatmaps,
-            use Api.get_beatmaps() instead
+            use OsuApi.get_beatmaps() instead
 
             Parameters :
 
@@ -69,35 +91,11 @@ class Api():
                                       Optional, by default all beatmaps are returned independently from the hash.
         """
 
-        route = Route('get_beatmaps', self._api_key, limit=1)
+        data = await self.__get_data('get_beatmaps', limit = 1, s = beatmapset_id,
+            b = beatmap_id, u = user, m = mode, a = include_converted, h = hash_str,
+            type = type_str)
 
-        route.add_param('s'   , beatmapset_id)
-        route.add_param('b'   , beatmap_id)
-        route.add_param('u'   , user)
-        route.add_param('m'   , mode)
-        route.add_param('a'   , include_converted)
-        route.add_param('h'   , hash_str)
-        route.add_param('type', type_str)
-
-        beatmap = Beatmap(self)
-        request = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            beatmap.is_empty = True
-            return beatmap
-
-        # Assigning the fetched values to the variables
-        beatmap.is_empty = Utilities.apply_data(beatmap, data)
-
-        return beatmap
+        return Beatmap(self, **data)
 
     async def get_beatmaps(self, limit = None, since = None, type_str = None,
         beatmapset_id = None, include_converted = None, user = None, mode = None):
@@ -125,29 +123,12 @@ class Api():
                                     Optional, default is 0.
         """
 
-        route = Route('get_beatmaps', self._api_key)
-
-        route.add_param('limit', limit)
-        route.add_param('since', since)
-        route.add_param('type' , type_str)
-        route.add_param('s'    , beatmapset_id)
-        route.add_param('a'    , include_converted)
-        route.add_param('u'    , user)
-        route.add_param('m'    , mode)
+        datas = await self.__get_data('get_beatmaps', False, limit = limit, since = since,
+            type = type_str, s = beatmapset_id, a = include_converted, u = user, m = mode)
 
         beatmaps = BeatmapCollection(self)
-        request  = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
-        for data in request.data:
-            beatmap = Beatmap(self)
-            beatmap.is_empty = Utilities.apply_data(beatmap, data)
-
-            beatmaps.add_beatmap(beatmap)
+        for data in datas:
+            beatmaps.add_beatmap(Beatmap(self, **data))
 
         return beatmaps
 
@@ -168,44 +149,20 @@ class Api():
                              Range of 1-31. Optional, default value is 1.
         """
 
-        route = Route('get_user', self._api_key)
+        data = await self.__get_data('get_user', u = user, m = mode, type = type_str,
+            event_days = event_days)
 
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-        route.add_param('event_days', event_days)
+        user_events = []
+        for event in data.get('events', []):
+            user_events.append(UserEvent(**event))
 
-        user    = User   (self)
-        request = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            user.is_empty = True
-            return user
-
-        #Adding events
-        for event in data['events']:
-            user_event = UserEvent()
-            Utilities.apply_data(user_event, event)
-            user.events.append(user_event)
-
-        # Assigning the fetched values to the variables
-        user.is_empty = Utilities.apply_data(user, data, ['events'])
-
-        return user
+        return User(self, user_events, **data)
 
     async def get_score(self, beatmap_id, user = None, mode = None, type_str = None):
         """
             If any of the parameters used returns more than one score,
             the first one only will be used. If you want multiple scores use
-            Api.get_scores() instead
+            OsuApi.get_scores() instead
 
             Parameters :
 
@@ -219,29 +176,10 @@ class Api():
                              Optional, maps of all modes are returned by default.
         """
 
-        route = Route('get_scores', self._api_key, b=beatmap_id, limit=1)
+        data = await self.__get_data('get_scores', b = beatmap_id, limit = 1, u = user,
+            m = mode, type = type_str)
 
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('type', type_str)
-
-        score   = Score  (self)
-        request = Request(route)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
-        data = request.data
-        if len(data) is not 0:
-            data = data[0]
-        else:
-            score.is_empty = True
-            return score
-
-        # Assigning the fetched values to the variables
-        score.is_empty = Utilities.apply_data(score, data)
+        score = Score(self, **data)
         if mode != None:
             score.mode = mode
 
@@ -266,26 +204,97 @@ class Api():
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
 
-        route = Route('get_scores', self._api_key, b=beatmap_id)
+        datas = await self.__get_data('get_scores', False, b = beatmap_id, u = user,
+            m = mode, mods = mods, type = type_str, limit = limit)
 
-        route.add_param('u', user)
-        route.add_param('m', mode)
-        route.add_param('mods', mods)
-        route.add_param('type', type_str)
-        route.add_param('limit', limit)
-
-        request = Request(route)
-        scores  = ScoreCollection(self)
-
-        if self._session is None:
-            await request.fetch()
-        else:
-            await request.fetch_with_session(self._session)
-
-        for data in request.data:
-            score = Score(self)
-            score.is_empty = Utilities.apply_data(score, data)
-
-            scores.add_score(score)
+        scores = ScoreCollection(self)
+        for data in datas:
+            scores.add_score(Score(self, **data))
 
         return scores
+
+    async def get_user_best(self, user, mode = None, type_str = None):
+        """
+            Returns the top play of a user. If you want more than one user best
+            use OsuApi.get_user_bests() instead.
+
+            Parameters : 
+            
+                user     - specify a user_id or a username to return best scores from (required).
+                mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                           Optional, default value is 0.
+                type_str - specify if user is a user_id or a username.
+                           Use 'string' for usernames or 'id' for user_ids.
+                           Optional, default behavior is automatic recognition 
+                           may be problematic for usernames made up of digits only).
+        """
+        data = await self.__get_data('get_user_best', u = user, limit = 1, m = mode,
+            type = type_str)
+
+        return UserBest(self, **data)
+
+    async def get_user_bests(self, user, mode = None, type_str = None, limit = None):
+        """
+            Parameters :
+
+                user       - sspecify a user_id or a username to return best scores from (required).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.
+                type_str   - specify if user is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
+        """
+
+        datas = await self.__get_data('get_user_best', False, u = user, m = mode,
+            type = type_str, limit = limit)
+
+        bests = UserBestCollection(self)
+        for data in datas:
+            bests.add_user_best(UserBest(self, **data))
+
+        return bests
+
+    async def get_user_recent(self, user, mode = None, type_str = None):
+        """
+            Returns the top play of a user. If you want more than one user best
+            use OsuApi.get_user_bests() instead.
+
+            Parameters : 
+            
+                user     - specify a user_id or a username to return best scores from (required).
+                mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                           Optional, default value is 0.
+                type_str - specify if user is a user_id or a username.
+                           Use 'string' for usernames or 'id' for user_ids.
+                           Optional, default behavior is automatic recognition 
+                           may be problematic for usernames made up of digits only).
+        """
+        data = await self.__get_data('get_user_recent', u = user, limit = 1, m = mode,
+            type = type_str)
+
+        return UserRecent(self, **data)
+
+    async def get_user_recents(self, user, mode = None, type_str = None, limit = None):
+        """
+            Parameters :
+
+                user       - sspecify a user_id or a username to return best scores from (required).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.
+                type_str   - specify if user is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
+        """
+
+        datas = await self.__get_data('get_user_recent', False, u = user, m = mode,
+            type = type_str, limit = limit)
+
+        recents = UserRecentCollection(self)
+        for data in datas:
+            recents.add_user_recent(UserRecent(self, **data))
+
+        return recents

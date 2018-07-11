@@ -20,50 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-class WrongApiKey(Exception):
-    """ Wrong api key exception """
+from abc         import ABCMeta
+from .exceptions import UnreferencedApi
 
-    def __init__(self, message):
+class BaseModel(metaclass=ABCMeta):
+    """ This class is just a base model and cannot be instanciated. """
+    
+    def __init__(self, api : 'OsuApi', **data):
 
-        super().__init__(message)
-        self.code = 401
+        self.__api    = api
+        self.is_empty = len(data) is 0
 
-class RouteNotFound(Exception):
-    """ The route that was targetted was not found """
+    @property
+    def api(self):
+        """ api getter """
 
-    def __init__(self, message, code):
-
-        super().__init__(message)
-        self.code = code
-
-class InvalidArgument(Exception):
-    """ Invalid argument passed 
-    This event is raised by the Route class if a parameter
-    send isn't in the list of accepted parameters :
-
-    [a, h, k, m, b, u, s, mp, limit, type, mods, event_days, since]
-    """
-
-    def __init__(self, param):
-
-        super().__init__(f'Invalid parameter used : \'{param}\'')
-        self.code = 400
-
-class HTTPError(Exception):
-    """ Unhandeled http error """
-
-    def __init__(self, code, message):
-
-        super().__init__(message)
-
-        self.message = message
-        self.code = code
-
-class UnreferencedApi(Exception):
-    """ Api instance isn't known """
-
-    def __init__(self, message):
-
-        super().__init__(message)
+        if self.__api is None:
+            raise UnreferencedApi("The osu api reference cannot be 'None'")
         
-        self.message = message
+        return self.__api
+
+    @api.setter
+    def api(self, value : 'OsuApi'):
+        """ api setter """
+
+        self.__api = value

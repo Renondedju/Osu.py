@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#Trello card : https://trello.com/c/HG9eXUE0/7-game-modifiers-class
-
 class GameModifier():
     """
         Game modifier class. Used to represent game modifiers

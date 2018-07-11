@@ -20,43 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .beatmap import *
+from .beatmap         import Beatmap
+from .base_collection import BaseCollection
 
-class BeatmapCollection():
+class BeatmapCollection(BaseCollection):
     """ Beatmap collection class """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
 
-        self._beatmaps = []
-        self.api       = api
+        super().__init__(api, Beatmap)
 
-    @property
-    def count(self):
-        """ Returns the number of beatmaps of the collection """
-        return len(self._beatmaps)
-
-    @property
-    def is_empty(self):
-        """ Checks if the beatmap collection si empty or not """
-        return len(self._beatmaps) == 0
-
-    @property
-    def beatmaps(self):
+    def get_beatmaps(self):
         """ Returns the beatmaps of the collection """
-        return self._beatmaps
+        
+        return self.get_content()
 
     def add_beatmap(self, beatmap : Beatmap):
         """ Adds a beatmap to the collection """
 
-        if beatmap is not None:
-            self._beatmaps.append(beatmap)
-
-        return
-
+        return self.add_content(beatmap)
+ 
     def remove_beatmap(self, beatmap : Beatmap):
         """ Removes a beatmap from the collection """
 
-        if beatmap is not None:
-            self._beatmaps.pop(beatmap, None)
-
-        return
+        return self.remove_content(beatmap)

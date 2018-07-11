@@ -20,24 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-class Utilities():
-    """ Utilities class """
+from .user_best       import UserBest
+from .base_collection import BaseCollection
 
-    @staticmethod
-    def apply_data(obj, data : dict, ignore : list = []):
-        """ Applies datas from a dict to an object.
-            Returns True if the dict passed is empty
+class UserBestCollection(BaseCollection):
+    """ User recent collection class """
 
-            'ignore' is a list of optional key to ignore, must be str keys
-        """
+    def __init__(self, api : 'OsuApi'):
 
-        for key, value in data.items():
+        super().__init__(api, UserBest)
 
-            if key in ignore:
-                continue
-
-            attribute = getattr(obj, key)
-            if attribute is not None and value is not None:
-                setattr(obj, key, (type(attribute))(value))
+    def get_user_bests(self):
+        """ Returns the user recent of the collection """
         
-        return len(data) is 0
+        return self.get_content()
+
+    def add_user_best(self, beatmap : UserBest):
+        """ Adds a user recent to the collection """
+
+        return self.add_content(beatmap)
+ 
+    def remove_user_best(self, beatmap : UserBest):
+        """ Removes a user recent from the collection """
+
+        return self.remove_content(beatmap)

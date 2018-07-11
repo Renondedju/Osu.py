@@ -20,45 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http      import *
-from .score     import *
-from .utilities import *
+from .score           import Score
+from .base_collection import BaseCollection
 
-class ScoreCollection():
+class ScoreCollection(BaseCollection):
     """ Score collection class """
 
-    def __init__(self, api):
+    def __init__(self, api : 'OsuApi'):
 
-        self._scores = []
-        self.api     = api
+        super().__init__(api, Score)
 
-    @property
-    def count(self):
-        """ Returns the number of scores of the collection """
-        return len(self._scores)
-
-    @property
-    def scores(self):
+    def get_scores(self):
         """ Returns the scores of the collection """
-        return self._scores
-    
-    @property
-    def is_empty(self):
-        """ Checks if the score collection si empty or not """
-        return len(self._scores) == 0
-    
-    def add_score(self, score : Score):
+        
+        return self.get_content()
+
+    def add_score(self, beatmap : Score):
         """ Adds a score to the collection """
 
-        if score is not None:
-            self._scores.append(score)
-
-        return
-
-    def remove_beatmap(self, score : Score):
+        return self.add_content(beatmap)
+ 
+    def remove_score(self, beatmap : Score):
         """ Removes a score from the collection """
 
-        if score is not None:
-            self._scores.pop(score, None)
-
-        return
+        return self.remove_content(beatmap)

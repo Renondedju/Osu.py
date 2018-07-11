@@ -31,7 +31,7 @@ from pyosu import *
 
 pass_count = 0
 test_count = 0
-api = Api(json.load(open('test-config.json'))['api_key'])
+api = OsuApi(json.load(open('test-config.json'))['api_key'])
 
 async def test(function):
     """ Tests a function and sends a report if it fails """
@@ -81,6 +81,29 @@ async def test_score_collection():
     if scores.is_empty:
         raise ValueError('Empty scores !')
 
+async def test_user_best():
+    best = await api.get_user_best('Renondedju', mode = GameMode.Osu)
+    if (best.is_empty):
+        raise ValueError('Empty best !')
+    
+    if (await best.get_beatmap()).is_empty:
+        raise ValueError('Empty best.get_beatmap() !')
+
+    if (await best.get_user()).is_empty:
+        raise ValueError('Empty best.get_user() !')
+
+async def test_user_bests():
+    bests = await api.get_user_bests('Renondedju')
+
+    if bests.is_empty:
+        raise ValueError('User bests is empty, there should be 10 scores')
+
+async def test_user_recent():
+    await api.get_user_recent('Jamu')
+
+async def test_user_recents():
+    await api.get_user_recents('Jamu')
+
 async def main():
 
     await test(test_user)
@@ -88,6 +111,10 @@ async def main():
     await test(test_beatmap_collection)
     await test(test_score)
     await test(test_score_collection)
+    await test(test_user_best)
+    await test(test_user_bests)
+    await test(test_user_recent)
+    await test(test_user_recents)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")
