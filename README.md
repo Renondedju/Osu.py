@@ -1,4 +1,5 @@
 # Osu<span></span>.py library [![dev chat](https://discordapp.com/api/guilds/310348632094146570/widget.png?style=shield)](https://discord.gg/Qsw3yD5)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRenondedju%2FOsu.py.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRenondedju%2FOsu.py?ref=badge_shield)
 
 A simple python implementation for the Osu! api.
 
@@ -27,3 +28,5 @@ Thanks to @ppy for [the osu api](https://github.com/ppy/osu-api/wiki)
 ## License
 
 Osu<span></span>.py is released under the [MIT License](http://www.opensource.org/licenses/MIT). Check [the license](LICENSE) for more details.
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRenondedju%2FOsu.py.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FRenondedju%2FOsu.py?ref=badge_large)
