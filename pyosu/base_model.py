@@ -20,11 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import abc
-
+from abc         import ABCMeta
 from .exceptions import UnreferencedApi
 
-class BaseModel(metaclass=abc.ABCMeta):
+class BaseModel(metaclass=ABCMeta):
     """ This class is just a base model and cannot be instanciated. """
     
     def __init__(self, api : 'OsuApi', **data):

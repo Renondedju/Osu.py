@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Trello card : https://trello.com/c/FgSCdGTM/8-exceptions
-
 class WrongApiKey(Exception):
     """ Wrong api key exception """
 

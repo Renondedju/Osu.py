@@ -32,7 +32,6 @@ from .beatmap_collection     import BeatmapCollection
 from .user_best_collection   import UserBestCollection
 
 import asyncio
-import aiohttp
 
 class OsuApi():
 

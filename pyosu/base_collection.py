@@ -20,11 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import abc
-
+from abc         import ABCMeta
 from .exceptions import UnreferencedApi
 
-class BaseCollection(metaclass=abc.ABCMeta):
+class BaseCollection(metaclass=ABCMeta):
     """ Base collection object, you cannot instanciate it
         unless you create a child class of it
     """

@@ -21,9 +21,9 @@
 # SOFTWARE.
 
 import asyncio
-import aiohttp
-import json
 
+from json        import loads
+from aiohttp     import ClientSession
 from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError
 
 class Route:
@@ -112,7 +112,7 @@ class Request():
         if (text == None or text == ''):
             return {}
 
-        data = json.loads(text)
+        data = loads(text)
 
         if len(args) == 0:
             return data
@@ -155,5 +155,5 @@ class Request():
         if session is not None:
             return await self.fetch_with_session(session)
 
-        async with aiohttp.ClientSession() as session:
+        async with ClientSession() as session:
             return await self.fetch_with_session(session)
