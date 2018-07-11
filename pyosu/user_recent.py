@@ -27,7 +27,7 @@ class UserRecent(BaseModel):
 
     def __init__(self, api : 'OsuApi', **data):
 
-        super().__init__(api)
+        super().__init__(api, **data)
 
         self.beatmap_id   = data.get('beatmap_id'  , 0)
         self.score        = data.get('score'       , 0.0)

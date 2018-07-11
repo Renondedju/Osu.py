@@ -30,6 +30,7 @@ from .user_recent            import UserRecent
 from .score_collection       import ScoreCollection
 from .beatmap_collection     import BeatmapCollection
 from .user_best_collection   import UserBestCollection
+from .user_recent_collection import UserRecentCollection
 
 import asyncio
 
@@ -46,6 +47,8 @@ class OsuApi():
 
         for key, value in args.items():
             route.add_param(key, value)
+
+        print(route.route)
 
         request = Request(route)
         await request.fetch(self._session)
@@ -234,7 +237,6 @@ class OsuApi():
 
     async def get_user_bests(self, user, mode = None, type_str = None, limit = None):
         """
-
             Parameters :
 
                 user       - sspecify a user_id or a username to return best scores from (required).
@@ -255,3 +257,46 @@ class OsuApi():
             bests.add_user_best(UserBest(self, **data))
 
         return bests
+
+    async def get_user_recent(self, user, mode = None, type_str = None):
+        """
+            Returns the top play of a user. If you want more than one user best
+            use OsuApi.get_user_bests() instead.
+
+            Parameters : 
+            
+                user     - specify a user_id or a username to return best scores from (required).
+                mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                           Optional, default value is 0.
+                type_str - specify if user is a user_id or a username.
+                           Use 'string' for usernames or 'id' for user_ids.
+                           Optional, default behavior is automatic recognition 
+                           may be problematic for usernames made up of digits only).
+        """
+        data = await self.__get_data('get_user_recent', u = user, limit = 1, m = mode,
+            type = type_str)
+
+        return UserRecent(self, **data)
+
+    async def get_user_recents(self, user, mode = None, type_str = None, limit = None):
+        """
+            Parameters :
+
+                user       - sspecify a user_id or a username to return best scores from (required).
+                mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
+                             Optional, default value is 0.
+                type_str   - specify if user is a user_id or a username.
+                             Use string for usernames or id for user_ids.
+                             Optional, default behaviour is automatic recognition
+                             (may be problematic for usernames made up of digits only).
+                limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
+        """
+
+        datas = await self.__get_data('get_user_recent', False, u = user, m = mode,
+            type = type_str, limit = limit)
+
+        recents = UserRecentCollection(self)
+        for data in datas:
+            recents.add_user_recent(UserRecent(self, **data))
+
+        return recents
