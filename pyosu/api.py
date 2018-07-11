@@ -48,8 +48,6 @@ class OsuApi():
         for key, value in args.items():
             route.add_param(key, value)
 
-        print(route.route)
-
         request = Request(route)
         await request.fetch(self._session)
 
