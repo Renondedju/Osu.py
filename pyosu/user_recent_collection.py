@@ -20,27 +20,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .user_best       import UserBest
+from .user_recent     import UserRecent
 from .base_collection import BaseCollection
 
-class UserBestCollection(BaseCollection):
-    """ User recent collection class """
+class UserRecentCollection(BaseCollection):
+    """ User bests collection class """
 
     def __init__(self, api : 'OsuApi'):
 
-        super().__init__(api, UserBest)
+        super().__init__(api, UserRecent)
 
-    def get_user_bests(self):
-        """ Returns the user recent of the collection """
+    def get_user_recents(self):
+        """ Returns the user bests of the collection """
         
         return self.get_content()
 
-    def add_user_best(self, beatmap : UserBest):
-        """ Adds a user recent to the collection """
+    def add_user_recent(self, beatmap : UserRecent):
+        """ Adds a user best to the collection """
 
         return self.add_content(beatmap)
  
-    def remove_user_best(self, beatmap : UserBest):
-        """ Removes a user recent from the collection """
+    def remove_user_recent(self, beatmap : UserRecent):
+        """ Removes a user best from the collection """
 
         return self.remove_content(beatmap)
