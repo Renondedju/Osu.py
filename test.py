@@ -104,17 +104,23 @@ async def test_user_recent():
 async def test_user_recents():
     await api.get_user_recents('Jamu')
 
+async def test_replay():
+    
+    #This replay is one year old and shouldn't be avaliable
+    await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
+
 async def main():
 
     await test(test_user)
-    await test(test_beatmap)
-    await test(test_beatmap_collection)
     await test(test_score)
-    await test(test_score_collection)
+    await test(test_replay)
+    await test(test_beatmap)
     await test(test_user_best)
     await test(test_user_bests)
     await test(test_user_recent)
     await test(test_user_recents)
+    await test(test_score_collection)
+    await test(test_beatmap_collection)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")

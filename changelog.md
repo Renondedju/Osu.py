@@ -7,6 +7,8 @@
 > Replays and multiplayer match arrived !
 
 - Created replay model
+- Added OsuApi.get_replay()
+- Added the ReplayUnavailable exception
 
 ## Version 0.2.0
 
