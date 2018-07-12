@@ -15,6 +15,8 @@
 - Added the MultiplayerTeam enum
 - Added the ScoringType enum
 - Added the TeamType enum
+- Added OsuApi.get_match()
+- Fixed route check bug
 
 ## Version 0.2.0
 

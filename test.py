@@ -115,9 +115,16 @@ async def test_replay():
     # Cannot really test replays since they might be deleted at all time ..
     # Also sice the request rate is at 10/min, I don't wanna abuse it
 
+async def test_match():
+
+    await api.get_match(0)
+
+    # Cannot test too much things here since a match is temporary
+
 async def main():
 
     await test(test_user)
+    await test(test_match)
     await test(test_score)
     await test(test_replay)
     await test(test_beatmap)
