@@ -27,7 +27,7 @@ from .beatmap_genre          import BeatmapGenre
 from .beatmap_approved_state import BeatmapApprovedState
 
 class Beatmap(BaseModel):
-    """ Beatmap class """
+    """ Beatmap model """
 
     def __init__(self, api : 'OsuApi', **data):
 
