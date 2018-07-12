@@ -31,7 +31,7 @@ class MultiplayerMatch(BaseModel):
 
         self.start_time   = data.get('start_time', ""  )
         self.match_id     = data.get('match_id'  , 0   )
-        self.end_time     = data.get('end_time'  , None) # not supported yet - always None
+        self.end_time     = data.get('end_time'  , None) # not supported yet - always None (Api side)
         self.name         = data.get('name'      , ""  )
 
         self.games = match_games
