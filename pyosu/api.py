@@ -29,6 +29,9 @@ from .user_best              import UserBest
 from .user_event             import UserEvent
 from .user_recent            import UserRecent
 from .score_collection       import ScoreCollection
+from .multiplayer_game       import MultiplayerGame
+from .multiplayer_score      import MultiplayerScore
+from .multiplayer_match      import MultiplayerMatch
 from .beatmap_collection     import BeatmapCollection
 from .user_best_collection   import UserBestCollection
 from .user_recent_collection import UserRecentCollection
@@ -325,3 +328,30 @@ class OsuApi():
             data['beatmap_id'] = beatmap_id
 
         return Replay(self, **data)
+
+    async def get_match(self, match_id):
+        """
+            Retrieve information about multiplayer match.
+
+            Parameters :
+
+                match_id - match id to get information from (required).
+        """
+
+        data = await self.__get_data('get_match', False, mp = match_id)
+
+        if type(data) == dict and data.get('match') == 0:
+            return MultiplayerMatch(self, [], **{})
+        else:
+            data = data[0]
+
+        games = []
+        for game in data.get('games', []):
+
+            scores = []
+            for score in game.get('scores', []):
+                scores.append(MultiplayerScore(self, **score))
+
+            games.append(MultiplayerGame(self, scores, **game))
+
+        return MultiplayerMatch(self, games, **data.get('match', {}))
