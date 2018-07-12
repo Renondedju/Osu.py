@@ -107,7 +107,13 @@ async def test_user_recents():
 async def test_replay():
     
     #This replay is one year old and shouldn't be avaliable
-    await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
+    try:
+        await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
+    except ReplayUnavailable:
+        pass
+
+    # Cannot really test replays since they might be deleted at all time ..
+    # Also sice the request rate is at 10/min, I don't wanna abuse it
 
 async def main():
 
