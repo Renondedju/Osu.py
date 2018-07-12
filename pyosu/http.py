@@ -24,7 +24,7 @@ import asyncio
 
 from json        import loads
 from aiohttp     import ClientSession
-from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError
+from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError, ReplayUnavailable
 
 class Route:
 
@@ -39,9 +39,6 @@ class Route:
     @property
     def route(self):
         """ Returns the current route """
-
-        self.check_params()
-        self.check_path()
 
         params = ''
         for key, value in self.parameters.items():
@@ -86,7 +83,7 @@ class Route:
         """
 
         accepted_paths = ['get_beatmaps', 'get_user', 'get_scores',
-            'get_user_best', 'get_user_recent',' get_match', 'get_replay']
+            'get_user_best', 'get_user_recent', 'get_match', 'get_replay']
 
         if self.path not in accepted_paths:
             raise RouteNotFound(f'The route {self.route} does not exists.', 404)
@@ -128,26 +125,32 @@ class Request():
     async def fetch_with_session(self, session):
         """ Fetches some data with a session using the actual route """
 
-        for i in range(self.retry_count):
-            async with session.get(self.route.route) as response:
-                    
-                if response.status == 401: #Unauthorized
-                    raise WrongApiKey(await self.get_json(response, 'error'))
+        self.route.check_params()
+        self.route.check_path()
 
-                if response.status in [302, 404]: #Redirection or route not found
-                    raise RouteNotFound(f'{self.route.route} was not found.', response.status)
+        async with session.get(self.route.route) as response:
+                
+            if response.status == 401: #Unauthorized
+                raise WrongApiKey(await self.get_json(response, 'error'))
 
-                if response.status != 200 and i == self.retry_count: #Unknown error
-                    raise HTTPError(response.status, await self.get_json(response, 'error'))
+            if response.status in [302, 404]: #Redirection or route not found
+                raise RouteNotFound(f'{self.route.route} was not found.', response.status)
 
-                if response.status == 200:
-                    data = await self.get_json(response)
-                    
-                    if (type(data) == dict) and ('error' in data):
-                        raise HTTPError(400, data.get('error'))
+            if response.status != 200: #Unknown error
+                raise HTTPError(response.status, await self.get_json(response, 'error'))
 
-                    self._data = data
-                    return data
+            if response.status == 200:
+                data = await self.get_json(response)
+                
+                if (type(data) == dict) and ('error' in data):
+
+                    if data.get('error') == 'Replay not available.':
+                        raise ReplayUnavailable(data.get('error'))
+                        
+                    raise HTTPError(400, data.get('error'))
+
+                self._data = data
+                return data
 
     async def fetch(self, session = None):
         """ Fetches some data using the actual route """

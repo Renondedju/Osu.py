@@ -104,17 +104,36 @@ async def test_user_recent():
 async def test_user_recents():
     await api.get_user_recents('Jamu')
 
+async def test_replay():
+    
+    #This replay is one year old and shouldn't be avaliable
+    try:
+        await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
+    except ReplayUnavailable:
+        pass
+
+    # Cannot really test replays since they might be deleted at all time ..
+    # Also sice the request rate is at 10/min, I don't wanna abuse it
+
+async def test_match():
+
+    await api.get_match(0)
+
+    # Cannot test too much things here since a match is temporary
+
 async def main():
 
     await test(test_user)
-    await test(test_beatmap)
-    await test(test_beatmap_collection)
+    await test(test_match)
     await test(test_score)
-    await test(test_score_collection)
+    await test(test_replay)
+    await test(test_beatmap)
     await test(test_user_best)
     await test(test_user_bests)
     await test(test_user_recent)
     await test(test_user_recents)
+    await test(test_score_collection)
+    await test(test_beatmap_collection)
 
     print('\n' + '-'*100)
     print(f"Tests done : {pass_count}/{test_count}")

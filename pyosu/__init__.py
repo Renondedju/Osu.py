@@ -33,21 +33,28 @@ __title__     = 'osu.py'
 __author__    = 'Renondedju'
 __license__   = 'MIT'
 __copyright__ = 'Copyright 2018 Renondedju'
-__version__   = '0.2.0'
+__version__   = '0.3.0'
 
 from .api                    import OsuApi
 from .user                   import User
 from .score                  import Score
+from .replay                 import Replay
 from .beatmap                import Beatmap
 from .language               import Language
+from .team_type              import TeamType
 from .user_best              import UserBest
 from .user_event             import UserEvent
 from .exceptions             import *
 from .game_modes             import GameMode
 from .user_recent            import UserRecent
+from .scoring_type           import ScoringType
 from .beatmap_genre          import BeatmapGenre
 from .game_modifiers         import GameModifier
+from .multiplayer_team       import MultiplayerTeam
+from .multiplayer_game       import MultiplayerGame
 from .score_collection       import ScoreCollection
+from .multiplayer_score      import MultiplayerScore
+from .multiplayer_match      import MultiplayerMatch
 from .beatmap_collection     import BeatmapCollection
 from .replay_availability    import ReplayAvailability
 from .user_best_collection   import UserBestCollection
