@@ -24,7 +24,7 @@ import asyncio
 
 from json        import loads
 from aiohttp     import ClientSession
-from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError
+from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError, ReplayUnavailable
 
 class Route:
 
@@ -144,6 +144,10 @@ class Request():
                     data = await self.get_json(response)
                     
                     if (type(data) == dict) and ('error' in data):
+
+                        if data.get('error') == 'Replay not available.':
+                            raise ReplayUnavailable(data.get('error'))
+                            
                         raise HTTPError(400, data.get('error'))
 
                     self._data = data

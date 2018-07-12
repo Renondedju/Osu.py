@@ -67,3 +67,13 @@ class UnreferencedApi(Exception):
         super().__init__(message)
         
         self.message = message
+
+class ReplayUnavailable(Exception):
+    """ Replay isn't available """
+
+    def __init__(self, message):
+
+        super().__init__(message)
+
+        self.message = message
+        self.code = 400
