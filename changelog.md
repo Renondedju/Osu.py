@@ -9,6 +9,12 @@
 - Created replay model
 - Added OsuApi.get_replay()
 - Added the ReplayUnavailable exception
+- Added the MultiplayerMach model
+- Added the MultiplayerGame model
+- Added the MultiplayerScore model
+- Added the MultiplayerTeam enum
+- Added the ScoringType enum
+- Added the TeamType enum
 
 ## Version 0.2.0
 
