@@ -23,6 +23,7 @@
 from .http                   import Route, Request
 from .user                   import User
 from .score                  import Score
+from .replay                 import Replay
 from .beatmap                import Beatmap
 from .user_best              import UserBest
 from .user_event             import UserEvent
@@ -298,3 +299,29 @@ class OsuApi():
             recents.add_user_recent(UserRecent(self, **data))
 
         return recents
+
+    async def get_replay(self, mode, beatmap_id, user):
+        """
+            Official doc : https://github.com/ppy/osu-api/wiki#get-replay-data
+        
+            Ref : https://github.com/ppy/osu-api/wiki#rate-limiting  
+            As this is quite a load-heavy request, it has special rules about rate limiting.
+            You are only allowed to do 10 requests per minute.
+            Also, please note that this request is ___not___ intended for batch retrievals.
+
+            Parameters:
+
+                mode        - the mode the score was played in (required)
+                beatmap_id  - the beatmap ID (not beatmap set ID!)
+                              in which the replay was played (required).
+                user        - the user that has played the beatmap (required).
+        """
+        
+        data = await self.__get_data('get_replay', False, u = user, m = mode, b = beatmap_id)
+
+        if len(data) is not 0:
+            data['user']       = user
+            data['mode']       = mode
+            data['beatmap_id'] = beatmap_id
+
+        return Replay(self, **data)

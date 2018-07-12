@@ -38,6 +38,7 @@ __version__   = '0.3.0-dev'
 from .api                    import OsuApi
 from .user                   import User
 from .score                  import Score
+from .replay                 import Replay
 from .beatmap                import Beatmap
 from .language               import Language
 from .user_best              import UserBest
