@@ -33,7 +33,7 @@ __title__     = 'osu.py'
 __author__    = 'Renondedju'
 __license__   = 'MIT'
 __copyright__ = 'Copyright 2018 Renondedju'
-__version__   = '0.3.0'
+__version__   = '0.3.1-dev'
 
 from .api                    import OsuApi
 from .user                   import User

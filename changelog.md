@@ -2,6 +2,10 @@
 
 > Osu<span></span>.py library changelogs
 
+## Version 0.3.1
+
+- Unavaliable requested requests no longer raise ReplayUnavailable exception
+
 ## Version 0.3.0
 
 > Replays and multiplayer match arrived !

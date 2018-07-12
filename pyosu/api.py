@@ -320,7 +320,11 @@ class OsuApi():
                 user        - the user that has played the beatmap (required).
         """
         
-        data = await self.__get_data('get_replay', False, u = user, m = mode, b = beatmap_id)
+        try:
+            data = await self.__get_data('get_replay', False, u = user, m = mode,
+                b = beatmap_id)
+        except ReplayUnavailable:
+            return Replay(self, **{})
 
         if len(data) is not 0:
             data['user']       = user
