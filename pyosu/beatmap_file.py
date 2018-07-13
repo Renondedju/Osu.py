@@ -36,3 +36,11 @@ class BeatmapFile(BaseModel):
         super().__init__(api, **data)
 
         self.content = data.get('content', '')
+        self.version = self.parse_version()
+
+    def parse_version(self):
+
+        regex   = r"osu file format v(\d*)"
+        matches = re.search(regex, self.content, re.IGNORECASE)
+
+        return int(matches.group(1))
