@@ -28,23 +28,32 @@ from .exceptions import WrongApiKey, RouteNotFound, InvalidArgument, HTTPError, 
 
 class Route:
 
-    BASE = 'https://osu.ppy.sh/api/'
+    def __init__(self, path : str = '', api_key : str = '', base = 'https://osu.ppy.sh/api/', **parameters):
 
-    def __init__(self, path : str, api_key : str, **parameters):
-
+        self.base        = base
         self.path        = path
         self.api_key     = api_key
-        self.parameters  = parameters
+        self.parameters  = {}
+
+        for key, value in parameters.items():
+            if value != None:
+                self.parameters[key] = value
 
     @property
     def route(self):
         """ Returns the current route """
 
-        params = ''
-        for key, value in self.parameters.items():
-            params += f'&{str(key)}={str(value)}'
+        params = []
+        if self.api_key != '':
+            params.append(f'k={self.api_key}')
 
-        return f"{Route.BASE}{self.path}?k={self.api_key}{params}"
+        for key, value in self.parameters.items():
+            params.append(f'{str(key)}={str(value)}')
+
+        if len(params) > 0:
+            return f"{self.base}{self.path}?{'&'.join(params)}"
+
+        return f"{self.base}{self.path}"
         
     def add_param(self, key, value):
         """ Adds or updates a prameter """
