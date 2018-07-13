@@ -27,6 +27,7 @@ from .replay                 import Replay
 from .beatmap                import Beatmap
 from .user_best              import UserBest
 from .user_event             import UserEvent
+from .exceptions             import ReplayUnavailable
 from .user_recent            import UserRecent
 from .score_collection       import ScoreCollection
 from .multiplayer_game       import MultiplayerGame
@@ -47,10 +48,7 @@ class OsuApi():
 
     async def __get_data(self, url : str, unique = True, **args):
 
-        route = Route(url, self._api_key)
-
-        for key, value in args.items():
-            route.add_param(key, value)
+        route = Route(url, self._api_key, **args)
 
         request = Request(route)
         await request.fetch(self._session)
