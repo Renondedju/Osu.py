@@ -2,6 +2,13 @@
 
 > Osu<span></span>.py library changelogs
 
+## Version 0.4.0
+
+> .osu file download !
+
+- Added the BeatmapFile Model
+- Added OsuApi.get_beatmap_file()
+
 ## Version 0.3.1
 
 - Unavaliable requested requests no longer raise ReplayUnavailable exception

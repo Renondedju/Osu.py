@@ -33,7 +33,7 @@ __title__     = 'osu.py'
 __author__    = 'Renondedju'
 __license__   = 'MIT'
 __copyright__ = 'Copyright 2018 Renondedju'
-__version__   = '0.3.1'
+__version__   = '0.4.0'
 
 from .api                    import OsuApi
 from .user                   import User
@@ -47,6 +47,7 @@ from .user_event             import UserEvent
 from .exceptions             import *
 from .game_modes             import GameMode
 from .user_recent            import UserRecent
+from .beatmap_file           import BeatmapFile
 from .scoring_type           import ScoringType
 from .beatmap_genre          import BeatmapGenre
 from .game_modifiers         import GameModifier

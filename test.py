@@ -107,10 +107,7 @@ async def test_user_recents():
 async def test_replay():
     
     #This replay is one year old and shouldn't be avaliable
-    try:
-        await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
-    except ReplayUnavailable:
-        pass
+    await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
 
     # Cannot really test replays since they might be deleted at all time ..
     # Also sice the request rate is at 10/min, I don't wanna abuse it
@@ -118,8 +115,13 @@ async def test_replay():
 async def test_match():
 
     await api.get_match(0)
-
     # Cannot test too much things here since a match is temporary
+
+async def test_beatmap_file():
+
+    b = await api.get_beatmap_file(390057)
+    if b.is_empty:
+        raise ValueError('The beatmap file shouldn\'t be empty')
 
 async def main():
 
@@ -132,6 +134,7 @@ async def main():
     await test(test_user_bests)
     await test(test_user_recent)
     await test(test_user_recents)
+    await test(test_beatmap_file)
     await test(test_score_collection)
     await test(test_beatmap_collection)
 
