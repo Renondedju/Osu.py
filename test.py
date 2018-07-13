@@ -115,8 +115,11 @@ async def test_replay():
 async def test_match():
 
     await api.get_match(0)
-
     # Cannot test too much things here since a match is temporary
+
+async def test_beatmap_file():
+
+    await api.get_beatmap_file(1657042)
 
 async def main():
 
@@ -129,6 +132,7 @@ async def main():
     await test(test_user_bests)
     await test(test_user_recent)
     await test(test_user_recents)
+    await test(test_beatmap_file)
     await test(test_score_collection)
     await test(test_beatmap_collection)
 
