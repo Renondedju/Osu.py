@@ -374,4 +374,7 @@ class OsuApi():
 
         await request.fetch()
 
+        if request.data == '':
+            return BeatmapFile(self, **{})
+
         return BeatmapFile(self, **{"content": request.data})

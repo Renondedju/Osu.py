@@ -44,7 +44,10 @@ class BeatmapFile(BaseModel):
         regex   = r"osu file format v(\d*)"
         matches = re.search(regex, self.content, re.IGNORECASE)
 
-        return int(matches.group(1))
+        if matches:
+            return int(matches.group(1))
+        
+        return 0
 
     def get_category(self, category_name : str):
         """ Gets a file category 

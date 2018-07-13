@@ -119,7 +119,9 @@ async def test_match():
 
 async def test_beatmap_file():
 
-    await api.get_beatmap_file(1657042)
+    b = await api.get_beatmap_file(390057)
+    if b.is_empty:
+        raise ValueError('The beatmap file shouldn\'t be empty')
 
 async def main():
 

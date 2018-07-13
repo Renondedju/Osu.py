@@ -6,6 +6,10 @@
 
 > .osu file donwload !
 
+- Added the BeatmapFile Model
+- Added OsuApi.get_beatmap_file()
+
+
 ## Version 0.3.1
 
 - Unavaliable requested requests no longer raise ReplayUnavailable exception
