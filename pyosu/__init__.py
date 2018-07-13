@@ -47,6 +47,7 @@ from .user_event             import UserEvent
 from .exceptions             import *
 from .game_modes             import GameMode
 from .user_recent            import UserRecent
+from .beatmap_file           import BeatmapFile
 from .scoring_type           import ScoringType
 from .beatmap_genre          import BeatmapGenre
 from .game_modifiers         import GameModifier
