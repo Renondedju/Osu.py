@@ -39,8 +39,29 @@ class BeatmapFile(BaseModel):
         self.version = self.parse_version()
 
     def parse_version(self):
+        """ Parses the version of the file """
 
         regex   = r"osu file format v(\d*)"
         matches = re.search(regex, self.content, re.IGNORECASE)
 
         return int(matches.group(1))
+
+    def get_category(self, category_name : str):
+        """ Gets a file category 
+        
+            Example :
+            calling get_category('Editor') on a file with version == 14
+            might return something like :
+
+               'DistanceSpacing: 0.9
+                BeatDivisor: 2
+                GridSize: 4
+                TimelineZoom: 1.399999'
+        """
+
+        try:
+            start = self.content.index(f'[{category_name}]') + len(category_name) + 2
+            end   = self.content.index('[', start )
+            return  self.content[start:end]
+        except ValueError:
+            return ""
