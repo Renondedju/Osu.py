@@ -85,27 +85,14 @@ class Route:
 
         return
 
-    def check_path(self):
-        """ Raise the RouteNotFound Exception if the path isn't in the following list :
-
-            [get_beatmaps, get_user, get_scores, get_user_best, get_user_recent, get_match, get_replay]
-        """
-
-        accepted_paths = ['get_beatmaps', 'get_user', 'get_scores',
-            'get_user_best', 'get_user_recent', 'get_match', 'get_replay']
-
-        if self.path not in accepted_paths:
-            raise RouteNotFound(f'The route {self.route} does not exists.', 404)
-        
-        return
-
 class Request():
 
-    def __init__(self, route : Route, retry : int = 5):
+    def __init__(self, route : Route, retry : int = 5, json_response : bool = True):
 
-        self.retry_count = retry # Number of retrys to do before throwing any errors
-        self.route = route
-        self._data = []
+        self.json_response = json_response
+        self.retry_count   = retry # Number of retrys to do before throwing any errors
+        self.route         = route
+        self._data         = []
 
     @property
     def data(self):
@@ -114,6 +101,9 @@ class Request():
     async def get_json(self, response, *args):
         """ Returns the json version of an api response """
         text = await response.text()
+
+        if self.json_response is False:
+            return text
 
         if (text == None or text == ''):
             return {}
@@ -135,7 +125,6 @@ class Request():
         """ Fetches some data with a session using the actual route """
 
         self.route.check_params()
-        self.route.check_path()
 
         async with session.get(self.route.route) as response:
                 
