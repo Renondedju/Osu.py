@@ -1,0 +1,2 @@
+# Osu.py documentation
+
