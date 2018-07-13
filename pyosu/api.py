@@ -29,6 +29,7 @@ from .user_best              import UserBest
 from .user_event             import UserEvent
 from .exceptions             import ReplayUnavailable
 from .user_recent            import UserRecent
+from .beatmap_file           import BeatmapFile
 from .score_collection       import ScoreCollection
 from .multiplayer_game       import MultiplayerGame
 from .multiplayer_score      import MultiplayerScore
@@ -357,3 +358,20 @@ class OsuApi():
             games.append(MultiplayerGame(self, scores, **game))
 
         return MultiplayerMatch(self, games, **data.get('match', {}))
+
+    async def get_beatmap_file(self, beatmap_id):
+        """
+            This model is way heavier than a classic Beatmap object (3Kb to 1Mb) since
+            it contains the beatmap file. If you don't really need it, don't use it !
+
+            Parameters :
+
+                beatmap_id - the beatmap ID (not beatmap set ID!) (requiered).
+        """
+
+        route   = Route(base = 'https://osu.ppy.sh/osu/', path = str(beatmap_id))
+        request = Request(route, 1, False)
+
+        await request.fetch()
+
+        return BeatmapFile(self, **{"content": request.data})
