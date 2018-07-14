@@ -31,16 +31,16 @@ class UserRecentCollection(BaseCollection):
         super().__init__(api, UserRecent)
 
     def get_user_recents(self):
-        """ Returns the user bests of the collection """
+        """ Returns the user recent of the collection """
         
         return self.get_content()
 
-    def add_user_recent(self, beatmap : UserRecent):
-        """ Adds a user best to the collection """
+    def add_user_recent(self, user_recent : UserRecent):
+        """ Adds a user recent to the collection """
 
-        return self.add_content(beatmap)
+        return self.add_content(user_recent)
  
-    def remove_user_recent(self, beatmap : UserRecent):
-        """ Removes a user best from the collection """
+    def remove_user_recent(self, user_recent : UserRecent):
+        """ Removes a user recent from the collection """
 
-        return self.remove_content(beatmap)
+        return self.remove_content(user_recent)

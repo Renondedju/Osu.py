@@ -26,8 +26,6 @@ class GameModifier():
 
         Game modifiers can be stacked using the | (pipe) operator
     """
-
-    #Static variables
     none              = 0
     NoFail            = 1 << 0
     Easy              = 1 << 1
