@@ -2,6 +2,12 @@
 
 > Osu<span></span>.py library changelogs
 
+## Version 0.4.1
+
+> Docs !
+
+- Added some docs *(1200 lines !)*
+
 ## Version 0.4.0
 
 > .osu file download !
