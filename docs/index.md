@@ -319,6 +319,8 @@ Fields :
 
 > Inherits from [BaseModel](index.md#basemodel)
 
+Fileds :
+
 - ``beatmap_id``   : int
 - ``score``        : float
 - ``maxcombo``     : int
@@ -348,6 +350,8 @@ Fields :
 
 > Inherits from [BaseModel](index.md#basemodel)
 
+Fields :
+
 - ``beatmap_id``   : int
 - ``score``        : float
 - ``maxcombo``     : int
@@ -373,6 +377,43 @@ Fields :
 ### Score
 
 > Inherits from [BaseModel](index.md#basemodel)
+
+Fields :
+
+- ``score_id``         : int
+- ``score``            : float
+- ``username``         : str
+- ``count300``         : int
+- ``count100``         : int
+- ``count50``          : int
+- ``countmiss``        : int
+- ``maxcombo``         : int
+- ``countkatu``        : int
+- ``countgeki``        : int
+- ``perfect``          : bool
+
+    True = maximum combo of map reached, False otherwise
+
+- ``enabled_mods``     : int
+
+    Bitwise flag representation of mods used.  
+    See reference [GameModifier](index.md#gamemodifier)
+
+- ``user_id``          : int
+- ``date``             : str
+- ``rank``             : str
+- ``pp``               : float
+- ``replay_available`` : [ReplayAvailability](index.md#replayavailability)
+- ``mode``             : int
+
+Methods :
+
+- ``get_user_data(mode = None)``
+
+    Returns the data of the author of the score 
+
+    If the user has already been fetched once, the data will be reused and no
+    request will be sent to the osu api.
 
 ### Replay
 
