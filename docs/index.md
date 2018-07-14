@@ -299,6 +299,16 @@ Fields :
 
 ### UserEvent
 
+Fields :
+
+- ``display_html``  : str
+- ``beatmap_id``    : int
+- ``beatmapset_id`` : int
+- ``date``          : str
+- ``epicfactor``    : int
+
+    How "epic" this event is (between 1 and 32)
+
 ### UserBest
 
 ### UserRecent
