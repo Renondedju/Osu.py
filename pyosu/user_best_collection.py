@@ -35,12 +35,12 @@ class UserBestCollection(BaseCollection):
         
         return self.get_content()
 
-    def add_user_best(self, beatmap : UserBest):
+    def add_user_best(self, user_best : UserBest):
         """ Adds a user recent to the collection """
 
-        return self.add_content(beatmap)
+        return self.add_content(user_best)
  
-    def remove_user_best(self, beatmap : UserBest):
+    def remove_user_best(self, user_best : UserBest):
         """ Removes a user recent from the collection """
 
-        return self.remove_content(beatmap)
+        return self.remove_content(user_best)

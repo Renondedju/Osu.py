@@ -29,7 +29,7 @@ class UserEvent(BaseModel):
         
         super().__init__(api, **data)
 
-        self.display_html	= data.get('display_html' , "")
+        self.display_html   = data.get('display_html' , "")
         self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
         self.beatmapset_id	= data.get('beatmapset_id', 0 )
         self.date		    = data.get('date'		  , "")

@@ -68,8 +68,8 @@ class OsuApi():
         type_str = None, mode = None, include_converted = None, hash_str = None):
         """
             If any of the parameters used returns more than one beatmap,
-            the first one only will be returned, if you want multiple beatmaps,
-            use OsuApi.get_beatmaps() instead
+            the first one only will be returned.
+            If you want multiple beatmaps, use OsuApi.get_beatmaps() instead
 
             Parameters :
 
@@ -135,7 +135,7 @@ class OsuApi():
 
         return beatmaps
 
-    async def get_user(self, user = None, mode = None, type_str = None, event_days = None):
+    async def get_user(self, user, mode = None, type_str = None, event_days = None):
         """
             Fetches a user data
 
@@ -261,8 +261,7 @@ class OsuApi():
 
     async def get_user_recent(self, user, mode = None, type_str = None):
         """
-            Returns the top play of a user. If you want more than one user best
-            use OsuApi.get_user_bests() instead.
+            If you want more than one user recent use OsuApi.get_user_recent() instead.
 
             Parameters : 
             
@@ -283,7 +282,7 @@ class OsuApi():
         """
             Parameters :
 
-                user       - sspecify a user_id or a username to return best scores from (required).
+                user       - specify a user_id or a username to return best scores from (required).
                 mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                              Optional, default value is 0.
                 type_str   - specify if user is a user_id or a username.

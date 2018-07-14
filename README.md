@@ -4,15 +4,20 @@ A simple python implementation for the Osu! api.
 
 This library is developed for [Uso! bot](https://github.com/Renondedju/Uso_Bot_V2.0), a discord recommendation bot for osu beatmaps
 
-## Requierments
+## Requirements
 
 - Python 3.6+ *(python 3.7 is partially unsupported due to the changes to asyncio)*
 - The *aiohttp* library : [Install instructions](https://aiohttp.readthedocs.io/en/stable/)
 - An internet connexion
 
+## Documentations
+
+Link to the [docs](docs/index.md)
+
 ## Modifications
 
 To get the current version of the library simply write and execute :
+
 ```py
 import pyosu #Make sure your import path is the right one
 print(pyosu.__version__)
