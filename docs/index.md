@@ -17,6 +17,7 @@
     - [get_match()](index.md#get_match)
 
 - [Models](index.md#models)
+    - [BaseModel](index.md#basemodel)
     - [Beatmap](index.md#beatmap)
     - [BeatmapFile](index.md#beatmapfile)
     - [User](index.md#user)
@@ -88,7 +89,132 @@
 
 > Bla
 
+### BaseModel
+
+> Metaclass : cannot be instanciated.
+
+Fields : 
+
+- property ``api`` : [OsuApi](index.md#osuapi)  
+    Raises an [UnreferencedApi](index.md#unreferencedapi) error if null when requested.
+
+- ``is_empty`` : bool  
+    Tells if the current model is empty *(because of an invalid request or an error)*
+
 ### Beatmap
+
+> Inherits from [BaseModel](index.md#basemodel)
+
+Fields :
+
+- ``approved``         : [BeatmapApprovedState](index.md#beatmapapprovedstate)  
+
+    Approved state of the beatmap
+
+- ``approved_date``    : str  
+
+    Date ranked, UTC+8 for now  
+    *example : '2013-07-02 01:01:12'*
+
+- ``last_update``      : str  
+
+    Last update date, timezone same as above.  
+    May be after approved_date if map was unranked and reranked.  
+    *example : '2013-07-02 01:01:12'*
+
+- ``artist``           : str  
+
+    Artist name of the song.
+
+- ``beatmap_id``       : int  
+
+    beatmap_id is per difficulty.
+
+- ``beatmapset_id``    : int  
+
+    beatmapset_id groups difficulties into a set.
+
+- ``bpm``              : float  
+
+    Beats per minute.
+
+- ``creator``          : str  
+
+    Creator of the beatmap.
+
+- ``difficultyrating`` : float  
+
+    The amount of stars the map would have ingame and on the website
+
+- ``diff_size``        : float  
+
+    Circle size value (CS)
+
+- ``diff_overall``     : float  
+
+    Overall difficulty (OD)
+
+- ``diff_approach``    : float  
+
+    Approach Rate (AR)
+
+- ``diff_drain``       : float  
+
+    Healthdrain (HP)
+
+- ``hit_length``       : float  
+
+    Seconds from first note to last note not including breaks
+
+- ``source``           : str  
+
+- ``genre_id``         : [BeatmapGenre](index.md#beatmapgenre)  
+
+    Music genre of the beatmap
+
+- ``language_id``      : [Language](index.md#language)  
+
+    Language of the beatmap
+
+- ``title``            : str  
+
+    Song name
+
+- ``total_length``     : float  
+
+    Seconds from first note to last note including breaks
+
+- ``version``          : str 
+
+    Difficulty name 
+
+- ``file_md5``         : str  
+
+    md5 hash of the beatmap
+
+- ``mode``             : [GameMode](index.md#gamemode)  
+
+    Game mode
+
+- ``tags``             : str  
+
+    Beatmap tags separated by spaces.
+
+- ``favourite_count``  : int  
+
+    Number of times the beatmap was favourited.
+
+- ``playcount``        : int  
+
+    Number of times the beatmap was played
+
+- ``passcount``        : int  
+
+    Number of times the beatmap was passed, completed (the user didn't fail or retry)
+
+- ``max_combo``        : int  
+
+    The maximum combo a user can reach playing this beatmap.
 
 ### BeatmapFile
 
