@@ -253,6 +253,50 @@ Methods :
 
 ### User
 
+Fields : 
+
+- ``user_id``         : int
+- ``username``        : str
+- ``count300``        : int
+- ``count100``        : int
+- ``count50``         : int
+- ``playcount``       : int
+
+    Only counts ranked, approved, and loved beatmaps
+
+- ``ranked_score``    : float
+
+    Counts the best individual score on each ranked, approved, and loved beatmaps
+
+- ``total_score``     : float
+
+    Counts every score on ranked, approved, and loved beatmaps
+
+- ``pp_rank``         : int
+- ``level``           : float
+- ``pp_raw``          : float
+
+    For inactive players this will be 0 to purge them from leaderboards
+
+- ``accuracy``        : float
+- ``count_rank_ss``   : int
+- ``count_rank_ssh``  : int
+- ``count_rank_s``    : int
+- ``count_rank_sh``   : int
+- ``count_rank_a``    : int
+- ``country``         : str
+
+    Uses the ISO3166-1 alpha-2 country code naming.  
+    See this for more information: *http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2/*
+
+- ``pp_country_rank`` : int
+
+    The user's rank in the country.
+
+- ``events``          : list
+
+    A list [UserEvent](index.md#userevent) for this user  
+
 ### UserEvent
 
 ### UserBest
