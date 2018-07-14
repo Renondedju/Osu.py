@@ -216,7 +216,40 @@ Fields :
 
     The maximum combo a user can reach playing this beatmap.
 
+Methods :
+
+- ``get_beatmapset()``
+
+    Returns a [BeatmapCollection](index.md#beatmapcollection) containing the beatmapset of the current beatmap.
+
 ### BeatmapFile
+
+Fields : 
+
+- ``content`` : str
+
+    Actual content of the beatmap file
+
+- ``version`` : int
+
+    Version of the beatmap file *(useful for parsing)*
+
+Methods :
+
+- ``get_category(category_name : str) -> str``
+
+    Gets a file category  
+        
+    *Example :*  
+    Calling get_category('Editor') on a file with version == 14
+    might return something like :
+
+    ```txt
+    DistanceSpacing: 0.9  
+    BeatDivisor: 2  
+    GridSize: 4  
+    TimelineZoom: 1.399999  
+    ```
 
 ### User
 
