@@ -51,12 +51,12 @@ class Replay(BaseModel):
         self.user       = data.get('user'      , "")
         self.mode       = data.get('mode'      , GameMode.Osu)
 
-    async def get_beatmap(self, **data):
+    async def get_beatmap(self, **parameters):
         """ Returns the beatmap's data of the replay """
 
-        return await self.api.get_beatmap(beatmap_id=self.beatmap_id, **data)
+        return await self.api.get_beatmap(beatmap_id=self.beatmap_id, **parameters)
 
-    async def get_user(self, **data):
+    async def get_user(self, **parameters):
         """ Returns the user's data of the replay """
 
-        return await self.api.get_user(user=self.user, **data)
+        return await self.api.get_user(user=self.user, **parameters)

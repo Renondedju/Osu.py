@@ -27,7 +27,7 @@ from .scoring_type   import ScoringType
 from .game_modifiers import GameModifier
 
 class MultiplayerGame(BaseModel):
-    """ Multiplayer match model """
+    """ Multiplayer game model """
 
     def __init__(self, api: 'OsuApi', game_scores : list, **data):
 

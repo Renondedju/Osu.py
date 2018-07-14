@@ -419,17 +419,125 @@ Methods :
 
 > Inherits from [BaseModel](index.md#basemodel)
 
+Replay model
+    
+Ref : https://github.com/ppy/osu-api/wiki#response-6  
+Note that the binary data you get when you decode above base64-string,  
+is not the contents of an .osr-file.  
+It is the LZMA stream referred to by the osu-wiki here:  
+
+>   The remaining data contains information about mouse movement and key  
+>   presses in an wikipedia:LZMA stream  
+>   [link](https://osu.ppy.sh/help/wiki/osu!_File_Formats/Osr_(file_format))
+
+Ref : https://github.com/ppy/osu-api/wiki#rate-limiting  
+As this is quite a load-heavy request, it has special rules about rate limiting.  
+You are only allowed to do 10 requests per minute.  
+Also, please note that this request is ___not___ intended for batch retrievals.  
+
+Fields :
+
+- ``beatmap_id`` : int
+- ``encoding``   : str = "base64"
+- ``content``    : str
+
+    base64-encoded replay
+
+- ``user``       : str
+- ``mode``       : [GameMode](index.md#gamemode)
+
+Methods :
+
+- ``get_beatmap(**parameters)``
+
+    Returns the beatmap's data of the replay
+
+- ``get_user(**parameters)``
+
+    Returns the user's data of the replay
+
 ### MultiplayerMatch
 
 > Inherits from [BaseModel](index.md#basemodel)
+
+Fields :
+
+- ``start_time``: str
+- ``match_id``  : int
+- ``end_time``  : None
+
+    Not supported yet - always None (Api side)
+
+- ``name``      : str
+- ``games``     : list
+
+    A list of [MultiplayerGame](index.md#multiplayergame)
 
 ### MultiplayerGame
 
 > Inherits from [BaseModel](index.md#basemodel)
 
+Fields :
+
+- ``game_id``      : int
+- ``start_time``   : str
+- ``end_time``     : str
+- ``beatmap_id``   : int
+- ``play_mode``    : [GameMode](index.md#gamemode)
+
+    Gamemode played
+
+- ``match_type``   : int
+- ``scoring_type`` : [ScoringType](index.md#scoringtype)
+
+    Winning condition
+
+- ``team_type``    : [TeamType](index.md#teamtype)
+
+    Team type
+
+- ``mods``         : [GameModifier](index.md#gamemodifier)
+
+    Global mods
+
+- ``scores``       : list
+
+    A list of [MultiplayerScore](index.md#multiplayerscore)
+
 ### MultiplayerScore
 
 > Inherits from [BaseModel](index.md#basemodel)
+
+Fields :
+
+- ``slot``      : int
+
+    0 based index of player's slot
+
+- ``team``      : [MultiplayerTeam](index.md#multiplayerteam)
+
+    Player's team
+
+- ``user_id``   : int
+- ``score``     : int
+- ``maxcombo``  : int
+- ``rank``      : int
+
+    Not used (Api side)
+
+- ``count50``   : int
+- ``count100``  : int
+- ``count300``  : int
+- ``countmiss`` : int
+- ``countgeki`` : int
+- ``countkatu`` : int
+- ``perfect``   : bool
+
+    Full combo
+
+- ``passed``    : bool
+
+    Does the player passed the map at the end ?
 
 ## Collections
 
