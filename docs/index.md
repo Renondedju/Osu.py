@@ -224,6 +224,8 @@ Methods :
 
 ### BeatmapFile
 
+> Inherits from [BaseModel](index.md#basemodel)
+
 Fields : 
 
 - ``content`` : str
@@ -252,6 +254,8 @@ Methods :
     ```
 
 ### User
+
+> Inherits from [BaseModel](index.md#basemodel)
 
 Fields : 
 
@@ -299,6 +303,8 @@ Fields :
 
 ### UserEvent
 
+> Inherits from [BaseModel](index.md#basemodel)
+
 Fields :
 
 - ``display_html``  : str
@@ -311,17 +317,78 @@ Fields :
 
 ### UserBest
 
+> Inherits from [BaseModel](index.md#basemodel)
+
+- ``beatmap_id``   : int
+- ``score``        : float
+- ``maxcombo``     : int
+- ``count300``     : int
+- ``count100``     : int
+- ``count50``      : int
+- ``countmiss``    : int
+- ``countkatu``    : int
+- ``countgeki``    : int
+- ``perfect``      : bool
+
+    True = maximum combo of map reached, False otherwise
+
+- ``enabled_mods`` : int
+
+    Bitwise flag representation of mods used.  
+    See reference [GameModifiers](index.md#gamemodifiers)
+
+- ``user_id``      : int
+- ``date``         : str
+- ``rank``         : str
+- ``pp``           : float
+
+    Float value , 4 decimals
+
 ### UserRecent
+
+> Inherits from [BaseModel](index.md#basemodel)
+
+- ``beatmap_id``   : int
+- ``score``        : float
+- ``maxcombo``     : int
+- ``count300``     : int
+- ``count100``     : int
+- ``count50``      : int
+- ``countmiss``    : int
+- ``countkatu``    : int
+- ``countgeki``    : int
+- ``perfect``      : bool
+
+    True = maximum combo of map reached, False otherwise
+
+- ``enabled_mods`` : int
+
+    Bitwise flag representation of mods used.  
+    See reference [GameModifiers](index.md#gamemodifiers)
+
+- ``user_id``      : int
+- ``date``         : str
+- ``rank``         : str
 
 ### Score
 
+> Inherits from [BaseModel](index.md#basemodel)
+
 ### Replay
+
+> Inherits from [BaseModel](index.md#basemodel)
 
 ### MultiplayerMatch
 
+> Inherits from [BaseModel](index.md#basemodel)
+
 ### MultiplayerGame
 
+> Inherits from [BaseModel](index.md#basemodel)
+
 ### MultiplayerScore
+
+> Inherits from [BaseModel](index.md#basemodel)
 
 ## Collections
 
