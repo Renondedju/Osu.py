@@ -28,7 +28,7 @@ class User(BaseModel):
     def __init__(self, api : 'OsuApi', user_events : list, **data):
 
         super().__init__(api, **data)
-        
+
         self.user_id         = data.get('user_id'       , 0)
         self.username        = data.get('username'      , "")
         self.count300        = data.get('count300'      , 0)    # Total amount for all ranked, approved, and loved beatmaps played

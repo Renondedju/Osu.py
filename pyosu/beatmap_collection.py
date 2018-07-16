@@ -26,21 +26,5 @@ from .base_collection import BaseCollection
 class BeatmapCollection(BaseCollection):
     """ Beatmap collection class """
 
-    def __init__(self, api : 'OsuApi'):
-
-        super().__init__(api, Beatmap)
-
-    def get_beatmaps(self):
-        """ Returns the beatmaps of the collection """
-        
-        return self.get_content()
-
-    def add_beatmap(self, beatmap : Beatmap):
-        """ Adds a beatmap to the collection """
-
-        return self.add_content(beatmap)
- 
-    def remove_beatmap(self, beatmap : Beatmap):
-        """ Removes a beatmap from the collection """
-
-        return self.remove_content(beatmap)
+    def __init__(self, items=[], *, api : 'OsuApi'):
+        super().__init__(items, api=api, collection_type=Beatmap)
