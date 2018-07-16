@@ -12,8 +12,15 @@ This library is developed for [Uso! bot](https://github.com/Renondedju/Uso_Bot_V
 
 ## Installation
 
-Open a terminal and write ``pip install -e git+https://github.com/Renondedju/Osu.py@master#egg=osupy``  
-Or download the repo and type ``python setup.py install``
+Open a terminal and write
+
+    pip install git+https://github.com/Renondedju/Osu.py
+
+Or from the source
+
+    $ git clone https://github.com/Renondedju/Osu.py
+    $ cd Osu.py
+    $ pip install .
 
 ## Documentations
 
