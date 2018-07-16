@@ -23,66 +23,33 @@
 from abc         import ABCMeta
 from .exceptions import UnreferencedApi
 
-class BaseCollection(metaclass=ABCMeta):
+class BaseCollection(list, metaclass=ABCMeta):
     """ Base collection object, you cannot instanciate it
         unless you create a child class of it
     """
 
-    def __init__(self, api : 'OsuApi', collection_type):
+    def __init__(self, items, api : 'OsuApi', collection_type):
 
-        self._container = []
+        super().__init__(items)
         self.__api     = api
         self.__type    = collection_type
 
     @property
     def api(self):
         """ api getter """
-
         if self.__api is None:
             raise UnreferencedApi("The osu api reference cannot be 'None'")
-        
         return self.__api
 
-    @api.setter
-    def api(self, value : 'OsuApi'):
-        """ api setter """
-
-        self.__api = value
-        return value
-
-    @property
-    def count(self):
-        """ Returns the number of objects in the container of the collection """
-        return len(self._container)
-
-    @property
-    def is_empty(self):
-        """ Checks if the container of the collection is empty """
-        return len(self._container) == 0
-
-    def get_content(self):
-        """ Returns the content of the collection """
-        return self._container
-
-    def add_content(self, content):
+    def append(self, content):
         """ Adds content to the collection. """
 
-        if type(content) is not self.__type:
+        if not content:
+            return
+
+        if not isinstance(content, self.__type):
             raise ValueError(
                 f'The content type should be of type '
                 f'\'{self.__type.__name__}\', not \'{type(content).__name__}\'')
 
-        if content is not None:
-            self._container.append(content)
-
-        return
-
-    def remove_content(self, content):
-        """ Removes content from the collection """
-
-        if type(content) is not self.__type:
-            raise ValueError(
-                f'The content type should be of type '
-                f'\'{self.__type.__name__}\', not \'{type(content).__name__}\'')
-
-        return self._container.pop(content, None)
+        super().append(content)
