@@ -26,21 +26,5 @@ from .base_collection import BaseCollection
 class ScoreCollection(BaseCollection):
     """ Score collection class """
 
-    def __init__(self, api : 'OsuApi'):
-
-        super().__init__(api, Score)
-
-    def get_scores(self):
-        """ Returns the scores of the collection """
-        
-        return self.get_content()
-
-    def add_score(self, beatmap : Score):
-        """ Adds a score to the collection """
-
-        return self.add_content(beatmap)
- 
-    def remove_score(self, beatmap : Score):
-        """ Removes a score from the collection """
-
-        return self.remove_content(beatmap)
+    def __init__(self, items=[], *, api : 'OsuApi'):
+        super().__init__(items, api=api, collection_type=Score)

@@ -129,11 +129,10 @@ class OsuApi():
         datas = await self.__get_data('get_beatmaps', False, limit = limit, since = since,
             type = type_str, s = beatmapset_id, a = include_converted, u = user, m = mode)
 
-        beatmaps = BeatmapCollection(self)
-        for data in datas:
-            beatmaps.add_beatmap(Beatmap(self, **data))
-
-        return beatmaps
+        return BeatmapCollection(
+            (Beatmap(self, **data) for data in datas),
+            api=self
+        )
 
     async def get_user(self, user, mode = None, type_str = None, event_days = None):
         """
@@ -210,11 +209,10 @@ class OsuApi():
         datas = await self.__get_data('get_scores', False, b = beatmap_id, u = user,
             m = mode, mods = mods, type = type_str, limit = limit)
 
-        scores = ScoreCollection(self)
-        for data in datas:
-            scores.add_score(Score(self, **data))
-
-        return scores
+        return ScoreCollection(
+            (Score(**data, api=self) for data in datas),
+            api=self
+        )
 
     async def get_user_best(self, user, mode = None, type_str = None):
         """
@@ -253,18 +251,17 @@ class OsuApi():
         datas = await self.__get_data('get_user_best', False, u = user, m = mode,
             type = type_str, limit = limit)
 
-        bests = UserBestCollection(self)
-        for data in datas:
-            bests.add_user_best(UserBest(self, **data))
-
-        return bests
+        return UserBestCollection(
+            (UserBest(self, **data) for data in datas),
+            api=self
+        )
 
     async def get_user_recent(self, user, mode = None, type_str = None):
         """
             If you want more than one user recent use OsuApi.get_user_recent() instead.
 
-            Parameters : 
-            
+            Parameters :
+
                 user     - specify a user_id or a username to return best scores from (required).
                 mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                            Optional, default value is 0.
@@ -295,16 +292,15 @@ class OsuApi():
         datas = await self.__get_data('get_user_recent', False, u = user, m = mode,
             type = type_str, limit = limit)
 
-        recents = UserRecentCollection(self)
-        for data in datas:
-            recents.add_user_recent(UserRecent(self, **data))
-
-        return recents
+        return UserRecentCollection(
+           (UserRecent(self, **data) for data in datas),
+            api=self
+        )
 
     async def get_replay(self, mode, beatmap_id, user):
         """
             Official doc : https://github.com/ppy/osu-api/wiki#get-replay-data
-        
+
             Ref : https://github.com/ppy/osu-api/wiki#rate-limiting  
             As this is quite a load-heavy request, it has special rules about rate limiting.
             You are only allowed to do 10 requests per minute.
@@ -317,7 +313,7 @@ class OsuApi():
                               in which the replay was played (required).
                 user        - the user that has played the beatmap (required).
         """
-        
+
         try:
             data = await self.__get_data('get_replay', False, u = user, m = mode,
                 b = beatmap_id)

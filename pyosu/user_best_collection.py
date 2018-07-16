@@ -26,21 +26,5 @@ from .base_collection import BaseCollection
 class UserBestCollection(BaseCollection):
     """ User recent collection class """
 
-    def __init__(self, api : 'OsuApi'):
-
-        super().__init__(api, UserBest)
-
-    def get_user_bests(self):
-        """ Returns the user recent of the collection """
-        
-        return self.get_content()
-
-    def add_user_best(self, user_best : UserBest):
-        """ Adds a user recent to the collection """
-
-        return self.add_content(user_best)
- 
-    def remove_user_best(self, user_best : UserBest):
-        """ Removes a user recent from the collection """
-
-        return self.remove_content(user_best)
+    def __init__(self, items=[], *, api : 'OsuApi'):
+        super().__init__(items, api=api, collection_type=UserBest)
