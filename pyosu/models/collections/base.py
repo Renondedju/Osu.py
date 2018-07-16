@@ -21,13 +21,29 @@
 # SOFTWARE.
 
 from abc         import ABCMeta
-from .exceptions import UnreferencedApi
 
-class BaseModel(metaclass=ABCMeta):
-    """ This class is just a base model and cannot be instanciated. """
+from pyosu.exceptions import UnreferencedApi
 
-    def __init__(self, api : 'OsuApi', **data):
-        self.__api    = api
+
+class BaseCollection(list, metaclass=ABCMeta):
+    """ Base collection object, you cannot instantiate it
+        unless you create a child class of it
+    """
+
+    def __init__(self, items=[], *, api : 'OsuApi'=None, collection_type):
+        self.__api     = api
+        self.__type    = collection_type
+        items = list(items)
+        for item in items:
+            self._check_type(item)
+
+        super().__init__(items)
+
+    def _check_type(self, item):
+        if not isinstance(item, self.__type):
+            raise ValueError(
+                f'The item type should be of type '
+                f'\'{self.__type.__name__}\', not \'{type(item).__name__}\'')
 
     @property
     def api(self):
@@ -35,3 +51,12 @@ class BaseModel(metaclass=ABCMeta):
         if self.__api is None:
             raise UnreferencedApi("The osu api reference cannot be 'None'")
         return self.__api
+
+    def append(self, item):
+        """ Adds item to the collection. """
+
+        if not item:
+            return
+
+        self._check_type(item)
+        super().append(item)

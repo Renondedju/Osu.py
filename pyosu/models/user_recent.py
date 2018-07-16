@@ -20,27 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .team_type      import TeamType
-from .game_modes     import GameMode
-from .base_model     import BaseModel
-from .scoring_type   import ScoringType
-from .game_modifiers import GameModifier
+from .base import BaseModel
 
-class MultiplayerGame(BaseModel):
-    """ Multiplayer game model """
+class UserRecent(BaseModel):
+    """ User recent model """
 
-    def __init__(self, api: 'OsuApi', game_scores : list, **data):
+    def __init__(self, *, api : 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
-        self.game_id      = data.get('game_id'     , 0)
-        self.start_time   = data.get('start_time'  , "")
-        self.end_time     = data.get('end_time'    , "")
         self.beatmap_id   = data.get('beatmap_id'  , 0)
-        self.play_mode    = data.get('play_mode'   , GameMode.Osu)          # Gamemode played
-        self.match_type   = data.get('match_type'  , 0)                     # couldn't find
-        self.scoring_type = data.get('scoring_type', ScoringType.score)     # winning condition see ScoringType
-        self.team_type    = data.get('team_type'   , TeamType.head_to_head) # team type : see TeamType
-        self.mods         = data.get('mods'        , GameModifier.none)     # global mods, see GameModifiers
-
-        self.scores = game_scores
+        self.score        = data.get('score'       , 0.0)
+        self.maxcombo     = data.get('maxcombo'    , 0)
+        self.count300     = data.get('count300'    , 0)
+        self.count100     = data.get('count100'    , 0)
+        self.count50      = data.get('count50'     , 0)
+        self.countmiss    = data.get('countmiss'   , 0)
+        self.countkatu    = data.get('countkatu'   , 0)
+        self.countgeki    = data.get('countgeki'   , 0)
+        self.perfect      = data.get('perfect'     , False)        # True = maximum combo of map reached, False otherwise
+        self.enabled_mods = data.get('enabled_mods', 0)            # bitwise flag representation of mods used. see reference (GameModifiers)
+        self.user_id      = data.get('user_id'     , 0)
+        self.date         = data.get('date'        , "")
+        self.rank         = data.get('rank'        , "")

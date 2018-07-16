@@ -31,7 +31,9 @@ from pyosu import *
 
 pass_count = 0
 test_count = 0
-api = OsuApi(json.load(open('test-config.json'))['api_key'])
+
+with open('test-config.json') as f:
+    api = OsuApi(json.load(f)['api_key'])
 
 async def test(function):
     """ Tests a function and sends a report if it fails """

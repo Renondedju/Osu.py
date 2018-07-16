@@ -20,8 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .game_modes import GameMode
-from .base_model import BaseModel
+from pyosu.game_modes import GameMode
+from .base import BaseModel
+
 
 class Replay(BaseModel):
     """ Replay model
@@ -41,9 +42,9 @@ class Replay(BaseModel):
         Also, please note that this request is ___not___ intended for batch retrievals.
     """
 
-    def __init__(self, api : 'OsuApi', **data):
+    def __init__(self, *, api : 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.beatmap_id = data.get('beatmap_id', 0)
         self.encoding   = data.get('encoding'  , "base64")

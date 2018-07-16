@@ -20,14 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model import BaseModel
+from .base import BaseModel
 
 class User(BaseModel):
     """ Contains users data """
 
-    def __init__(self, api : 'OsuApi', user_events : list, **data):
+    def __init__(self, *, api : 'OsuApi' = None, user_events : list, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.user_id         = data.get('user_id'       , 0)
         self.username        = data.get('username'      , "")
