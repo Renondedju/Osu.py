@@ -24,22 +24,24 @@ from abc         import ABCMeta
 from .exceptions import UnreferencedApi
 
 class BaseCollection(list, metaclass=ABCMeta):
-    """ Base collection object, you cannot instanciate it
+    """ Base collection object, you cannot instantiate it
         unless you create a child class of it
     """
 
     def __init__(self, items=[], *, api : 'OsuApi', collection_type):
         self.__api     = api
         self.__type    = collection_type
+
         for item in items:
             self._check_type(item)
+
         super().__init__(items)
 
     def _check_type(self, item):
-        if not isinstance(content, self.__type):
+        if not isinstance(item, self.__type):
             raise ValueError(
-                f'The content type should be of type '
-                f'\'{self.__type.__name__}\', not \'{type(content).__name__}\'')
+                f'The item type should be of type '
+                f'\'{self.__type.__name__}\', not \'{type(item).__name__}\'')
 
     @property
     def api(self):
@@ -53,5 +55,6 @@ class BaseCollection(list, metaclass=ABCMeta):
 
         if not item:
             return
+
         self._check_type(item)
         super().append(item)
