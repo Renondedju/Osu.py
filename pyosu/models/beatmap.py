@@ -20,11 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.language               import Language
+from pyosu.types import BeatmapGenre, BeatmapApprovedState, GameMode, Language
 
-from pyosu.types import BeatmapGenre, BeatmapApprovedState, GameMode
-
-from .base             import BaseModel
+from .base       import BaseModel
 
 class Beatmap(BaseModel):
     """ Beatmap model """
