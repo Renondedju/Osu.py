@@ -33,7 +33,7 @@ def read(fname):
 
 setup(
     name     = "osu.py",
-    version  = "0.4.2",
+    version  = "0.5.0",
     author   = "Renondedju",
     description = ("A basic wrapper for the Osu API."),
     license = "MIT",
