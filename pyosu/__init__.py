@@ -36,13 +36,4 @@ __copyright__ = 'Copyright 2018 Renondedju'
 __version__   = '0.4.2'
 
 from .api                    import OsuApi
-from .language               import Language
-from .team_type              import TeamType
 from .exceptions             import *
-from .game_modes             import GameMode
-from .scoring_type           import ScoringType
-from .beatmap_genre          import BeatmapGenre
-from .game_modifiers         import GameModifier
-from .multiplayer_team       import MultiplayerTeam
-from .replay_availability    import ReplayAvailability
-from .beatmap_approved_state import BeatmapApprovedState
