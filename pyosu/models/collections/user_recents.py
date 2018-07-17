@@ -20,11 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .score           import Score
-from .base_collection import BaseCollection
+from pyosu.models.user_recent     import UserRecent
 
-class ScoreCollection(BaseCollection):
-    """ Score collection class """
+from .base import BaseCollection
 
-    def __init__(self, items=[], *, api : 'OsuApi'):
-        super().__init__(items, api=api, collection_type=Score)
+
+class UserRecentCollection(BaseCollection):
+    """ User bests collection class """
+
+    def __init__(self, items=[], *, api : 'OsuApi'=None):
+        super().__init__(items, api=api, collection_type=UserRecent)

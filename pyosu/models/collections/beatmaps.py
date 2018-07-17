@@ -20,41 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from abc         import ABCMeta
-from .exceptions import UnreferencedApi
+from pyosu.models.beatmap         import Beatmap
 
-class BaseCollection(list, metaclass=ABCMeta):
-    """ Base collection object, you cannot instantiate it
-        unless you create a child class of it
-    """
+from .base import BaseCollection
 
-    def __init__(self, items=[], *, api : 'OsuApi', collection_type):
-        self.__api     = api
-        self.__type    = collection_type
 
-        for item in items:
-            self._check_type(item)
+class BeatmapCollection(BaseCollection):
+    """ Beatmap collection class """
 
-        super().__init__(items)
-
-    def _check_type(self, item):
-        if not isinstance(item, self.__type):
-            raise ValueError(
-                f'The item type should be of type '
-                f'\'{self.__type.__name__}\', not \'{type(item).__name__}\'')
-
-    @property
-    def api(self):
-        """ api getter """
-        if self.__api is None:
-            raise UnreferencedApi("The osu api reference cannot be 'None'")
-        return self.__api
-
-    def append(self, item):
-        """ Adds item to the collection. """
-
-        if not item:
-            return
-
-        self._check_type(item)
-        super().append(item)
+    def __init__(self, items=[], *, api : 'OsuApi' = None):
+        super().__init__(items, api=api, collection_type=Beatmap)

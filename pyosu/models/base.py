@@ -20,11 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .beatmap         import Beatmap
-from .base_collection import BaseCollection
+from abc         import ABCMeta
 
-class BeatmapCollection(BaseCollection):
-    """ Beatmap collection class """
+from pyosu.exceptions import UnreferencedApi
 
-    def __init__(self, items=[], *, api : 'OsuApi'):
-        super().__init__(items, api=api, collection_type=Beatmap)
+
+class BaseModel(metaclass=ABCMeta):
+    """ This class is just a base model and cannot be instanciated. """
+
+    def __init__(self, api : 'OsuApi' = None):
+        self.__api = api
+
+    @property
+    def api(self):
+        """ api getter """
+        if self.__api is None:
+            raise UnreferencedApi("The osu api reference cannot be 'None'")
+        return self.__api

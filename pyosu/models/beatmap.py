@@ -20,18 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .language               import Language
-from .game_modes             import GameMode
-from .base_model             import BaseModel
-from .beatmap_genre          import BeatmapGenre
-from .beatmap_approved_state import BeatmapApprovedState
+from pyosu.language               import Language
+
+from pyosu.beatmap_genre          import BeatmapGenre
+from pyosu.beatmap_approved_state import BeatmapApprovedState
+from pyosu.game_modes             import GameMode
+
+from .base             import BaseModel
 
 class Beatmap(BaseModel):
     """ Beatmap model """
 
-    def __init__(self, api : 'OsuApi', **data):
+    def __init__(self, *, api : 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         #Api data
         self.approved         = data.get('approved'        , BeatmapApprovedState.Pending)

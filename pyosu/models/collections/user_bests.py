@@ -20,18 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model import BaseModel
+from pyosu.models.user_best       import UserBest
 
-class MultiplayerMatch(BaseModel):
-    """ Multiplayer match model """
+from .base import BaseCollection
 
-    def __init__(self, api: 'OsuApi', match_games : list, **data):
 
-        super().__init__(api, **data)
+class UserBestCollection(BaseCollection):
+    """ User recent collection class """
 
-        self.start_time   = data.get('start_time', ""  )
-        self.match_id     = data.get('match_id'  , 0   )
-        self.end_time     = data.get('end_time'  , None) # not supported yet - always None (Api side)
-        self.name         = data.get('name'      , ""  )
-
-        self.games = match_games
+    def __init__(self, items=[], *, api : 'OsuApi'=None):
+        print(items)
+        super().__init__(items, api=api, collection_type=UserBest)

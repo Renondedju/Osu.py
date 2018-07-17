@@ -20,17 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model import BaseModel
+from .base import BaseModel
 
-class UserEvent(BaseModel):
-    """ Contains events for a user """
+class MultiplayerMatch(BaseModel):
+    """ Multiplayer match model """
 
-    def __init__(self, api : 'OsuApi', **data):
-        
-        super().__init__(api, **data)
+    def __init__(self, *, api: 'OsuApi' = None, match_games : list, **data):
 
-        self.display_html   = data.get('display_html' , "")
-        self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
-        self.beatmapset_id	= data.get('beatmapset_id', 0 )
-        self.date		    = data.get('date'		  , "")
-        self.epicfactor	    = data.get('epicfactor'	  , 1 ) # How "epic" this event is (between 1 and 32)
+        super().__init__(api)
+
+        self.start_time   = data.get('start_time', ""  )
+        self.match_id     = data.get('match_id'  , 0   )
+        self.end_time     = data.get('end_time'  , None) # not supported yet - always None (Api side)
+        self.name         = data.get('name'      , ""  )
+
+        self.games = match_games

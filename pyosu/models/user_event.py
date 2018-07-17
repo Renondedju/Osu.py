@@ -20,11 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .user_best       import UserBest
-from .base_collection import BaseCollection
+from .base import BaseModel
 
-class UserBestCollection(BaseCollection):
-    """ User recent collection class """
+class UserEvent(BaseModel):
+    """ Contains events for a user """
 
-    def __init__(self, items=[], *, api : 'OsuApi'):
-        super().__init__(items, api=api, collection_type=UserBest)
+    def __init__(self, *, api : 'OsuApi' = None, **data):
+        
+        super().__init__(api)
+
+        self.display_html   = data.get('display_html' , "")
+        self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
+        self.beatmapset_id	= data.get('beatmapset_id', 0 )
+        self.date		    = data.get('date'		  , "")
+        self.epicfactor	    = data.get('epicfactor'	  , 1 ) # How "epic" this event is (between 1 and 32)
