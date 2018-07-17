@@ -20,10 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.models.user_recent     import UserRecent
-
-from .base import BaseCollection
-
+from pyosu.models.user_recent import UserRecent
+from .base                    import BaseCollection
 
 class UserRecentCollection(BaseCollection):
     """ User bests collection class """

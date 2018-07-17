@@ -22,7 +22,7 @@
 
 import asyncio
 
-from .http                   import Route, Request
+from .http   import Route, Request
 from .models import (
     User,
     Score,
