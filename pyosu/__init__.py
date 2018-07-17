@@ -36,4 +36,7 @@ __copyright__ = 'Copyright 2018 Renondedju'
 __version__   = '0.4.2'
 
 from .api                    import OsuApi
-from .exceptions             import *
+
+from . import models
+from . import types
+from . import exceptions
