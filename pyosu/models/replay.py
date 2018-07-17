@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.game_modes import GameMode
+from pyosu.types import GameMode
 from .base import BaseModel
 
 

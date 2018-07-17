@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.multiplayer_team import MultiplayerTeam
+from pyosu.types import MultiplayerTeam
 
 from .base       import BaseModel
 

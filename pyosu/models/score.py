@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from .base          import BaseModel
-from pyosu.replay_availability import ReplayAvailability
+from pyosu.types import ReplayAvailability
 
 class Score(BaseModel):
 
