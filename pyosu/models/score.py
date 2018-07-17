@@ -20,14 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model          import BaseModel
-from .replay_availability import ReplayAvailability
+from .base          import BaseModel
+from pyosu.types import ReplayAvailability
 
 class Score(BaseModel):
 
-    def __init__(self, api : 'OsuApi', **data):
+    def __init__(self, *, api : 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.score_id         = data.get('score_id'         , 0)
         self.score            = data.get('score'            , 0.0)

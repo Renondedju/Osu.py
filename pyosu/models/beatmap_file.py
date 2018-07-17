@@ -22,18 +22,18 @@
 
 import re
 
-from .base_model import BaseModel
+from .base import BaseModel
 
 class BeatmapFile(BaseModel):
     """ Beatmap file model.
-    
+
     This model is way heavier than a classic Beatmap object (3Kb to 1Mb) since
     it contains the beatmap file. If you don't really need it, don't use it !
     """
 
-    def __init__(self, api : 'OsuApi', **data):
+    def __init__(self, *, api : 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.content = data.get('content', '')
         self.version = self.parse_version()
@@ -46,12 +46,12 @@ class BeatmapFile(BaseModel):
 
         if matches:
             return int(matches.group(1))
-        
+
         return 0
 
     def get_category(self, category_name : str):
         """ Gets a file category 
-        
+
             Example :
             calling get_category('Editor') on a file with version == 14
             might return something like :

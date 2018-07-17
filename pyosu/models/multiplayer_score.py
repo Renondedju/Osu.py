@@ -20,16 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model       import BaseModel
-from .multiplayer_team import MultiplayerTeam
+from pyosu.types import MultiplayerTeam
+
+from .base       import BaseModel
 
 
 class MultiplayerScore(BaseModel):
     """ Multiplayer score model """
 
-    def __init__(self, api: 'OsuApi', **data):
+    def __init__(self, *, api: 'OsuApi' = None, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.slot       = data.get('slot'     , 0)     # 0 based index of player's slot
         self.team       = data.get('team'     , MultiplayerTeam.none) # Player's team

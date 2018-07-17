@@ -21,27 +21,19 @@
 # SOFTWARE.
 
 from abc         import ABCMeta
-from .exceptions import UnreferencedApi
+
+from pyosu.exceptions import UnreferencedApi
+
 
 class BaseModel(metaclass=ABCMeta):
     """ This class is just a base model and cannot be instanciated. """
-    
-    def __init__(self, api : 'OsuApi', **data):
 
-        self.__api    = api
-        self.is_empty = len(data) is 0
+    def __init__(self, api : 'OsuApi' = None):
+        self.__api = api
 
     @property
     def api(self):
         """ api getter """
-
         if self.__api is None:
             raise UnreferencedApi("The osu api reference cannot be 'None'")
-        
         return self.__api
-
-    @api.setter
-    def api(self, value : 'OsuApi'):
-        """ api setter """
-
-        self.__api = value

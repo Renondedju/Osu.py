@@ -20,18 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 import json
 import asyncio
 import aiohttp
 import inspect
 import traceback
 
-from pyosu import *
+from pyosu import OsuApi
+from pyosu.types import *
 
 pass_count = 0
 test_count = 0
-api = OsuApi(json.load(open('test-config.json'))['api_key'])
+
+with open('test-config.json') as f:
+    api = OsuApi(json.load(f)['api_key'])
 
 async def test(function):
     """ Tests a function and sends a report if it fails """
@@ -58,44 +60,43 @@ async def test(function):
 
 async def test_score():
     score = await api.get_score(1461701)
-    if score.is_empty:
+    if score is None:
         raise ValueError('Empty score !')
 
 async def test_user():
     user = await api.get_user(user = 'Renondedju', mode = GameMode.Mania)
-    if user.is_empty:
+    if user is None:
         raise ValueError('Empty user !')
 
 async def test_beatmap():
     beatmap = await api.get_beatmap(beatmap_id=1461701)
-    if beatmap.is_empty:
+    if beatmap is None:
         raise ValueError('Empty beatmap !')
 
 async def test_beatmap_collection():
     beatmapset = await api.get_beatmaps(beatmapset_id=690687)
-    if beatmapset.is_empty:
+    if beatmapset is None:
         raise ValueError('Empty beatmapset !')
 
 async def test_score_collection():
     scores = await api.get_scores(1461701)
-    if scores.is_empty:
+    if scores is None:
         raise ValueError('Empty scores !')
 
 async def test_user_best():
     best = await api.get_user_best('Renondedju', mode = GameMode.Osu)
-    if (best.is_empty):
+    if best is None:
         raise ValueError('Empty best !')
     
-    if (await best.get_beatmap()).is_empty:
+    if await best.get_beatmap() is None:
         raise ValueError('Empty best.get_beatmap() !')
 
-    if (await best.get_user()).is_empty:
+    if await best.get_user() is None:
         raise ValueError('Empty best.get_user() !')
 
 async def test_user_bests():
     bests = await api.get_user_bests('Renondedju')
-
-    if bests.is_empty:
+    if bests is None:
         raise ValueError('User bests is empty, there should be 10 scores')
 
 async def test_user_recent():
@@ -110,7 +111,7 @@ async def test_replay():
     await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
 
     # Cannot really test replays since they might be deleted at all time ..
-    # Also sice the request rate is at 10/min, I don't wanna abuse it
+    # Also since the request rate is at 10/min, I don't wanna abuse it
 
 async def test_match():
 
@@ -120,7 +121,7 @@ async def test_match():
 async def test_beatmap_file():
 
     b = await api.get_beatmap_file(390057)
-    if b.is_empty:
+    if b is None:
         raise ValueError('The beatmap file shouldn\'t be empty')
 
 async def main():

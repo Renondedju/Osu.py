@@ -1,6 +1,16 @@
-# Changelogs
+# Changelog
 
-> Osu<span></span>.py library changelogs
+> Osu<span></span>.py library changelog
+
+## Version 0.5.0
+
+> Corrections and proper install
+
+- BaseCollection now inherits from list
+- Added a setup.py and install instructions in [Readme](README.md)
+- Split models with proper package hierarchy
+
+Contributors : [@obayemi](https://github.com/obayemi)
 
 ## Version 0.4.1
 
@@ -17,7 +27,7 @@
 
 ## Version 0.3.1
 
-- Unavaliable requested requests no longer raise ReplayUnavailable exception
+- Unavailable requested requests no longer raise ReplayUnavailable exception
 
 ## Version 0.3.0
 
@@ -37,7 +47,7 @@
 
 ## Version 0.2.0
 
-> User bests and recent are now avaliable !
+> User bests and recent are now available !
 
 - Improved loading times and reworked the base architecture of the api
 - Created The BaseModel and BaseCollection classes for easier extensions
@@ -56,7 +66,7 @@
 - Added Score model
 - Added Replay Availability Enum
 - Added Score collection model
-- Created a chengelog :)
+- Created a changelog :)
 - Added the *\_\_version\_\_*, *\_\_copyright\_\_*, *\_\_license\_\_*, *\_\_author\_\_* and *\_\_title\_\_* properties of the library
 - New api system : everything can be get from one and unique class. Everything returned is now a valid instance and client apps don't have to manage sessions themselves. Just create an Api instance, and it manages everything
 - Every model has now a pointer on the api instance
@@ -66,7 +76,7 @@
 
 ## Version 0.0.0
 
-> This version is the first version of the library, there is verry fiew api
+> This version is the first version of the library, there is very few api
 > features supported, everything here is subject to modifications
 
 - Added Beatmaps class

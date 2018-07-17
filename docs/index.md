@@ -31,6 +31,7 @@
   - [MultiplayerScore](index.md#multiplayerscore)
 
 - [Collections](index.md#containers)
+  - [BaseCollection](index.md#basecollection)
   - [BeatmapCollection](index.md#beatmapcollection)
   - [ScoreCollection](index.md#scorecollection)
   - [UserBestCollection](index.md#userbestcollection)
@@ -63,7 +64,7 @@
 
 ### get_beatmap()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve general beatmap information.__
 
@@ -86,7 +87,7 @@ Parameters :
 
     type_str          - specify if 'user' is a user_id or a username.  
                         Use `string` for usernames or `id` for user_ids.
-                        Optional, default behaviour is automatic recognition
+                        Optional, default behavior is automatic recognition
                         (may be problematic for usernames made up of digits only).  
 
     mode              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
@@ -104,11 +105,11 @@ Parameters :
                         (example of hash: a5b99395a42bd55bc5eb1d2411cbdf8b).
                         Optional, by default all beatmaps are returned independently from the hash.
 
--> Returns a [Beatmap](index.md#beatmap) model
+-> Returns a [Beatmap](index.md#beatmap) model, None if the request failed
 
 ### get_beatmaps()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve general beatmap information.__
 
@@ -119,7 +120,7 @@ async def get_beatmaps(self, limit = None, since = None, type_str = None, beatma
 ```
 
 Do note that requesting a beatmap collection is way faster than
-requesting beatmap by beatmap *(and requiers only only one api request)*
+requesting beatmap by beatmap *(and requires only only one api request)*
 
 Parameters :
 
@@ -134,7 +135,7 @@ Parameters :
 
     type_str          - specify if 'user' is a user_id or a username.
                         Use `string` for usernames or `id` for user_ids.
-                        Optional, default behaviour is automatic recognition
+                        Optional, default behavior is automatic recognition
                         (may be problematic for usernames made up of digits only).
 
     mode              - mode see GameMode enum.  
@@ -146,11 +147,11 @@ Parameters :
                         Converted maps show their converted difficulty rating.
                         Optional, default is 0.
 
--> Returns a [BeatmapCollection](index.md#beatmapcollection) collection
+-> Returns a [BeatmapCollection](index.md#beatmapcollection) collection, None if the request failed
 
 ### get_beatmap_file()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve .osu beatmap file__
 
@@ -166,13 +167,13 @@ If you don't really need it, don't use it !
 
 Parameters :
 
-    beatmap_id - the beatmap ID (not beatmap set ID!) (requiered).
+    beatmap_id - the beatmap ID (not beatmap set ID!) (required).
 
--> Returns a [BeatmapFile](index.md#beatmapfile) model
+-> Returns a [BeatmapFile](index.md#beatmapfile) model, None if the request failed
 
 ### get_user()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve general user information.__
 
@@ -191,17 +192,17 @@ Parameters :
 
     type_str   - specify if u is a user_id or a username.
                  Use `string` for usernames or `id` for user_ids.
-                 Optional, default behaviour is automatic recognition
+                 Optional, default behavior is automatic recognition
                  (may be problematic for usernames made up of digits only).
 
     event_days - Max number of days between now and last event date.  
                  Range of 1-31. Optional, default value is 1.
 
--> Returns a [User](index.md#user) model
+-> Returns a [User](index.md#user) model, None if the request failed
 
 ### get_score()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve information about the top 100 scores of a specified beatmap.__
 
@@ -222,17 +223,17 @@ Parameters :
 
     type_str   - specify if 'user' is a user_id or a username.
                  Use `string` for usernames or `id` for user_ids.
-                 Optional, default behaviour is automatic recognition
+                 Optional, default behavior is automatic recognition
                  (may be problematic for usernames made up of digits only).
 
     mode       - mode, see GameMode enum
                  Optional, maps of all modes are returned by default.
 
--> Returns a [Score](index.md#score) model
+-> Returns a [Score](index.md#score) model, None if the request failed
 
 ### get_scores()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve information about the top 100 scores of a specified beatmap.__
 
@@ -242,7 +243,7 @@ Function declaration :
 async def get_scores(self, beatmap_id, user = None, mode = None, mods = None, type_str = None, limit = None)
 ```
 
-Do note that requesting a score collection is way faster than requesting score by score *(and requiers only only one api request)*
+Do note that requesting a score collection is way faster than requesting score by score *(and requires only only one api request)*
 
 Parameters :
 
@@ -257,16 +258,16 @@ Parameters :
 
     type_str   - specify if user is a user_id or a username.
                  Use string for usernames or id for user_ids.
-                 Optional, default behaviour is automatic recognition
+                 Optional, default behavior is automatic recognition
                  (may be problematic for usernames made up of digits only).
 
     limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
 
--> Returns a [ScoreCollection](index.md#scorecollection) collection
+-> Returns a [ScoreCollection](index.md#scorecollection) collection, None if the request failed
 
 ### get_user_best()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Get the top score for the specified user.__
 
@@ -290,11 +291,11 @@ Parameters :
                Optional, default behavior is automatic recognition
                may be problematic for usernames made up of digits only).
 
--> Returns a [UserBest](index.md#userbest) model
+-> Returns a [UserBest](index.md#userbest) model, None if the request failed
 
 ### get_user_bests()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Get the top scores for the specified user.__
 
@@ -306,23 +307,23 @@ async def get_user_bests(self, user, mode = None, type_str = None, limit = None)
 
 Parameters :
 
-    user       - sspecify a user_id or a username to return best scores from (required).
+    user       - specify a user_id or a username to return best scores from (required).
 
     mode       - mode, see the GameMode enum
                  Optional, default value is 0 (Osu).
 
     type_str   - specify if user is a user_id or a username.
                  Use 'string' for usernames or 'id' for user_ids.
-                 Optional, default behaviour is automatic recognition
+                 Optional, default behavior is automatic recognition
                  (may be problematic for usernames made up of digits only).
 
     limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
 
--> Returns a [UserBestCollection](index.md#userbestcollection) collection
+-> Returns a [UserBestCollection](index.md#userbestcollection) collection, None if the request failed
 
 ### get_user_recent()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Gets the user's most recent play over the last 24 hours.__
 
@@ -346,11 +347,11 @@ Parameters :
                Optional, default behavior is automatic recognition
                may be problematic for usernames made up of digits only).
 
--> Returns a [UserRecent](index.md#userrecent) model
+-> Returns a [UserRecent](index.md#userrecent) model, None if the request failed
 
 ### get_user_recents()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Gets the user's most recent plays over the last 24 hours.__
 
@@ -369,16 +370,16 @@ Parameters :
 
     type_str   - specify if user is a user_id or a username.
                  Use 'string' for usernames or 'id' for user_ids.
-                 Optional, default behaviour is automatic recognition
+                 Optional, default behavior is automatic recognition
                  (may be problematic for usernames made up of digits only).
 
     limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
 
--> Returns a [UserRecentCollection](index.md#userrecentcollection) collection
+-> Returns a [UserRecentCollection](index.md#userrecentcollection) collection, None if the request failed
 
 ### get_replay()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Get the replay data of a user's score on a map.__
 
@@ -403,11 +404,11 @@ Parameters:
 
     user        - the user that has played the beatmap (required).
 
--> Returns a [Replay](index.md#replay) model
+-> Returns a [Replay](index.md#replay) model, None if the request failed
 
 ### get_match()
 
-> This function is a couroutine
+> This function is a coroutine
 
 __Retrieve information about multiplayer match.__
 
@@ -421,7 +422,7 @@ Parameters :
 
     match_id - match id to get information from (required).
 
--> Returns a [MultiplayerMatch](index.md#multiplayermatch) model
+-> Returns a [MultiplayerMatch](index.md#multiplayermatch) model, None if the request failed
 
 -----
 
@@ -432,15 +433,12 @@ Parameters :
 
 ### BaseModel
 
-> Metaclass : cannot be instanciated.
+> Metaclass : cannot be instantiated.
 
 Fields :
 
 - property ``api`` : [OsuApi](index.md#osuapi)  
     Raises an [UnreferencedApi](index.md#unreferencedapi) error if null when requested.
-
-- ``is_empty`` : bool  
-    Tells if the current model is empty *(because of an invalid request or an error)*
 
 ### Beatmap
 
@@ -604,7 +602,7 @@ Methods :
 
 > Inherits from [BaseModel](index.md#basemodel)
 
-Reprents users statistics
+Represent users statistics
 
 Fields :
 
@@ -672,7 +670,7 @@ Fields :
 
 Represent a user best score
 
-Fileds :
+Fields :
 
 - ``beatmap_id``   : int
 - ``score``        : float
@@ -910,85 +908,42 @@ Fields :
 
 ### BaseCollection
 
-> Metaclass : cannot be instanciated.
+> Metaclass : cannot be instanciated.  
+> Inherits from list
 
 Fields :
 
 - property ``api`` : [OsuApi](index.md#osuapi)  
     raises an [UnreferencedApi](index.md#unreferencedapi) exception if the api is null.
 
-- property ``count`` : int  
-    Returns the number of objects in the container of the collection
-
-- property ``is_empty`` : bool  
-    Checks if the container of the collection is empty
-
 Functions :
 
-- ``get_content()``  
-    Returns the content of the collection
-
-- ``add_content(content)``  
-    Adds content to the collection.
-
-- ``remove_content(content)``  
-    Removes content from the collection
+- ``append(item)``  
+    Adds an item to the collection.
 
 ### BeatmapCollection
 
 > Inherits from [BaseCollection](index.md#basecollection)
 
-Methods:
-
-- ``get_beatmaps()``  
-    Returns the [Beatmaps](index.md#beatmap) of the collection
-
-- ``add_beatmap(beatmap : Beatmap)``  
-    Adds a [Beatmap](index.md#beatmap) to the collection
-
-- ``remove_beatmap(beatmap : Beatmap)``  
-    Removes a [Beatmap](index.md#beatmap) from the collection
+The BeatmapCollection.append() function is limited to the [Beatmap](index.md#beatmap) type
 
 ### ScoreCollection
 
 > Inherits from [BaseCollection](index.md#basecollection)
 
-Methods:
-
-- ``get_scores()``  
-    Returns the [Scores](index.md#score) of the collection
-
-- ``add_score(score : Score)``  
-    Adds a [Score](index.md#score) to the collection
-
-- ``remove_score(score : Score)``  
-    Removes a [Score](index.md#score) from the collection
+The ScoreCollection.append() function is limited to the [Score](index.md#score) type
 
 ### UserBestCollection
 
 > Inherits from [BaseCollection](index.md#basecollection)
 
-- ``get_user_bests()``  
-    Returns the [UserBests](index.md#userbest) of the collection
-
-- ``add_user_best(user_best : UserBest)``  
-    Adds a [UserBest](index.md#userbest) to the collection
-
-- ``remove_user_best(user_best : UserBest)``  
-    Removes a [UserBest](index.md#userbest) from the collection
+The UserBestCollection.append() function is limited to the [UserBest](index.md#userbest) type
 
 ### UserRecentCollection
 
 > Inherits from [BaseCollection](index.md#basecollection)
 
-- ``get_user_recents()``  
-    Returns the [UserRecents](index.md#userrecent) of the collection
-
-- ``add_user_recent(user_recent : UserRecent)``  
-    Adds a [UserRecent](index.md#userrecent) to the collection
-
-- ``remove_user_recent(user_recent : UserRecent)``  
-    Removes a [UserRecent](index.md#userrecent) from the collection
+The UserRecentCollection.append() function is limited to the [UserRecent](index.md#userrecent) type
 
 -----
 

@@ -10,6 +10,18 @@ This library is developed for [Uso! bot](https://github.com/Renondedju/Uso_Bot_V
 - The *aiohttp* library : [Install instructions](https://aiohttp.readthedocs.io/en/stable/)
 - An internet connexion
 
+## Installation
+
+Open a terminal and write
+
+    pip install git+https://github.com/Renondedju/Osu.py
+
+Or from the source
+
+    $ git clone https://github.com/Renondedju/Osu.py
+    $ cd Osu.py
+    $ pip install .
+
 ## Documentations
 
 Link to the [docs](docs/index.md)

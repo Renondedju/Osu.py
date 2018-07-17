@@ -20,14 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base_model import BaseModel
+from .base import BaseModel
 
 class MultiplayerMatch(BaseModel):
     """ Multiplayer match model """
 
-    def __init__(self, api: 'OsuApi', match_games : list, **data):
+    def __init__(self, *, api: 'OsuApi' = None, match_games : list, **data):
 
-        super().__init__(api, **data)
+        super().__init__(api)
 
         self.start_time   = data.get('start_time', ""  )
         self.match_id     = data.get('match_id'  , 0   )

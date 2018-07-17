@@ -20,31 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
-from setuptools import setup, find_packages
+from pyosu.models.user_recent import UserRecent
+from .base                    import BaseCollection
 
-# Utility function to read the README file.
-# Used for the long_description.  It's nice, because now 1) we have a top level
-# README file and 2) it's easier to type in the README file than to put a raw
-# string in below ...
-def read(fname):
-    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
-        return f.read()
+class UserRecentCollection(BaseCollection):
+    """ User bests collection class """
 
-setup(
-    name     = "osu.py",
-    version  = "0.5.0",
-    author   = "Renondedju",
-    description = ("A basic wrapper for the Osu API."),
-    license = "MIT",
-    url = "https://github.com/Renondedju/Osu.py",
-    packages=find_packages(),
-    long_description=read('README.md'),
-    install_requires=[
-        'aiohttp'
-    ],
-    classifiers=[
-        "Development Status :: 4 - Stable",
-        "Programming Language :: Python :: 3.6",
-    ],
-)
+    def __init__(self, items=[], *, api : 'OsuApi'=None):
+        super().__init__(items, api=api, collection_type=UserRecent)

@@ -20,25 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .http                   import Route, Request
-from .user                   import User
-from .score                  import Score
-from .replay                 import Replay
-from .beatmap                import Beatmap
-from .user_best              import UserBest
-from .user_event             import UserEvent
-from .exceptions             import ReplayUnavailable
-from .user_recent            import UserRecent
-from .beatmap_file           import BeatmapFile
-from .score_collection       import ScoreCollection
-from .multiplayer_game       import MultiplayerGame
-from .multiplayer_score      import MultiplayerScore
-from .multiplayer_match      import MultiplayerMatch
-from .beatmap_collection     import BeatmapCollection
-from .user_best_collection   import UserBestCollection
-from .user_recent_collection import UserRecentCollection
-
 import asyncio
+
+from .http   import Route, Request
+from .models import (
+    User,
+    Score,
+    Replay,
+    Beatmap,
+    UserBest,
+    UserEvent,
+    UserRecent,
+    BeatmapFile,
+    ScoreCollection,
+    MultiplayerGame,
+    MultiplayerScore,
+    MultiplayerMatch,
+    BeatmapCollection,
+    UserBestCollection,
+    UserRecentCollection,
+)
+from .exceptions import ReplayUnavailable
+
 
 class OsuApi():
 
@@ -78,7 +81,7 @@ class OsuApi():
                 user              - specify a user_id or a username to return metadata from.
                 type_str          - specify if 'user' is a user_id or a username.
                                       Use string for usernames or id for user_ids.
-                                      Optional, default behaviour is automatic recognition
+                                      Optional, default behavior is automatic recognition
                                       (may be problematic for usernames made up of digits only).
                 mode              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                                       Optional, maps of all modes are returned by default.
@@ -98,13 +101,16 @@ class OsuApi():
             b = beatmap_id, u = user, m = mode, a = include_converted, h = hash_str,
             type = type_str)
 
-        return Beatmap(self, **data)
+        if len(data) == 0:
+            return None
+
+        return Beatmap(**data, api=self)
 
     async def get_beatmaps(self, limit = None, since = None, type_str = None,
         beatmapset_id = None, include_converted = None, user = None, mode = None):
         """
             Do note that requesting a beatmap collection is way faster than 
-            requesting beatmap by beatmap (and requiers only only one api request)
+            requesting beatmap by beatmap (and requires only only one api request)
 
             Parameters :
 
@@ -115,7 +121,7 @@ class OsuApi():
                 user              - specify a user_id or a username to return metadata from.
                 type_str          - specify if 'user' is a user_id or a username.
                                     Use string for usernames or id for user_ids.
-                                    Optional, default behaviour is automatic recognition
+                                    Optional, default behavior is automatic recognition
                                     (may be problematic for usernames made up of digits only).
                 mode              - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                                     Optional, maps of all modes are returned by default.
@@ -129,11 +135,12 @@ class OsuApi():
         datas = await self.__get_data('get_beatmaps', False, limit = limit, since = since,
             type = type_str, s = beatmapset_id, a = include_converted, u = user, m = mode)
 
-        beatmaps = BeatmapCollection(self)
-        for data in datas:
-            beatmaps.add_beatmap(Beatmap(self, **data))
-
-        return beatmaps
+        if len(datas) == 0:
+            return None
+        return BeatmapCollection(
+            (Beatmap(**data, api=self) for data in datas),
+            api=self,
+        )
 
     async def get_user(self, user, mode = None, type_str = None, event_days = None):
         """
@@ -146,7 +153,7 @@ class OsuApi():
                              Optional, default value is 0.    
                 type_str   - specify if u is a user_id or a username.
                              Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
+                             Optional, default behavior is automatic recognition
                              (may be problematic for usernames made up of digits only).
                 event_days - Max number of days between now and last event date. 
                              Range of 1-31. Optional, default value is 1.
@@ -155,11 +162,10 @@ class OsuApi():
         data = await self.__get_data('get_user', u = user, m = mode, type = type_str,
             event_days = event_days)
 
-        user_events = []
-        for event in data.get('events', []):
-            user_events.append(UserEvent(**event))
+        if len(data) == 0:
+            return None
 
-        return User(self, user_events, **data)
+        return User(user_events=[UserEvent(**event) for event in data.get('events', [])], **data, api=self)
 
     async def get_score(self, beatmap_id, user = None, mode = None, type_str = None):
         """
@@ -173,7 +179,7 @@ class OsuApi():
                 user       - specify a user_id or a username to return metadata from.
                 type_str   - specify if 'user' is a user_id or a username.
                              Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
+                             Optional, default behavior is automatic recognition
                              (may be problematic for usernames made up of digits only).
                 mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                              Optional, maps of all modes are returned by default.
@@ -182,7 +188,10 @@ class OsuApi():
         data = await self.__get_data('get_scores', b = beatmap_id, limit = 1, u = user,
             m = mode, type = type_str)
 
-        score = Score(self, **data)
+        if len(data) == 0:
+            return None
+
+        score = Score(**data, api=self)
         if mode != None:
             score.mode = mode
 
@@ -191,7 +200,7 @@ class OsuApi():
     async def get_scores(self, beatmap_id, user = None, mode = None, mods = None, type_str = None, limit = None):
         """
             Do note that requesting a score collection is way faster than 
-            requesting score by score (and requiers only only one api request)
+            requesting score by score (and requires only only one api request)
 
             Parameters :
 
@@ -202,7 +211,7 @@ class OsuApi():
                 mods       - specify a mod or mod combination (See the bitwise enum)
                 type_str   - specify if user is a user_id or a username.
                              Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
+                             Optional, default behavior is automatic recognition
                              (may be problematic for usernames made up of digits only).
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
@@ -210,19 +219,20 @@ class OsuApi():
         datas = await self.__get_data('get_scores', False, b = beatmap_id, u = user,
             m = mode, mods = mods, type = type_str, limit = limit)
 
-        scores = ScoreCollection(self)
-        for data in datas:
-            scores.add_score(Score(self, **data))
-
-        return scores
+        if len(datas) == 0:
+            return None
+        return ScoreCollection(
+            [Score(**data, api=self) for data in datas],
+            api=self
+        )
 
     async def get_user_best(self, user, mode = None, type_str = None):
         """
             Returns the top play of a user. If you want more than one user best
             use OsuApi.get_user_bests() instead.
 
-            Parameters : 
-            
+            Parameters :
+
                 user     - specify a user_id or a username to return best scores from (required).
                 mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                            Optional, default value is 0.
@@ -234,18 +244,21 @@ class OsuApi():
         data = await self.__get_data('get_user_best', u = user, limit = 1, m = mode,
             type = type_str)
 
-        return UserBest(self, **data)
+        if len(data) == 0:
+            return None
+
+        return UserBest(**data, api=self)
 
     async def get_user_bests(self, user, mode = None, type_str = None, limit = None):
         """
             Parameters :
 
-                user       - sspecify a user_id or a username to return best scores from (required).
+                user       - specify a user_id or a username to return best scores from (required).
                 mode       - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                              Optional, default value is 0.
                 type_str   - specify if user is a user_id or a username.
                              Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
+                             Optional, default behavior is automatic recognition
                              (may be problematic for usernames made up of digits only).
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
@@ -253,18 +266,20 @@ class OsuApi():
         datas = await self.__get_data('get_user_best', False, u = user, m = mode,
             type = type_str, limit = limit)
 
-        bests = UserBestCollection(self)
-        for data in datas:
-            bests.add_user_best(UserBest(self, **data))
+        if len(datas) == 0:
+            return None
 
-        return bests
+        return UserBestCollection(
+            (UserBest(**data, api=self) for data in datas),
+            api=self,
+        )
 
     async def get_user_recent(self, user, mode = None, type_str = None):
         """
             If you want more than one user recent use OsuApi.get_user_recent() instead.
 
-            Parameters : 
-            
+            Parameters :
+
                 user     - specify a user_id or a username to return best scores from (required).
                 mode     - mode (0 = osu!, 1 = Taiko, 2 = CtB, 3 = osu!mania).
                            Optional, default value is 0.
@@ -276,7 +291,9 @@ class OsuApi():
         data = await self.__get_data('get_user_recent', u = user, limit = 1, m = mode,
             type = type_str)
 
-        return UserRecent(self, **data)
+        if len(data) == 0:
+            return None
+        return UserRecent(**data, api=self)
 
     async def get_user_recents(self, user, mode = None, type_str = None, limit = None):
         """
@@ -287,7 +304,7 @@ class OsuApi():
                              Optional, default value is 0.
                 type_str   - specify if user is a user_id or a username.
                              Use string for usernames or id for user_ids.
-                             Optional, default behaviour is automatic recognition
+                             Optional, default behavior is automatic recognition
                              (may be problematic for usernames made up of digits only).
                 limit      - amount of results from the top (range between 1 and 100 - defaults to 50).
         """
@@ -295,16 +312,15 @@ class OsuApi():
         datas = await self.__get_data('get_user_recent', False, u = user, m = mode,
             type = type_str, limit = limit)
 
-        recents = UserRecentCollection(self)
-        for data in datas:
-            recents.add_user_recent(UserRecent(self, **data))
-
-        return recents
+        return UserRecentCollection(
+           (UserRecent(**data, api=self) for data in datas),
+            api=self,
+        )
 
     async def get_replay(self, mode, beatmap_id, user):
         """
             Official doc : https://github.com/ppy/osu-api/wiki#get-replay-data
-        
+
             Ref : https://github.com/ppy/osu-api/wiki#rate-limiting  
             As this is quite a load-heavy request, it has special rules about rate limiting.
             You are only allowed to do 10 requests per minute.
@@ -317,19 +333,21 @@ class OsuApi():
                               in which the replay was played (required).
                 user        - the user that has played the beatmap (required).
         """
-        
+
         try:
             data = await self.__get_data('get_replay', False, u = user, m = mode,
                 b = beatmap_id)
         except ReplayUnavailable:
-            return Replay(self, **{})
+            return None
 
         if len(data) is not 0:
             data['user']       = user
             data['mode']       = mode
             data['beatmap_id'] = beatmap_id
+        else:
+            return None
 
-        return Replay(self, **data)
+        return Replay(**data, api=None)
 
     async def get_match(self, match_id):
         """
@@ -342,8 +360,11 @@ class OsuApi():
 
         data = await self.__get_data('get_match', False, mp = match_id)
 
+        if len(data) == 0:
+            return None
+
         if type(data) == dict and data.get('match') == 0:
-            return MultiplayerMatch(self, [], **{})
+            return None
         else:
             data = data[0]
 
@@ -365,7 +386,7 @@ class OsuApi():
 
             Parameters :
 
-                beatmap_id - the beatmap ID (not beatmap set ID!) (requiered).
+                beatmap_id - the beatmap ID (not beatmap set ID!) (required).
         """
 
         route   = Route(base = 'https://osu.ppy.sh/osu/', path = str(beatmap_id))
@@ -374,6 +395,6 @@ class OsuApi():
         await request.fetch()
 
         if request.data == '':
-            return BeatmapFile(self, **{})
+            return None
 
-        return BeatmapFile(self, **{"content": request.data})
+        return BeatmapFile(**{"content": request.data}, api=self)

@@ -20,27 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .beatmap         import Beatmap
-from .base_collection import BaseCollection
+from .base import BaseModel
 
-class BeatmapCollection(BaseCollection):
-    """ Beatmap collection class """
+class UserEvent(BaseModel):
+    """ Contains events for a user """
 
-    def __init__(self, api : 'OsuApi'):
-
-        super().__init__(api, Beatmap)
-
-    def get_beatmaps(self):
-        """ Returns the beatmaps of the collection """
+    def __init__(self, *, api : 'OsuApi' = None, **data):
         
-        return self.get_content()
+        super().__init__(api)
 
-    def add_beatmap(self, beatmap : Beatmap):
-        """ Adds a beatmap to the collection """
-
-        return self.add_content(beatmap)
- 
-    def remove_beatmap(self, beatmap : Beatmap):
-        """ Removes a beatmap from the collection """
-
-        return self.remove_content(beatmap)
+        self.display_html   = data.get('display_html' , "")
+        self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
+        self.beatmapset_id	= data.get('beatmapset_id', 0 )
+        self.date		    = data.get('date'		  , "")
+        self.epicfactor	    = data.get('epicfactor'	  , 1 ) # How "epic" this event is (between 1 and 32)
