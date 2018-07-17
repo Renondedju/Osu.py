@@ -29,5 +29,4 @@ class UserBestCollection(BaseCollection):
     """ User recent collection class """
 
     def __init__(self, items=[], *, api : 'OsuApi'=None):
-        print(items)
         super().__init__(items, api=api, collection_type=UserBest)

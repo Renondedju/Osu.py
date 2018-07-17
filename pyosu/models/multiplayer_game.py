@@ -20,10 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.team_type      import TeamType
-from pyosu.game_modes     import GameMode
-from pyosu.scoring_type   import ScoringType
-from pyosu.game_modifiers import GameModifier
+from pyosu.types import TeamType, GameMode, ScoringType, GameModifier
 
 from .base     import BaseModel
 

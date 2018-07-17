@@ -27,7 +27,8 @@ import aiohttp
 import inspect
 import traceback
 
-from pyosu import *
+from pyosu import OsuApi
+from pyosu.types import *
 
 pass_count = 0
 test_count = 0

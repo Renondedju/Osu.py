@@ -22,9 +22,7 @@
 
 from pyosu.language               import Language
 
-from pyosu.beatmap_genre          import BeatmapGenre
-from pyosu.beatmap_approved_state import BeatmapApprovedState
-from pyosu.game_modes             import GameMode
+from pyosu.types import BeatmapGenre, BeatmapApprovedState, GameMode
 
 from .base             import BaseModel
 

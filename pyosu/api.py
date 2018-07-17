@@ -165,7 +165,7 @@ class OsuApi():
         if len(data) == 0:
             return None
 
-        return User(user_event=[UserEvent(**event) for event in data.get('events', [])], **data, api=self)
+        return User(user_events=[UserEvent(**event) for event in data.get('events', [])], **data, api=self)
 
     async def get_score(self, beatmap_id, user = None, mode = None, type_str = None):
         """
@@ -265,7 +265,6 @@ class OsuApi():
 
         datas = await self.__get_data('get_user_best', False, u = user, m = mode,
             type = type_str, limit = limit)
-        print(datas)
 
         if len(datas) == 0:
             return None
