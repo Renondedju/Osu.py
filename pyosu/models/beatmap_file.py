@@ -22,7 +22,7 @@
 
 import re
 
-from .base import BaseModel
+from pyosu.models.base import BaseModel
 
 class BeatmapFile(BaseModel):
     """ Beatmap file model.

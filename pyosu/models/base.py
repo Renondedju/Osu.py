@@ -20,8 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from abc         import ABCMeta
-
+from abc              import ABCMeta
 from pyosu.exceptions import UnreferencedApi
 
 

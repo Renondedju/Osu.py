@@ -21,6 +21,8 @@
 # SOFTWARE.
 
 import os
+import pyosu
+
 from setuptools import setup, find_packages
 
 # Utility function to read the README file.
@@ -32,15 +34,15 @@ def read(fname):
         return f.read()
 
 setup(
-    name     = "osu.py",
-    version  = "0.5.0",
-    author   = "Renondedju",
+    name     = pyosu.__name__,
+    version  = pyosu.__version__,
+    author   = pyosu.__author__,
+    license  = pyosu.__license__,
+    url      = "https://github.com/Renondedju/Osu.py",
     description = ("A basic wrapper for the Osu API."),
-    license = "MIT",
-    url = "https://github.com/Renondedju/Osu.py",
-    packages=find_packages(),
-    long_description=read('README.md'),
-    install_requires=[
+    packages = find_packages(),
+    long_description = read('README.md'),
+    install_requires = [
         'aiohttp'
     ],
     classifiers=[

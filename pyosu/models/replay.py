@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.types import GameMode
-from .base import BaseModel
+from pyosu.types       import GameMode
+from pyosu.models.base import BaseModel
 
 
 class Replay(BaseModel):
@@ -46,11 +46,11 @@ class Replay(BaseModel):
 
         super().__init__(api)
 
-        self.beatmap_id = data.get('beatmap_id', 0)
-        self.encoding   = data.get('encoding'  , "base64")
-        self.content    = data.get('content'   , "")       #base64-encoded replay
-        self.user       = data.get('user'      , "")
-        self.mode       = data.get('mode'      , GameMode.Osu)
+        self.mode       = int(data.get('mode'      , GameMode.Osu))
+        self.beatmap_id = int(data.get('beatmap_id', 0))
+        self.user       =     data.get('user'      , "")
+        self.content    =     data.get('content'   , "")       #base64-encoded replay
+        self.encoding   =     data.get('encoding'  , "base64")
 
     async def get_beatmap(self, **parameters):
         """ Returns the beatmap's data of the replay """

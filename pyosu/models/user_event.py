@@ -20,7 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base import BaseModel
+import datetime
+
+from pyosu.models.base import BaseModel
 
 class UserEvent(BaseModel):
     """ Contains events for a user """
@@ -29,8 +31,8 @@ class UserEvent(BaseModel):
         
         super().__init__(api)
 
-        self.display_html   = data.get('display_html' , "")
-        self.beatmap_id	    = data.get('beatmap_id'	  , 0 )
-        self.beatmapset_id	= data.get('beatmapset_id', 0 )
-        self.date		    = data.get('date'		  , "")
-        self.epicfactor	    = data.get('epicfactor'	  , 1 ) # How "epic" this event is (between 1 and 32)
+        self.display_html   =     data.get('display_html' , "")
+        self.beatmap_id	    = int(data.get('beatmap_id'	  , 0 ))
+        self.epicfactor	    = int(data.get('epicfactor'	  , 1 )) # How "epic" this event is (between 1 and 32)
+        self.beatmapset_id	= int(data.get('beatmapset_id', 0 ))
+        self.date		    = datetime.datetime.strptime(data.get('date', "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S")

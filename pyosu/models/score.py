@@ -20,8 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base          import BaseModel
-from pyosu.types import ReplayAvailability
+import datetime
+
+from pyosu.types       import ReplayAvailability
+from pyosu.models.base import BaseModel
 
 class Score(BaseModel):
 
@@ -29,24 +31,24 @@ class Score(BaseModel):
 
         super().__init__(api)
 
-        self.score_id         = data.get('score_id'         , 0)
-        self.score            = data.get('score'            , 0.0)
-        self.username         = data.get('username'         , "")
-        self.count300         = data.get('count300'         , 0)
-        self.count100         = data.get('count100'         , 0)
-        self.count50          = data.get('count50'          , 0)
-        self.countmiss        = data.get('countmiss'        , 0)
-        self.maxcombo         = data.get('maxcombo'         , 0)
-        self.countkatu        = data.get('countkatu'        , 0)
-        self.countgeki        = data.get('countgeki'        , 0)
-        self.perfect          = data.get('perfect'          , False) # True = maximum combo of map reached, False otherwise
-        self.enabled_mods     = data.get('enabled_mods'     , 0)     # Bitwise flag representation of mods used. see reference (GameModifier class)
-        self.user_id          = data.get('user_id'          , 0)
-        self.date             = data.get('date'             , "")
-        self.rank             = data.get('rank'             , "")
-        self.pp               = data.get('pp'               , 0.0)   # Float value , 4 decimals
-        self.replay_available = data.get('replay_available' , ReplayAvailability.Unavailable)
-        self.mode             = data.get('mode'             , 0)
+        self.rank             =       data.get('rank'             , "")
+        self.username         =       data.get('username'         , "")
+        self.mode             =   int(data.get('mode'             , 0))
+        self.user_id          =   int(data.get('user_id'          , 0))
+        self.count50          =   int(data.get('count50'          , 0))
+        self.count100         =   int(data.get('count100'         , 0))
+        self.count300         =   int(data.get('count300'         , 0))
+        self.score_id         =   int(data.get('score_id'         , 0))
+        self.maxcombo         =   int(data.get('maxcombo'         , 0))
+        self.countmiss        =   int(data.get('countmiss'        , 0))
+        self.countkatu        =   int(data.get('countkatu'        , 0))
+        self.countgeki        =   int(data.get('countgeki'        , 0))
+        self.enabled_mods     =   int(data.get('enabled_mods'     , 0))     # Bitwise flag representation of mods used. see reference (GameModifier class)
+        self.replay_available =   int(data.get('replay_available' , ReplayAvailability.Unavailable))
+        self.perfect          =  bool(data.get('perfect'          , False)) # True = maximum combo of map reached, False otherwise
+        self.pp               = float(data.get('pp'               , 0.0))   # Float value , 4 decimals
+        self.score            = float(data.get('score'            , 0.0))
+        self.date             = datetime.datetime.strptime(data.get('date', "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S")
 
         self._user = None
 

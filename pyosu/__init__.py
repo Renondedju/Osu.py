@@ -33,9 +33,9 @@ __title__     = 'osu.py'
 __author__    = 'Renondedju'
 __license__   = 'MIT'
 __copyright__ = 'Copyright 2018 Renondedju'
-__version__   = '0.5.0'
+__version__   = '0.5.1'
 
-from .api                    import OsuApi
+from .api import OsuApi
 
 from . import models
 from . import types
