@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 import re
 
-from .base import BaseModel
+from pyosu.models.base import BaseModel
 
 class BeatmapFile(BaseModel):
     """ Beatmap file model.

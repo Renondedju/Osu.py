@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base import BaseModel
+import datetime
+
+from pyosu.models.base import BaseModel
 
 class UserRecent(BaseModel):
     """ User recent model """
@@ -29,17 +31,17 @@ class UserRecent(BaseModel):
 
         super().__init__(api)
 
-        self.beatmap_id   = data.get('beatmap_id'  , 0)
-        self.score        = data.get('score'       , 0.0)
-        self.maxcombo     = data.get('maxcombo'    , 0)
-        self.count300     = data.get('count300'    , 0)
-        self.count100     = data.get('count100'    , 0)
-        self.count50      = data.get('count50'     , 0)
-        self.countmiss    = data.get('countmiss'   , 0)
-        self.countkatu    = data.get('countkatu'   , 0)
-        self.countgeki    = data.get('countgeki'   , 0)
-        self.perfect      = data.get('perfect'     , False)        # True = maximum combo of map reached, False otherwise
-        self.enabled_mods = data.get('enabled_mods', 0)            # bitwise flag representation of mods used. see reference (GameModifiers)
-        self.user_id      = data.get('user_id'     , 0)
-        self.date         = data.get('date'        , "")
-        self.rank         = data.get('rank'        , "")
+        self.rank         =       data.get('rank'        , "")
+        self.user_id      =   int(data.get('user_id'     , 0))
+        self.count50      =   int(data.get('count50'     , 0))
+        self.count100     =   int(data.get('count100'    , 0))
+        self.count300     =   int(data.get('count300'    , 0))
+        self.maxcombo     =   int(data.get('maxcombo'    , 0))
+        self.countmiss    =   int(data.get('countmiss'   , 0))
+        self.countkatu    =   int(data.get('countkatu'   , 0))
+        self.countgeki    =   int(data.get('countgeki'   , 0))
+        self.beatmap_id   =   int(data.get('beatmap_id'  , 0))
+        self.enabled_mods =   int(data.get('enabled_mods', 0))            # bitwise flag representation of mods used. see reference (GameModifiers)
+        self.perfect      =  bool(data.get('perfect'     , False))        # True = maximum combo of map reached, False otherwise
+        self.score        = float(data.get('score'       , 0.0))
+        self.date         = datetime.datetime.strptime(data.get('date', "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S")

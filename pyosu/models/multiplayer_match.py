@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .base import BaseModel
+import datetime
+
+from pyosu.models.base import BaseModel
 
 class MultiplayerMatch(BaseModel):
     """ Multiplayer match model """
 
-    def __init__(self, *, api: 'OsuApi' = None, match_games : list, **data):
+    def __init__(self, *, api: 'OsuApi' = None, match_games: list, **data):
 
         super().__init__(api)
 
-        self.start_time   = data.get('start_time', ""  )
-        self.match_id     = data.get('match_id'  , 0   )
-        self.end_time     = data.get('end_time'  , None) # not supported yet - always None (Api side)
-        self.name         = data.get('name'      , ""  )
+        self.name         = data.get('name', "")
+        self.end_time     = datetime.datetime.strptime(data.get('end_time'  , "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S") # not supported yet - always None (Api side)
+        self.start_time   = datetime.datetime.strptime(data.get('start_time', "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S")
+        self.match_id     = int(data.get('match_id', 0))
 
         self.games = match_games

@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,17 @@ Osu API Wrapper
 ~~~~~~~~~~~~~~~~~~~
 A basic wrapper for the Osu API.
 
-:copyright: (c) 2018 Renondedju
+:copyright: (c) 2018-2019 Renondedju
 :license: MIT, see LICENSE for more details.
 """
 
 __title__     = 'osu.py'
 __author__    = 'Renondedju'
 __license__   = 'MIT'
-__copyright__ = 'Copyright 2018 Renondedju'
-__version__   = '0.5.0'
+__copyright__ = 'Copyright 2018-2019 Renondedju'
+__version__   = '0.5.1'
 
-from .api                    import OsuApi
+from .api import OsuApi
 
 from . import models
 from . import types

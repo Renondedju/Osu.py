@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,8 @@
 
 import asyncio
 
-from .http   import Route, Request
-from .models import (
+from pyosu.http   import Route, Request
+from pyosu.models import (
     User,
     Score,
     Replay,
@@ -40,7 +40,7 @@ from .models import (
     UserBestCollection,
     UserRecentCollection,
 )
-from .exceptions import ReplayUnavailable
+from pyosu.exceptions import ReplayUnavailable
 
 
 class OsuApi():

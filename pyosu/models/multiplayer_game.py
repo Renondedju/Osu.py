@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2018 Renondedju
+# Copyright (c) 2018-2019 Renondedju
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,9 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyosu.types import TeamType, GameMode, ScoringType, GameModifier
+import datetime
 
-from .base     import BaseModel
+from pyosu.types       import TeamType, GameMode, ScoringType, GameModifier
+from pyosu.models.base import BaseModel
 
 class MultiplayerGame(BaseModel):
     """ Multiplayer game model """
@@ -31,14 +32,16 @@ class MultiplayerGame(BaseModel):
 
         super().__init__(api)
 
-        self.game_id      = data.get('game_id'     , 0)
-        self.start_time   = data.get('start_time'  , "")
-        self.end_time     = data.get('end_time'    , "")
-        self.beatmap_id   = data.get('beatmap_id'  , 0)
-        self.play_mode    = data.get('play_mode'   , GameMode.Osu)          # Gamemode played
-        self.match_type   = data.get('match_type'  , 0)                     # couldn't find
-        self.scoring_type = data.get('scoring_type', ScoringType.score)     # winning condition see ScoringType
-        self.team_type    = data.get('team_type'   , TeamType.head_to_head) # team type : see TeamType
-        self.mods         = data.get('mods'        , GameModifier.none)     # global mods, see GameModifiers
+        
+        self.start_time   = datetime.datetime.strptime(data.get('start_time', "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S")
+        self.end_time     = datetime.datetime.strptime(data.get('end_time'  , "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S")
+
+        self.mods         = int(data.get('mods'        , GameModifier.none))     # global mods, see GameModifiers
+        self.game_id      = int(data.get('game_id'     , 0))
+        self.play_mode    = int(data.get('play_mode'   , GameMode.Osu))          # Gamemode played
+        self.team_type    = int(data.get('team_type'   , TeamType.head_to_head)) # team type : see TeamType
+        self.beatmap_id   = int(data.get('beatmap_id'  , 0))
+        self.match_type   = int(data.get('match_type'  , 0))                     # couldn't find
+        self.scoring_type = int(data.get('scoring_type', ScoringType.score))     # winning condition see ScoringType
 
         self.scores = game_scores

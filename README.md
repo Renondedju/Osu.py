@@ -6,8 +6,8 @@ This library is developed for [Uso! bot](https://github.com/Renondedju/Uso_Bot_V
 
 ## Requirements
 
-- Python 3.6+ *(python 3.7 is partially unsupported due to the changes to asyncio)*
-- The *aiohttp* library : [Install instructions](https://aiohttp.readthedocs.io/en/stable/)
+- Python 3.6+ *(anterior versions might be supported but haven't been tested.)*
+- The **aiohttp** library : [Install instructions](https://aiohttp.readthedocs.io/en/stable/)
 - An internet connexion
 
 ## Installation
@@ -21,6 +21,24 @@ Or from the source
     $ git clone https://github.com/Renondedju/Osu.py
     $ cd Osu.py
     $ pip install .
+
+## Example
+
+```py
+import asyncio
+from pyosu import OsuApi
+
+async def main():
+    
+    api = OsuApi('Your api key here')
+
+    bests = await api.get_user_bests('Renondedju')
+    for best in bests:
+        print(best.__dict__)
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
 
 ## Documentations
 
@@ -43,4 +61,4 @@ Thanks to @ppy for [the osu api](https://github.com/ppy/osu-api/wiki)
 
 ## License
 
-Osu<span></span>.py is released under the [MIT License](http://www.opensource.org/licenses/MIT). Check [the license](LICENSE) for more details.
+Osu<span></span>.py is released under the [MIT License](http://www.opensource.org/licenses/MIT).  Check [the license](LICENSE) for more details.
