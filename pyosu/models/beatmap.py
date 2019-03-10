@@ -46,7 +46,6 @@ class Beatmap(BaseModel):
         self.genre_id         =   int(data.get('genre_id'        , BeatmapGenre.Any))
         self.playcount        =   int(data.get('playcount'       , 0))              # Number of times the beatmap was played
         self.passcount        =   int(data.get('passcount'       , 0))              # Number of times the beatmap was passed, completed (the user didn't fail or retry)
-        self.max_combo        =   int(data.get('max_combo'       , 0))              # The maximum combo a user can reach playing this beatmap.
         self.beatmap_id       =   int(data.get('beatmap_id'      , 0))              # beatmap_id is per difficulty
         self.language_id      =   int(data.get('language_id'     , Language.Any))
         self.beatmapset_id    =   int(data.get('beatmapset_id'   , 0))              # beatmapset_id groups difficulties into a set
@@ -58,8 +57,19 @@ class Beatmap(BaseModel):
         self.version          =       data.get('version'         , "")              # difficulty name
         self.creator          =       data.get('creator'         , "")
         self.file_md5         =       data.get('file_md5'        , "")              # md5 hash of the beatmap
-        self.approved_date    = datetime.datetime.strptime(data.get('approved_date' , "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S") # date ranked, UTC+8 for now
-        self.last_update      = datetime.datetime.strptime(data.get('last_update'   , "1970-01-01 00:00:00") , "%Y-%m-%d %H:%M:%S") # last update date, timezone same as above. May be after approved_date if map was unranked and reranked.
+        self.last_update      = datetime.datetime.strptime(data.get('last_update'   , "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S") # last update date, timezone same as above. May be after approved_date if map was unranked and reranked.
+        
+        # Quickfix. See https://github.com/ppy/osu-api/issues/130 for more details
+        if data.get('max_combo', 0) is None:
+            self.max_combo = 0
+        else:
+            self.max_combo = int(data.get('max_combo' , 0))              # The maximum combo a user can reach playing this beatmap.
+        
+        # Some beatmaps have never been approved so we need to take care of this
+        if data.get('approved_date', "") is None:
+            self.approved_date = datetime.datetime.utcfromtimestamp(0)
+        else:
+            self.approved_date = datetime.datetime.strptime(data.get('approved_date', "1970-01-01 00:00:00"), "%Y-%m-%d %H:%M:%S") # date ranked, UTC+8 for now
 
     async def get_beatmapset(self):
         """ Returns a beatmap collection with every beatmap of the beatmapset """
