@@ -1,4 +1,4 @@
-# Osu<span></span>.py library [![dev chat](https://discordapp.com/api/guilds/310348632094146570/widget.png?style=shield)](https://discord.gg/Qsw3yD5)
+# Osu<span></span>.py library
 
 A simple python implementation for the Osu! api.
 
