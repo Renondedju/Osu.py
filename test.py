@@ -22,7 +22,6 @@
 
 import json
 import asyncio
-import aiohttp
 import inspect
 import traceback
 
@@ -33,7 +32,10 @@ pass_count = 0
 test_count = 0
 
 with open('test-config.json') as f:
-    api = OsuApi(json.load(f)['api_key'])
+    config = json.load(f)
+
+    api      = OsuApi(config['api_key'])
+    username = config['username']
 
 async def test(function):
     """ Tests a function and sends a report if it fails """
@@ -64,7 +66,7 @@ async def test_score():
         raise ValueError('Empty score !')
 
 async def test_user():
-    user = await api.get_user(user = 'Renondedju', mode = GameMode.Mania)
+    user = await api.get_user(user = username, mode = GameMode.Osu)
     if user is None:
         raise ValueError('Empty user !')
 
@@ -84,7 +86,7 @@ async def test_score_collection():
         raise ValueError('Empty scores !')
 
 async def test_user_best():
-    best = await api.get_user_best('Renondedju', mode = GameMode.Osu)
+    best = await api.get_user_best(username, mode = GameMode.Osu)
     if best is None:
         raise ValueError('Empty best !')
     
@@ -95,23 +97,18 @@ async def test_user_best():
         raise ValueError('Empty best.get_user() !')
 
 async def test_user_bests():
-    bests = await api.get_user_bests('Renondedju')
+    bests = await api.get_user_bests(username)
     if bests is None:
         raise ValueError('User bests is empty, there should be 10 scores')
 
 async def test_user_recent():
-    await api.get_user_recent('Jamu')
+    await api.get_user_recent(username)
 
 async def test_user_recents():
-    await api.get_user_recents('Jamu')
+    await api.get_user_recents(username)
 
 async def test_replay():
-    
-    #This replay is one year old and shouldn't be avaliable
-    await api.get_replay(GameMode.Osu, 390057, 'Renondedju')
-
-    # Cannot really test replays since they might be deleted at all time ..
-    # Also since the request rate is at 10/min, I don't wanna abuse it
+    await api.get_replay(GameMode.Osu, 390057, username)
 
 async def test_match():
 
@@ -129,7 +126,7 @@ async def main():
     await test(test_user)
     await test(test_match)
     await test(test_score)
-    await test(test_replay)
+    #await test(test_replay)
     await test(test_beatmap)
     await test(test_user_best)
     await test(test_user_bests)
@@ -145,6 +142,4 @@ async def main():
     return
 
 if __name__ == '__main__':
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+    asyncio.run(main())
